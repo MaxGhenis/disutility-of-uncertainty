@@ -1,2 +1,3 @@
-# disutility-of-uncertainty
+# Disutility of uncertainty
+
 How uncertainty around marginal tax rates affects social welfare
