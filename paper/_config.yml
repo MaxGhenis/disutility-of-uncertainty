@@ -1,0 +1,48 @@
+# Book settings
+title: "The Welfare Cost of Tax Rate Uncertainty"
+author: Max Ghenis
+copyright: "2024"
+logo: ""
+
+# Force re-execution of notebooks on each build.
+execute:
+  execute_notebooks: auto
+  timeout: 120
+
+# Define the name of the latex output file for PDF builds
+latex:
+  latex_documents:
+    targetname: tax-uncertainty.tex
+  
+# Add a bibtex file so citations can render
+bibtex_bibfiles:
+  - references.bib
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/maxghenis/disutility-of-uncertainty
+  path_to_book: paper
+  branch: main
+
+# Add GitHub buttons to your book
+html:
+  use_issues_button: true
+  use_repository_button: true
+  use_edit_button: true
+  
+# Launch button settings
+launch_buttons:
+  notebook_interface: classic
+  binderhub_url: ""
+  colab_url: "https://colab.research.google.com"
+  
+# Extra extensions
+sphinx:
+  extra_extensions:
+    - sphinx.ext.autodoc
+    - sphinx.ext.intersphinx
+    - sphinx.ext.viewcode
+    - sphinxcontrib.bibtex
+  config:
+    bibtex_reference_style: author_year
+    suppress_warnings: ["mystnb.unknown_mime_type"]
