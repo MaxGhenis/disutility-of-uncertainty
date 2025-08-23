@@ -72,6 +72,7 @@ jobs:
     - name: Build MyST Book
       run: |
         cd paper && myst build --html
+        touch _build/html/.nojekyll
     
     - name: Upload book artifact
       uses: actions/upload-artifact@v4
