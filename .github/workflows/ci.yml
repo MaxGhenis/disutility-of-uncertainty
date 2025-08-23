@@ -71,7 +71,10 @@ jobs:
     
     - name: Build MyST Book
       run: |
-        cd paper && myst build --html
+        cd paper
+        # Build with base URL for GitHub Pages subpath
+        export BASE_URL="/disutility-of-uncertainty"
+        myst build --html
         touch _build/html/.nojekyll
     
     - name: Upload book artifact
