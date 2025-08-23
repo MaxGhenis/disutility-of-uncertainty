@@ -1,0 +1,24 @@
+# Table of contents
+format: jb-book
+root: index
+parts:
+  - caption: Introduction
+    chapters:
+    - file: chapters/introduction
+    - file: chapters/literature_review
+  - caption: Methodology
+    chapters:
+    - file: chapters/theoretical_framework
+    - file: chapters/empirical_approach
+  - caption: Results
+    chapters:
+    - file: chapters/baseline_results
+    - file: chapters/robustness
+  - caption: Conclusion
+    chapters:
+    - file: chapters/discussion
+    - file: chapters/policy_implications
+  - caption: Appendix
+    chapters:
+    - file: chapters/technical_appendix
+    - file: chapters/data_appendix
