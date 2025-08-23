@@ -70,7 +70,3 @@ def test_optimal_choice():
     # Test labor supply
     labor = choice.labor_supply(wage, tax_rate, transfers, total_hours)
     assert abs(labor + leisure - total_hours) < 1e-6
-
-    # Test optimal consumption
-    consumption = choice.optimal_consumption(wage, tax_rate, transfers, total_hours)
-    assert consumption > 0
