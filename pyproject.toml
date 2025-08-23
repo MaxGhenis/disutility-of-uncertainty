@@ -9,7 +9,7 @@ description = "Analyzing welfare effects of tax rate uncertainty using economic 
 readme = "README.md"
 requires-python = ">=3.9"
 authors = [
-    {name = "Max Ghenis", email = ""},
+    {name = "Max Ghenis"},
 ]
 license = {text = "MIT"}
 keywords = ["economics", "taxation", "uncertainty", "welfare", "labor supply"]

@@ -1,0 +1,46 @@
+version: 1
+project:
+  title: The Welfare Cost of Tax Rate Uncertainty
+  authors:
+    - name: Max Ghenis
+  copyright: '2024'
+  github: maxghenis/disutility-of-uncertainty
+  thebe:
+    binder:
+      repo: maxghenis/disutility-of-uncertainty
+      provider: github
+      url: https://mybinder.org
+      ref: main
+  bibliography:
+    - references.bib
+  exports:
+    - format: pdf
+      template: plain_latex_book
+      output: exports/tax-uncertainty.pdf
+  toc:
+    - file: index.md
+    - title: Introduction
+      children:
+        - file: chapters/introduction.md
+        - file: chapters/literature_review.md
+    - title: Methodology
+      children:
+        - file: chapters/theoretical_framework.ipynb
+        - file: chapters/empirical_approach.md
+    - title: Results
+      children:
+        - file: chapters/baseline_results.ipynb
+        - file: chapters/robustness.md
+    - title: Conclusion
+      children:
+        - file: chapters/discussion.md
+        - file: chapters/policy_implications.md
+    - title: Appendix
+      children:
+        - file: chapters/technical_appendix.md
+        - file: chapters/data_appendix.md
+site:
+  options:
+    logo: ''
+    folders: true
+  template: book-theme
