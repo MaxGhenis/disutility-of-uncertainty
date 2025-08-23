@@ -214,7 +214,7 @@ class UncertaintyAnalysis:
             transfers = 0
 
         # Calculate total welfare
-        total_welfare = 0
+        total_welfare = 0.0
         for wage in wage_samples:
             utility = self.choice_solver.indirect_utility(wage, tax_rate, transfers)
             total_welfare += utility
@@ -263,7 +263,7 @@ class UncertaintyAnalysis:
             welfare_uncertain = []
             for tax_mean in tax_grid:
                 # Calculate expected welfare under uncertainty
-                total_welfare = 0
+                total_welfare = 0.0
                 for wage in wage_samples:
                     # Create tax distribution
                     tax_scenarios = [

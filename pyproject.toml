@@ -64,6 +64,7 @@ target-version = ['py39']
 
 [tool.mypy]
 python_version = "3.9"
-warn_return_any = true
+warn_return_any = false
 warn_unused_configs = true
 ignore_missing_imports = true
+check_untyped_defs = true

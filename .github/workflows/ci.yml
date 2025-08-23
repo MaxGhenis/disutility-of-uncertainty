@@ -37,7 +37,7 @@ jobs:
     
     - name: Type check with mypy
       run: |
-        mypy src
+        cd src && mypy taxuncertainty
     
     - name: Test with pytest
       run: |
