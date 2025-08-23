@@ -32,7 +32,7 @@ First, we use only backward-looking policy uncertainty based on the standard dev
 
 Second, we employ survey data on taxpayers' subjective uncertainty about their marginal rates. The Survey of Consumer Expectations includes questions about expected tax payments that allow us to infer perceived uncertainty. Using these subjective measures produces welfare loss estimates of 0.6-1.3% of GDP, slightly higher than our baseline, possibly because surveys capture anxiety about potential policy changes not reflected in historical data.
 
-Third, we use text-based measures of policy uncertainty from news coverage, following the approach of {cite}`baker2016measuring`. Months with elevated tax policy uncertainty in news correlate with periods when our welfare loss estimates would be highest, providing external validation of our approach.
+Third, we use text-based measures of policy uncertainty from news coverage, following the approach of {cite:t}`baker2016measuring`. Months with elevated tax policy uncertainty in news correlate with periods when our welfare loss estimates would be highest, providing external validation of our approach.
 
 ## Dynamic Extension with Savings
 
