@@ -7,7 +7,7 @@ name = "taxuncertainty"
 version = "0.1.0"
 description = "Analyzing welfare effects of tax rate uncertainty using economic models"
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.13"
 authors = [
     {name = "Max Ghenis"},
 ]
@@ -19,9 +19,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Information Analysis",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.13",
 ]
 
 dependencies = [
@@ -60,10 +58,10 @@ addopts = "--cov=src/taxuncertainty --cov-report=term-missing --cov-report=html"
 
 [tool.black]
 line-length = 88
-target-version = ['py39']
+target-version = ['py313']
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.13"
 warn_return_any = false
 warn_unused_configs = true
 ignore_missing_imports = true
