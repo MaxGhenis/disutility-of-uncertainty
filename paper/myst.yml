@@ -29,6 +29,7 @@ project:
         - file: chapters/empirical_approach.md
     - title: Results
       children:
+        - file: chapters/empirical_estimates.ipynb
         - file: chapters/baseline_results.ipynb
         - file: chapters/robustness.md
     - title: Conclusion
