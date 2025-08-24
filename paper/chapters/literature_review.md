@@ -38,6 +38,8 @@ In the tax context, {cite:t}`chetty2013teaching` conducted a field experiment sh
 
 Recent work by Hoopes, Reck, and Slemrod (2015) uses data on searches for tax information to show that taxpayers have limited knowledge of tax provisions and actively seek information primarily around filing time. This pattern suggests that tax uncertainty is partly endogenous to the complexity of the tax system and the cost of acquiring information.
 
+{cite:t}`rees2020schmeduling` provide crucial evidence on how taxpayers mentally approximate complex tax schedules. They find that 43% of taxpayers use an "ironing" heuristic that linearizes the tax schedule around their average tax rate, leading to systematic underestimation of marginal tax rates. This mental model helps explain why taxpayers struggle to optimize their responses to tax incentives, even when tax policy itself is stable and knowable.
+
 ## Heterogeneous Effects and Distributional Considerations
 
 The distributional effects of tax uncertainty have received limited attention in the literature, despite their importance for policy design. Batchelder (2003) argues that tax complexity disproportionately burdens low-income households who cannot afford professional tax assistance. However, the current paper's finding that middle-income households face the highest uncertainty costs suggests a more nuanced distributional pattern.
