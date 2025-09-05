@@ -1,0 +1,37 @@
+{
+  "seed": 123,
+  "preferences": {
+    "a": 0.5,
+    "b": 0.5,
+    "T": 24.0
+  },
+  "block1": {
+    "wage": 20.0,
+    "true_tax": 0.3,
+    "transfers": 0.0,
+    "bias_max": 0.3
+  },
+  "block2": {
+    "wage": 20.0,
+    "tax_mean": 0.3,
+    "sd_max": 0.2
+  },
+  "block3": {
+    "wages": [
+      20.0,
+      40.0
+    ],
+    "tax_mean": 0.3,
+    "sd": 0.1
+  },
+  "block4": {
+    "pop_n": 200,
+    "wage_median": 20.0,
+    "wage_sigma": 0.5,
+    "sd_max": 0.2,
+    "search_range": [
+      0.05,
+      0.6
+    ]
+  }
+}

@@ -41,6 +41,7 @@ dev = [
     "flake8>=4.0.0",
     "mypy>=0.950",
     "pre-commit>=2.19.0",
+    "isort>=5.10.0",
 ]
 
 research = [

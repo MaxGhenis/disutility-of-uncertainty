@@ -29,6 +29,8 @@ project:
         - file: chapters/empirical_approach.md
     - title: Results
       children:
+        - file: chapters/stylized_results.md
+        - file: chapters/reproduce_stylized_results.ipynb
         - file: chapters/theory_walkthrough.ipynb
         - file: chapters/empirical_estimates.ipynb
         - file: chapters/policyengine_analysis.ipynb

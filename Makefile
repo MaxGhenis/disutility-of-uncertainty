@@ -17,6 +17,7 @@ help:
 	@echo "  make myst        Build with MyST (next-gen)"
 	@echo "  make serve       Start MyST dev server (port 3001)"
 	@echo "  make pdf         Generate PDF output"
+	@echo "  make figures     Generate analysis figures (blocks 1–4)"
 	@echo "  make deploy      Deploy to GitHub Pages"
 	@echo ""
 	@echo "Maintenance:"
@@ -52,9 +53,18 @@ book:
 	@echo "Book available at: paper/_build/html/index.html"
 
 # Build with MyST (recommended)
-myst:
+myst: figures
 	cd paper && myst build
 	@echo "MyST book available at: paper/_build/site/index.html"
+
+# Generate analysis figures and CSVs (blocks 1–4)
+figures:
+	mkdir -p paper/figures
+	PYTHONPATH=src python3 scripts/run_analysis.py --outdir paper/figures --seed 42 --grid 101 --pop-n 1000 --opt-tax-grid 31 --opt-sd-n 5 --tax-n 30
+
+# End-to-end replication (figures + book)
+replicate: clean figures myst
+	@echo "Replication artifacts in paper/figures and paper/_build/site"
 
 # Serve with MyST (development)
 serve:
