@@ -12,7 +12,7 @@ Under the central calibration ($\varepsilon = 0.33$, $\sigma = 0.12$, $\bar{\tau
 
 It is worth emphasizing what this quantity represents and what it does not. The \$187 figure is the expected utility loss, expressed in dollar terms, from a worker who optimizes labor supply against a perceived marginal rate that differs from the true rate by a random draw with standard deviation 0.12. When the perceived rate is too high, the worker supplies too little labor; when it is too low, too much. In both cases the worker ends up on a lower indifference curve than under perfect information. This is a pure behavioral distortion cost -- distinct from compliance costs, which represent resources spent on filing and record-keeping rather than misallocated time.
 
-For context, estimates suggest the deadweight loss of the federal estate tax is roughly \$20--30 billion per year. The welfare cost of marginal-rate misperception is comparable in magnitude, yet it receives far less policy attention. Unlike the estate tax, which affects fewer than 0.1% of decedents, misperception-induced DWL falls on the entire working population.
+For context, {cite:t}`kopczuk2013taxation` reviews estimates suggesting the deadweight loss of the federal estate tax is on the order of \$20--30 billion per year. The welfare cost of marginal-rate misperception is comparable in magnitude. Unlike the estate tax, which affects fewer than 0.1% of decedents, misperception-induced DWL falls on the entire working population.
 
 ## Sensitivity analysis
 
@@ -34,13 +34,13 @@ A utilitarian planner choosing a linear tax rate to maximize social welfare face
 
 Under the baseline calibration, the optimal tax rate in the absence of misperception is 44.5%. When the planner accounts for $\sigma = 0.12$ misperception, the optimum falls to 42.9%, a decline of 1.6 percentage points. The planner accepts somewhat less redistribution because the marginal cost of public funds is higher when workers cannot perceive their tax rate accurately.
 
-A 1.6 percentage-point adjustment corresponds to approximately \$130 billion in annual revenue foregone -- revenue the planner judges is not worth collecting given the amplified behavioral distortions it would cause.
+A 1.6 percentage-point adjustment corresponds to approximately \$141 billion in annual revenue foregone -- revenue the planner judges is not worth collecting given the amplified behavioral distortions it would cause.
 
 ## Value of information
 
 Because DWL is quadratic in $\sigma$, even partial reductions in misperception yield large welfare gains. Reducing $\sigma$ from 0.12 to 0.08 -- plausibly achievable through tax simplification, better withholding tables, or enhanced taxpayer communication -- lowers total DWL from \$29.9 billion to \$13.3 billion, a saving of approximately \$17 billion per year.
 
-To appreciate this magnitude, note that a \$17 billion welfare gain is equivalent in welfare terms to a roughly 3 percentage-point across-the-board reduction in marginal tax rates. Yet simplification need not sacrifice any revenue: it merely helps workers perceive the rate they already face. The U.S. tax preparation industry generates roughly \$35 billion in annual revenue ({cite:p}`irs2023databook`), suggesting that households already spend considerable resources trying to reduce their own $\sigma$. Public investments in simplification that lower $\sigma$ for all workers simultaneously would capture economies of scale unavailable to individual tax filers.
+To appreciate this magnitude, a \$17 billion welfare gain exceeds the annual budget of most federal information-provision programs and is achieved without any reduction in tax revenue: simplification merely helps workers perceive the rate they already face. The U.S. tax preparation industry generates roughly \$35 billion in annual revenue {cite:p}`irs2023databook`, suggesting that households already spend considerable resources trying to reduce their own $\sigma$. Public investments in simplification that lower $\sigma$ for all workers simultaneously would capture economies of scale unavailable to individual tax filers.
 
 In sum, the welfare costs of tax rate misperception range from 0.04% to 0.25% of GDP under every calibration considered. They are concentrated among middle-income workers, they reduce the optimal tax rate, and they imply large welfare gains from policies that make marginal rates more transparent.
 

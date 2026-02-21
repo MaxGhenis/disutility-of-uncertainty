@@ -1,11 +1,11 @@
 """Population-level welfare calculations.
 
 Aggregates individual DWL from tax misperception across a population
-of heterogeneous workers. Wages are interpreted as annual earnings
-(consistent with the calibration approach), so the DWL formula uses
-earnings directly:
+of heterogeneous workers. The ``wages`` parameter is *hourly* wages;
+annual earnings are computed as ``wage * STANDARD_ANNUAL_HOURS`` (2 000 h).
+The DWL formula applied is:
 
-    DWL_i = 0.5 * epsilon * earnings_i * sigma^2 / (1 - tau_i)
+    DWL_i = 0.5 * epsilon * (wage_i * 2000) * sigma^2 / (1 - tau_i)
 """
 
 import numpy as np
@@ -50,9 +50,11 @@ def _individual_dwl_from_wages(wage, tax_rate, misperception_std, prefs):
 class PopulationWelfare:
     """Aggregate deadweight loss calculations for a population.
 
-    All methods interpret the wages parameter as annual earnings,
-    consistent with the calibration approach. The DWL formula is:
-        DWL_i = 0.5 * epsilon * earnings_i * sigma^2 / (1 - tau_i)
+    All methods interpret the ``wages`` parameter as *hourly* wages.
+    Annual earnings are computed internally as ``wage * STANDARD_ANNUAL_HOURS``
+    (2 000 h), consistent with BLS conventions and the calibration approach.
+    The DWL formula applied is:
+        DWL_i = 0.5 * epsilon * (wage_i * 2000) * sigma^2 / (1 - tau_i)
     """
 
     def total_dwl(self, wages, tax_rates, misperception_std, prefs):
@@ -61,7 +63,8 @@ class PopulationWelfare:
         Parameters
         ----------
         wages : array-like
-            Annual earnings for each worker.
+            Hourly wage for each worker.  Converted to annual earnings
+            internally via ``wage * STANDARD_ANNUAL_HOURS``.
         tax_rates : array-like
             Marginal tax rate for each worker.
         misperception_std : float
@@ -90,7 +93,7 @@ class PopulationWelfare:
         Parameters
         ----------
         wages : array-like
-            Annual earnings for each worker.
+            Hourly wage for each worker.
         tax_rates : array-like
             Marginal tax rate for each worker.
         misperception_std : float
@@ -109,12 +112,12 @@ class PopulationWelfare:
                               prefs, n_workers=1):
         """Shortcut using representative-agent approximation.
 
-        total DWL ~ n * 0.5 * epsilon * earnings_bar * sigma^2 / (1 - tau_bar)
+        total DWL ~ n * 0.5 * epsilon * (mean_wage * 2000) * sigma^2 / (1 - tau_bar)
 
         Parameters
         ----------
         mean_wage : float
-            Mean annual earnings.
+            Mean hourly wage.
         mean_tax_rate : float
             Mean marginal tax rate.
         misperception_std : float

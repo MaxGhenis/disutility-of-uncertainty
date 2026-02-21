@@ -42,9 +42,9 @@ class Results:
     --------
     >>> r = Results("results.json")
     >>> r.baseline.total_dwl_billions
-    18.56
+    29.87
     >>> r.baseline.total_dwl_billions_fmt
-    '18.56'
+    '29.87'
     """
 
     def __init__(self, path=None):

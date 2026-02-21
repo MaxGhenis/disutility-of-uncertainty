@@ -12,9 +12,9 @@ where $T$ is the time endowment. This expression contains no tax rate: the incom
 
 This is a knife-edge result. It holds only when (i) preferences are exactly Cobb-Douglas and (ii) the government rebates no revenue. Once the government finances a lump-sum transfer $G$ from tax revenue, the budget constraint becomes $C = w(1-\tau)(T - L) + G$, and the tax rate re-enters the labor supply decision through the transfer channel. Even under Cobb-Douglas preferences, the worker now adjusts hours in response to perceived $\tau$ because the transfer makes the income and substitution effects no longer cancel. The resulting DWL is positive but smaller than under quasilinear preferences, because the substitution-effect channel -- the dominant channel empirically -- is shut down by assumption.
 
-The quasilinear model captures the substitution-effect channel directly: workers unambiguously reduce labor supply when they perceive a higher marginal rate. Empirical evidence from {cite:t}`chetty2009salience` and {cite:t}`feldstein1999tax` overwhelmingly shows that labor supply responds to perceived net-of-tax rates on the substitution margin, confirming that the quasilinear specification is the more empirically relevant of the two.
+The quasilinear model captures the substitution-effect channel directly: workers unambiguously reduce labor supply when they perceive a higher marginal rate. Empirical evidence from {cite:t}`chetty2009salience` and {cite:t}`feldstein1999tax` consistently finds that labor supply responds to perceived net-of-tax rates on the substitution margin, confirming that the quasilinear specification is the more empirically relevant of the two.
 
-## CES generalization
+## Constant elasticity of substitution (CES) generalization
 
 Both Cobb-Douglas and quasilinear preferences are special cases of the CES family
 
@@ -44,15 +44,15 @@ The baseline model assumes a uniform $\sigma = 0.12$ for all workers. In practic
 
 Low-income workers face relatively simple statutory schedules, but limited financial literacy and less experience with tax filing may raise their subjective uncertainty. The EITC phase-in and phase-out create steep effective marginal rates that many recipients do not understand, as documented by {cite:t}`chetty2013teaching`.
 
-Middle-income workers confront the densest thicket of interacting provisions: CTC phase-outs, the EITC cliff, the transition between federal brackets, the standard-versus-itemized deduction choice, AMT exposure, and state income taxes that piggyback on federal definitions. For these households, $\sigma$ is plausibly well above 0.12.
+Middle-income workers face the largest number of interacting provisions: CTC phase-outs, the EITC cliff, the transition between federal brackets, the standard-versus-itemized deduction choice, AMT exposure, and state income taxes that piggyback on federal definitions. For these households, $\sigma$ is plausibly well above 0.12.
 
-High-income workers face complex capital-gains rules, the net investment income tax, and state-specific provisions, but they also disproportionately hire CPAs and financial advisors. Professional tax planning likely compresses $\sigma$ below the population mean for this group.
+High-income workers face complex capital-gains rules, the net investment income tax, and state-specific provisions, but they also disproportionately hire certified public accountants (CPAs) and financial advisors. Professional tax planning likely compresses $\sigma$ below the population mean for this group.
 
 Incorporating a $\sigma$ that rises and then falls with income would shift the aggregate welfare cost toward middle-income workers and could raise or lower the population total depending on the covariance between $\sigma_i$ and $\tau_i$. Given that middle-income workers face both elevated $\sigma$ and moderate-to-high $\tau$, the net effect would likely increase total DWL relative to the homogeneous-$\sigma$ baseline.
 
 ## Endogenous information acquisition
 
-Workers are not passive recipients of tax confusion; they can invest in learning their marginal rate by hiring accountants, purchasing tax software, or spending time reading IRS publications. The observed $\sigma$ is therefore an equilibrium outcome in which each worker balances the cost of information against the utility gain from more accurate optimization.
+Workers are not passive recipients of tax confusion; they can invest in learning their marginal rate by hiring accountants, purchasing tax software, or spending time reading Internal Revenue Service (IRS) publications. The observed $\sigma$ is therefore an equilibrium outcome in which each worker balances the cost of information against the utility gain from more accurate optimization.
 
 The DWL formula implies that the private benefit of reducing one's own $\sigma$ by a small amount $d\sigma$ is approximately $\varepsilon \cdot \sigma \cdot \text{earnings} \cdot d\sigma / (1 - \tau)$. Workers with higher earnings, higher $\tau$, or higher $\varepsilon$ gain more from information and should invest more in acquiring it. This is consistent with the observation that high-income households are far more likely to hire professional tax preparers.
 
@@ -64,7 +64,7 @@ The U.S. tax preparation industry generates roughly \$35 billion in annual reven
 
 {cite:t}`chetty2009salience` find that salience manipulations shift consumer behavior by amounts equivalent to 1--4% of the tax revenue at stake. Translating their experimental magnitudes into a population-wide DWL is not straightforward, but the orders of magnitude are compatible: if misperception shifts effective labor supply responses by a few percent of the tax wedge, the resulting DWL as a share of GDP falls squarely in the estimated range.
 
-Taken together, the extensions and comparisons reinforce the central finding. The baseline estimate of 0.11% of GDP is robust to reasonable perturbations and, if anything, understates the full welfare cost once dynamic channels and heterogeneous misperception are accounted for.
+Taken together, the extensions and comparisons reinforce the central finding. The baseline estimate of 0.11% of GDP varies between 0.04% and 0.25% across the parameter grid and, if anything, understates the full welfare cost once dynamic channels and heterogeneous misperception are accounted for.
 
 ```{bibliography}
 ```

@@ -1,3 +1,6 @@
+# Documentation only — these values are not read by code at runtime.
+# Actual parameters are defined in analysis/calibration.py.
+#
 # Calibration parameters with sources
 # All values used in the analysis are documented here with citations.
 

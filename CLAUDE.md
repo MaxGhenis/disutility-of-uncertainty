@@ -15,7 +15,7 @@ This repository quantifies the welfare cost of tax rate misperception. Workers w
 
 ## Development
 
-- Python 3.13+, pytest for testing
+- Python 3.10+, pytest for testing
 - `pip install -e ".[dev]"` to install
 - `python -m pytest tests/` to run tests
 - All results are deterministic (seed=42)

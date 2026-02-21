@@ -1,19 +1,18 @@
 # Makefile for Tax Uncertainty Analysis Project
 
-.PHONY: help install test build serve clean pdf deploy lint format check-all
+.PHONY: help install test serve clean pdf deploy lint format check-all
 
 # Default target
 help:
 	@echo "Tax Uncertainty Analysis - Make Commands"
 	@echo ""
 	@echo "Development:"
-	@echo "  make install     Install all dependencies (package + book)"
+	@echo "  make install     Install all dependencies (package + paper)"
 	@echo "  make test        Run test suite with coverage"
 	@echo "  make lint        Run code quality checks"
 	@echo "  make format      Auto-format code with black"
 	@echo ""
 	@echo "Book/Paper:"
-	@echo "  make book        Build Jupyter Book (legacy)"
 	@echo "  make myst        Build with MyST (next-gen)"
 	@echo "  make serve       Start MyST dev server (port 3001)"
 	@echo "  make pdf         Generate PDF output"
@@ -27,7 +26,7 @@ help:
 # Install dependencies
 install:
 	pip install -e ".[dev,research]"
-	pip install mystmd jupyter-book
+	pip install mystmd
 
 # Run tests
 test:
@@ -46,11 +45,6 @@ lint:
 format:
 	black src tests
 	isort src tests
-
-# Build Jupyter Book (legacy)
-book:
-	cd paper && jupyter-book build . --builder html
-	@echo "Book available at: paper/_build/html/index.html"
 
 # Build with MyST (recommended)
 myst:
@@ -94,15 +88,6 @@ clean:
 	find . -type f -name "*.pyc" -delete
 	find . -type f -name ".DS_Store" -delete
 
-# Clean notebooks
-clean-notebooks:
-	jupyter nbconvert --clear-output --inplace paper/chapters/*.ipynb
-
-# Execute notebooks
-execute-notebooks:
-	cd paper && jupyter-book execute chapters/theoretical_framework.ipynb
-	cd paper && jupyter-book execute chapters/baseline_results.ipynb
-
 # Run all checks
 check-all: lint test myst
 	@echo "All checks passed!"
@@ -115,14 +100,6 @@ watch:
 # Create GitHub PR
 pr:
 	gh pr create --fill
-
-# Git operations
-commit:
-	git add -A
-	git commit -m "Update tax uncertainty analysis"
-
-push:
-	git push origin feature/tax-uncertainty-analysis
 
 # Development workflow shortcuts
 dev: serve
@@ -155,10 +132,10 @@ docker-run:
 
 # Virtual environment management
 venv:
-	python -m venv venv
-	./venv/bin/pip install -e ".[dev,research]"
+	python -m venv .venv
+	./.venv/bin/pip install -e ".[dev,research]"
 
 activate:
-	@echo "Run: source venv/bin/activate"
+	@echo "Run: source .venv/bin/activate"
 
 .DEFAULT_GOAL := help

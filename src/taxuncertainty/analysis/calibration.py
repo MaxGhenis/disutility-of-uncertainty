@@ -37,7 +37,7 @@ class Calibration:
     # Disutility scale psi calibrated so median worker works ~2000 hrs/year
     PSI = 1.0  # normalized
 
-    def _per_worker_dwl(self, eps, sigma, tau=None, earnings=None):
+    def per_worker_dwl(self, eps, sigma, tau=None, earnings=None):
         """Analytical per-worker DWL: 0.5 * eps * earnings * sigma^2 / (1 - tau)."""
         tau = tau if tau is not None else self.MEAN_MARGINAL_RATE
         earnings = earnings if earnings is not None else self.MEAN_ANNUAL_EARNINGS
@@ -45,7 +45,7 @@ class Calibration:
 
     def _dwl_row(self, eps, sigma):
         """Build a result dict for one (elasticity, sigma) combination."""
-        per_worker = self._per_worker_dwl(eps, sigma)
+        per_worker = self.per_worker_dwl(eps, sigma)
         total = per_worker * self.TOTAL_WORKERS
         return {
             "frisch_elasticity": eps,
