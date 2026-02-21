@@ -53,18 +53,17 @@ book:
 	@echo "Book available at: paper/_build/html/index.html"
 
 # Build with MyST (recommended)
-myst: figures
+myst:
 	cd paper && myst build
 	@echo "MyST book available at: paper/_build/site/index.html"
 
-# Generate analysis figures and CSVs (blocks 1–4)
+# Generate results via pipeline
 figures:
-	mkdir -p paper/figures
-	PYTHONPATH=src python3 scripts/run_analysis.py --outdir paper/figures --seed 42 --grid 101 --pop-n 1000 --opt-tax-grid 31 --opt-sd-n 5 --tax-n 30
+	PYTHONPATH=src python3 -c "from taxuncertainty.pipeline import generate_results; generate_results()"
 
-# End-to-end replication (figures + book)
+# End-to-end replication (pipeline + book)
 replicate: clean figures myst
-	@echo "Replication artifacts in paper/figures and paper/_build/site"
+	@echo "Replication artifacts in src/taxuncertainty/data/results.json and paper/_build/site"
 
 # Serve with MyST (development)
 serve:

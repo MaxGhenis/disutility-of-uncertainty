@@ -1,0 +1,93 @@
+{
+  "baseline": {
+    "frisch_elasticity": 0.33,
+    "misperception_std": 0.12,
+    "per_worker_dwl": 186.6857142857143,
+    "total_dwl_billions": 29.86971428571429,
+    "gdp_fraction_pct": 0.10667755102040817
+  },
+  "sensitivity": [
+    {
+      "frisch_elasticity": 0.25,
+      "misperception_std": 0.08,
+      "per_worker_dwl": 62.85714285714286,
+      "total_dwl_billions": 10.057142857142859,
+      "gdp_fraction_pct": 0.035918367346938776
+    },
+    {
+      "frisch_elasticity": 0.25,
+      "misperception_std": 0.12,
+      "per_worker_dwl": 141.42857142857144,
+      "total_dwl_billions": 22.62857142857143,
+      "gdp_fraction_pct": 0.08081632653061226
+    },
+    {
+      "frisch_elasticity": 0.25,
+      "misperception_std": 0.15,
+      "per_worker_dwl": 220.98214285714286,
+      "total_dwl_billions": 35.35714285714286,
+      "gdp_fraction_pct": 0.12627551020408165
+    },
+    {
+      "frisch_elasticity": 0.33,
+      "misperception_std": 0.08,
+      "per_worker_dwl": 82.97142857142859,
+      "total_dwl_billions": 13.275428571428574,
+      "gdp_fraction_pct": 0.04741224489795919
+    },
+    {
+      "frisch_elasticity": 0.33,
+      "misperception_std": 0.12,
+      "per_worker_dwl": 186.6857142857143,
+      "total_dwl_billions": 29.86971428571429,
+      "gdp_fraction_pct": 0.10667755102040817
+    },
+    {
+      "frisch_elasticity": 0.33,
+      "misperception_std": 0.15,
+      "per_worker_dwl": 291.6964285714286,
+      "total_dwl_billions": 46.67142857142858,
+      "gdp_fraction_pct": 0.16668367346938778
+    },
+    {
+      "frisch_elasticity": 0.5,
+      "misperception_std": 0.08,
+      "per_worker_dwl": 125.71428571428572,
+      "total_dwl_billions": 20.114285714285717,
+      "gdp_fraction_pct": 0.07183673469387755
+    },
+    {
+      "frisch_elasticity": 0.5,
+      "misperception_std": 0.12,
+      "per_worker_dwl": 282.8571428571429,
+      "total_dwl_billions": 45.25714285714286,
+      "gdp_fraction_pct": 0.1616326530612245
+    },
+    {
+      "frisch_elasticity": 0.5,
+      "misperception_std": 0.15,
+      "per_worker_dwl": 441.9642857142857,
+      "total_dwl_billions": 70.71428571428572,
+      "gdp_fraction_pct": 0.2525510204081633
+    }
+  ],
+  "optimal_tax": {
+    "certain": 0.44525000000000003,
+    "uncertain": 0.42925
+  },
+  "parameters": {
+    "frisch_elasticity_central": 0.33,
+    "frisch_elasticity_low": 0.25,
+    "frisch_elasticity_high": 0.5,
+    "misperception_std_central": 0.12,
+    "misperception_std_low": 0.08,
+    "misperception_std_high": 0.15,
+    "mean_marginal_rate": 0.3,
+    "mean_hourly_wage": 27.5,
+    "mean_annual_earnings": 55000,
+    "total_workers": 160000000,
+    "gdp": 28000000000000,
+    "psi": 1.0,
+    "seed": 42
+  }
+}

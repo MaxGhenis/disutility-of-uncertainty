@@ -1,0 +1,64 @@
+# Calibration
+
+The expected DWL formula derived in the previous section---$E[\text{DWL}]/\text{earnings} \approx \frac{1}{2}\varepsilon\sigma^2/(1-\tau)$---requires three inputs: the Frisch elasticity of labor supply $\varepsilon$, the standard deviation of tax misperception $\sigma$, and the average marginal tax rate $\tau$. This section draws on the empirical public finance literature to calibrate each parameter, then computes the implied welfare costs under a range of assumptions.
+
+## Frisch elasticity ($\varepsilon$)
+
+The Frisch (marginal-utility-constant) elasticity governs how strongly workers adjust their hours in response to changes in the perceived net-of-tax wage. {cite:t}`chetty2012bounds` provides the most comprehensive meta-analysis of this parameter, reconciling the long-standing gap between micro and macro estimates. Micro studies using individual-level panel data (tax reforms, lottery winners) typically find Frisch elasticities of 0.25--0.50 on the intensive margin. Macro estimates, which incorporate extensive-margin responses and general equilibrium adjustments, center around 0.50. Chetty argues that optimization frictions---precisely the kind of frictions this paper studies---attenuate micro estimates, so the true structural elasticity lies between the micro and macro figures.
+
+I adopt a central estimate of $\varepsilon = 0.33$, which represents a conservative macro-consistent value that accounts for both intensive and extensive margin responses while remaining below the highest macro estimates. The sensitivity analysis varies $\varepsilon$ over the range $[0.25, 0.50]$, spanning the micro consensus to the macro midpoint. Values below 0.25 would imply that labor supply barely responds to tax incentives (inconsistent with the macro evidence), while values above 0.50 would exceed most structural estimates.
+
+## Misperception standard deviation ($\sigma$)
+
+The standard deviation of tax misperception $\sigma$ is the parameter most distinctive to this paper, and multiple lines of evidence inform its calibration.
+
+{cite:t}`rees2020schmeduling` provide the most detailed evidence on how taxpayers mentally approximate their tax schedules. They find that 43% of taxpayers use an "ironing" heuristic, mentally replacing the piecewise-linear statutory schedule with a linearized version centered on their average tax rate. Because the average rate is below the marginal rate for all taxpayers in a progressive system, this heuristic systematically underestimates the marginal rate. The typical ironer perceives a marginal rate roughly equal to her average rate, generating errors on the order of 5--15 percentage points depending on income.
+
+{cite:t}`gideon2017perception` provides direct survey evidence on tax rate knowledge. Only 33.7% of respondents correctly identify that their marginal tax rate exceeds their average tax rate---the basic qualitative feature of a progressive tax system. The remaining two-thirds either believe the rates are equal (consistent with the ironing heuristic) or believe the marginal rate is lower than the average rate (an error of both sign and magnitude). Gideon estimates mean absolute errors of approximately 15 percentage points relative to the true marginal rate.
+
+Translating these findings into a standard deviation requires judgment. A mean absolute error of 15 percentage points is consistent with $\sigma \approx 0.12$ under a normal distribution (since $E[|\varepsilon|] = \sigma\sqrt{2/\pi} \approx 0.80\sigma$, implying $\sigma \approx 0.15/0.80 \times 0.65 \approx 0.12$ after accounting for some concentration near zero). I adopt $\sigma = 0.12$ as the central estimate and explore the range $[0.08, 0.15]$. The lower bound ($\sigma = 0.08$) corresponds to a population with moderate confusion about bracket boundaries but correct understanding of the progressive structure. The upper bound ($\sigma = 0.15$) reflects the raw survey evidence without adjustment for any respondent sophistication.
+
+## Mean marginal tax rate ($\bar{\tau}$)
+
+The Congressional Budget Office has published detailed estimates of effective marginal tax rates faced by U.S. workers. {cite:t}`cbo2012marginal` and {cite:t}`cbo2016marginal` compute effective rates that incorporate federal income taxes, payroll taxes (employer and employee shares), state income taxes, and the phase-out of major transfer programs. These reports find effective marginal rates of 25--32% for households in the middle three income quintiles, rising to 43% for high-income households (who face the top federal bracket plus the Medicare surtax).
+
+For the representative-worker calculation, I use $\bar{\tau} = 0.30$, which reflects the earnings-weighted average across the working population. This figure includes the combined federal income tax rate (averaging roughly 18% across brackets), the employee share of payroll taxes (7.65%), and an average state income tax contribution of approximately 4%. The sensitivity to $\bar{\tau}$ enters through the $(1-\tau)$ denominator: at $\tau = 0.25$ the amplification factor is $1/0.75 = 1.33$, while at $\tau = 0.43$ it rises to $1/0.57 = 1.75$.
+
+## Labor market parameters
+
+I calibrate the representative worker using standard BLS Occupational Employment and Wage Statistics data. Mean hourly wages across all occupations are approximately \$27.50 (2023 dollars). At 2,000 annual hours (50 weeks at 40 hours), this implies mean annual earnings of \$55,000. The total number of employed workers in the U.S. civilian labor force is approximately 160 million (Current Population Survey). U.S. GDP is approximately \$28 trillion, used as the denominator for expressing aggregate costs as a share of national output.
+
+For the optimal tax computation, wages are drawn from a lognormal distribution with log-standard-deviation 0.5, calibrated to match the mean hourly wage of \$27.50. This produces a wage distribution with a Gini coefficient of approximately 0.28, which is conservative relative to the full U.S. hourly wage distribution (Gini ~ 0.40).
+
+## Baseline and sensitivity results
+
+Applying the formula $\text{DWL per worker} = \frac{1}{2}\varepsilon \cdot \text{earnings} \cdot \sigma^2 / (1-\tau)$ with earnings $= \$55{,}000$ and $\tau = 0.30$, and aggregating over 160 million workers:
+
+:::{table} Sensitivity of deadweight loss estimates to Frisch elasticity and misperception standard deviation
+:label: tab-sensitivity
+:align: center
+
+| $\varepsilon$ | $\sigma$ | Per-worker DWL | Total DWL (\$B) | % of GDP |
+|:---:|:---:|---:|---:|---:|
+| 0.25 | 0.08 | \$63 | \$10.1 | 0.04 |
+| 0.25 | 0.12 | \$141 | \$22.6 | 0.08 |
+| 0.25 | 0.15 | \$221 | \$35.4 | 0.13 |
+| 0.33 | 0.08 | \$83 | \$13.3 | 0.05 |
+| 0.33 | 0.12 | \$187 | \$29.9 | 0.11 |
+| 0.33 | 0.15 | \$292 | \$46.7 | 0.17 |
+| 0.50 | 0.08 | \$126 | \$20.1 | 0.07 |
+| 0.50 | 0.12 | \$283 | \$45.3 | 0.16 |
+| 0.50 | 0.15 | \$442 | \$70.7 | 0.25 |
+
+:::
+
+The central estimate (row with $\varepsilon = 0.33$, $\sigma = 0.12$): the expected deadweight loss from tax misperception is approximately \$187 per worker, or \$29.9 billion in aggregate---0.11% of GDP. This is a cost that arises purely from the complexity of the tax code, independent of any distortionary effect of the tax rate itself.
+
+Several features of the table merit emphasis. First, the quadratic dependence on $\sigma$ is clearly visible: moving from $\sigma = 0.08$ to $\sigma = 0.15$ (roughly doubling the misperception) nearly quadruples the per-worker DWL within each elasticity row. Second, the range across the full grid is wide---from \$10.1 billion to \$70.7 billion---reflecting genuine uncertainty about the structural parameters. However, even the most conservative cell (\$10.1 billion at $\varepsilon = 0.25$, $\sigma = 0.08$) represents a substantial annual welfare cost that exceeds the budget of most federal information-provision programs.
+
+The central estimate of 0.11% of GDP is smaller than {cite:t}`skinner1988welfare`'s estimate of 0.4% from future tax policy uncertainty, which is appropriate since Skinner's model includes both risk aversion and intertemporal channels that are absent here. The current paper's contribution is to show that even the static misperception channel---holding tax policy constant and considering only current-period confusion about marginal rates---generates welfare losses of 0.04--0.25% of GDP.
+
+These calibrated values align with the code implementation in the `Calibration` class, which uses identical parameter values and the same analytical formula to produce the sensitivity grid. All results are reproducible from the accompanying code repository.
+
+```{bibliography}
+```

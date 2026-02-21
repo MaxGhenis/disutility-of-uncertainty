@@ -1,0 +1,46 @@
+# Calibration parameters with sources
+# All values used in the analysis are documented here with citations.
+
+frisch_elasticity:
+  central: 0.33
+  low: 0.25
+  high: 0.50
+  source: "Chetty (2012, Annual Review of Economics) meta-analysis of macro and micro estimates"
+  notes: >
+    Central value is the macro Frisch elasticity from Chetty's reconciliation of micro (0.25-0.5)
+    and macro (0.5-2.0) estimates. Conservative choice toward micro end.
+
+misperception_std:
+  central: 0.12
+  low: 0.08
+  high: 0.15
+  source: "Rees-Jones & Taubinsky (2020, RES); Gideon (2017, Public Finance Review)"
+  notes: >
+    Rees-Jones & Taubinsky find taxpayers use "ironing" heuristic, linearizing around
+    average tax rate. Mean absolute error ~15pp implies σ ≈ 0.12. Gideon finds only 33.7%
+    correctly identify MTR > ATR relationship. Range spans conservative to survey-based estimates.
+
+mean_marginal_rate:
+  value: 0.30
+  source: "Congressional Budget Office (2012, 2016) effective marginal tax rate reports"
+  notes: >
+    Average effective marginal rate across income quintiles, including federal income,
+    payroll, and state taxes. Range 25-43% across quintiles; 30% is weighted mean.
+
+us_labor_market:
+  mean_hourly_wage: 27.5
+  mean_annual_earnings: 55000
+  total_workers: 160000000
+  source: "Bureau of Labor Statistics, Current Population Survey (2024)"
+  notes: >
+    Mean hourly wage from BLS OES. Annual earnings at 2000 hours/year.
+    Total workers from CPS civilian employment.
+
+gdp:
+  value: 28000000000000
+  year: 2024
+  source: "Bureau of Economic Analysis, NIPA Table 1.1.5"
+
+preferences:
+  psi: 1.0
+  notes: "Normalized disutility scale (ψ=1). The DWL calibration uses annual earnings directly and does not depend on ψ. The optimal tax result is invariant to ψ rescaling."

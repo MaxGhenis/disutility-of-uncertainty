@@ -1,55 +1,47 @@
 Reproducing results
 ===================
 
-This guide explains how to reproduce the figures and tables used in the paper’s stylized blocks (1)–(4) using Python 3.13.
+This guide explains how to reproduce the analysis results and build the paper.
 
 Environment
 -----------
 
-- Python: 3.13 (as declared in `pyproject.toml`)
-- Install dependencies:
-  - Development + research extras: `pip install -e ".[dev,research]"`
-  - Optional: `mystmd`/`jupyter-book` for building the paper (or use `make install`).
+- Python: 3.13+ (as declared in `pyproject.toml`)
+- Install dependencies: `pip install -e ".[dev]"`
+- Optional: `mystmd` for building the paper (or use `make install`).
 
 Quick start
 -----------
 
 1. Create a virtual environment and install deps:
-   - `python3.13 -m venv .venv && source .venv/bin/activate`
-   - `pip install -e ".[dev,research]"`
-   - `pip install mystmd jupyter-book` (for the book)
-2. Generate figures and CSVs for blocks (1)–(4):
-   - `make figures` (writes to `results/latest/`)
-3. Build the MyST site (optional):
-   - `make myst` (outputs to `paper/_build/site/`)
+   - `python3 -m venv .venv && source .venv/bin/activate`
+   - `pip install -e ".[dev]"`
+2. Run the test suite:
+   - `python -m pytest tests/ -v --cov`
+3. Regenerate results:
+   - `python -c "from taxuncertainty.pipeline import generate_results; generate_results()"`
+4. Build the paper:
+   - `cd paper && myst build`
 
 What is generated
 -----------------
 
-- Figures:
-  - `block1_bias_loss.png` — Utility loss vs. perceived tax bias
-  - `block2_uncertainty_loss.png` — Utility loss vs. symmetric tax uncertainty
-  - `block3_two_worker_welfare.png` — Welfare vs. tax (two workers; uncertain vs. certain)
-  - `block4_opt_tax_vs_sd.png` — Optimal tax vs. tax-rate uncertainty
-  - `block4_welfare_vs_sd.png` — Welfare vs. tax-rate uncertainty
-- CSVs mirroring each figure’s underlying series
-- `summary.json` with the run configuration
+- `src/taxuncertainty/data/results.json` — All computed results from the pipeline, including:
+  - Calibrated DWL per worker and aggregate DWL
+  - DWL as share of earnings and GDP
+  - Optimal tax rates under uncertainty
+  - Sensitivity analysis across elasticity and misperception parameters
 
 Determinism and seeds
 ---------------------
 
-- Scripts set a fixed NumPy seed (`--seed`) to ensure repeatable wage sampling.
-- No external data are used for blocks (1)–(4); PolicyEngine integration is kept separate and can be added in a later step.
+- All results are deterministic (seed=42).
+- No external data are fetched; all parameters are in `src/taxuncertainty/data/parameters.yaml`.
 
-Notes on interpretation
------------------------
+Key model
+---------
 
-- Stylized preferences (Cobb–Douglas) and simple tax uncertainty are used for transparency. Results are qualitative; magnitudes are sensitive to parameters and grids. See `scripts/run_analysis.py` for configurable options.
-- For uncertainty, the analysis includes both the “optimize under expected tax” rule and the more appropriate “expected-utility maximizing labor” rule.
-
-Next steps
-----------
-
-- Integrate PolicyEngine-US microdata for empirical exercises and richer, non-linear tax-benefit schedules.
-- Pin a full environment lockfile (pip-tools or conda) and archive inputs for long-term replication.
-
+- Quasilinear-isoelastic preferences: U(C,h) = C - psi * h^(1+1/epsilon) / (1+1/epsilon)
+- Optimal hours: h* = (w(1-tau)/psi)^epsilon
+- DWL from misperception: E[DWL] ~ 1/2 * epsilon * w * h* * sigma^2 / (1-tau)
+- Calibrated to US labor market data (BLS wages, CBO tax rates, Chetty elasticities, Rees-Jones & Taubinsky misperception estimates).

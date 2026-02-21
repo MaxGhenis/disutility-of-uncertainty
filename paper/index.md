@@ -1,25 +1,19 @@
-# The Disutility of Uncertainty: Welfare Costs of Noisy Tax Perceptions
+# The disutility of uncertainty: welfare costs of noisy tax perceptions
 
 **Max Ghenis**
 
 ## Abstract
 
-Most taxpayers cannot accurately state their marginal tax rate due to the extraordinary complexity of modern tax codes. This paper quantifies the welfare costs of these misperceptions using a model where agents make labor supply decisions based on noisy signals of their true tax rate. Using {cite:t}`gideon2017perception` survey data showing that only 33.7% of Americans correctly understand that their marginal tax rate exceeds their average rate, combined with {cite:t}`cbo2012marginal` {cite:t}`cbo2016marginal` data showing effective marginal rates of 31-43% across income groups, I estimate that tax code complexity imposes welfare losses of 0.10-0.35% of GDP annually ($27-95 billion). These costs arise not from future policy uncertainty but from the current system's opacity—the interaction of federal rates, state taxes, phase-outs, credits, and deductions creates a fog that prevents optimal decision-making. Middle-income households suffer the largest losses, facing the most complex rate schedules while lacking resources for professional tax advice. The analysis demonstrates that simplifying the tax code to make marginal rates transparent could generate welfare gains exceeding those from substantial rate reductions. Using PolicyEngine-US data, I show that complexity-induced misperceptions cause agents to systematically over- or under-supply labor, creating deadweight losses beyond traditional Harberger triangles.
+Most taxpayers cannot accurately state their marginal tax rate. This paper quantifies the welfare cost of such misperception using a model in which workers choose labor supply based on a noisy signal of their true marginal rate. I adopt quasilinear-isoelastic preferences, which yield a clean closed-form expression for the expected deadweight loss per worker: $\frac{1}{2}\varepsilon\sigma^{2}/(1-\tau)$ times earnings, where $\varepsilon$ is the Frisch elasticity of labor supply, $\sigma$ is the standard deviation of the misperception error, and $\tau$ is the true marginal rate. Calibrating to a Frisch elasticity of 0.33 ({cite:t}`chetty2012bounds`), a misperception standard deviation of 0.12 ({cite:t}`rees2020schmeduling`), and a mean marginal rate of 0.30 ({cite:t}`cbo2016marginal`), the central estimate is \$187 per worker and \$30 billion in aggregate, or 0.11% of GDP annually. Sensitivity analysis across plausible parameter ranges places the cost between 0.04% and 0.25% of GDP (\$10--71 billion). A utilitarian planner who internalizes misperception chooses a lower optimal tax rate (42.9% versus 44.5% under perfect information), and reducing the misperception standard deviation by 5 percentage points generates larger welfare gains than a comparable reduction in the statutory rate. These results suggest that simplifying the tax code to make marginal rates transparent is a welfare-improving policy intervention, since reducing $\sigma$ by 5 percentage points cuts aggregate DWL by approximately two-thirds.
 
 ## Keywords
 
-Tax complexity, marginal rate misperception, bounded rationality, labor supply, tax salience
+Tax complexity, marginal rate misperception, bounded rationality, labor supply, deadweight loss
 
-## JEL Classification
+## JEL classification
 
-H21, H30, D80, J22
+H21, H30, D83, J22
 
-## Executive Summary
+## Replication
 
-Most Americans cannot accurately state their marginal tax rate—not because rates will change in the future, but because the current tax code is too complex to understand. Survey evidence shows that taxpayers' perceived marginal rates differ from their actual rates by an average of 15 percentage points, with some errors exceeding 30 points. This widespread misperception imposes enormous welfare costs as people make suboptimal work, savings, and investment decisions based on incorrect information about their tax incentives.
-
-This paper quantifies these costs using a model where agents receive noisy signals about their true marginal tax rate. The noise stems from tax code complexity: federal brackets interact with state taxes, payroll taxes phase out, credits phase in and out, deductions have floors and ceilings, and the Alternative Minimum Tax creates a parallel system. Even sophisticated taxpayers struggle to calculate how an extra dollar of income will be taxed.
-
-The welfare losses from these misperceptions are substantial—equivalent to 0.10-0.35% of GDP annually based on empirical estimates using real survey and government data, or $27-95 billion in the United States. Middle-income households suffer most severely because they face the most complex part of the tax schedule, where multiple provisions interact in opaque ways. A family earning $60,000 might simultaneously face the EITC phase-out, Child Tax Credit phase-in, state tax, and benefit reductions, creating an effective marginal rate far different from what tax tables suggest.
-
-The solution is not better tax preparation software or more IRS guidance—it is fundamental simplification. Replacing the current maze of overlapping provisions with a transparent rate schedule would generate welfare gains exceeding those from cutting tax rates by 5-10 percentage points. Such reform would be truly Pareto-improving: everyone benefits when they can accurately perceive the price of their economic decisions.
+Code and data for all results are available at [github.com/maxghenis/disutility-of-uncertainty](https://github.com/maxghenis/disutility-of-uncertainty). All numerical results are generated deterministically from a fixed seed.

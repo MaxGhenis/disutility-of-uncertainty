@@ -1,9 +1,9 @@
 version: 1
 project:
-  title: The Welfare Cost of Tax Rate Uncertainty
+  title: "The disutility of uncertainty: welfare costs of noisy tax perceptions"
   authors:
     - name: Max Ghenis
-  copyright: '2024'
+  copyright: '2025'
   github: maxghenis/disutility-of-uncertainty
   thebe:
     binder:
@@ -23,27 +23,20 @@ project:
       children:
         - file: chapters/introduction.md
         - file: chapters/literature_review.md
-    - title: Methodology
+    - title: Model
       children:
-        - file: chapters/theoretical_framework.ipynb
-        - file: chapters/empirical_approach.md
+        - file: chapters/model.md
+        - file: chapters/calibration.md
     - title: Results
       children:
-        - file: chapters/stylized_results.md
-        - file: chapters/reproduce_stylized_results.ipynb
-        - file: chapters/theory_walkthrough.ipynb
-        - file: chapters/empirical_estimates.ipynb
-        - file: chapters/policyengine_analysis.ipynb
-        - file: chapters/baseline_results.ipynb
-        - file: chapters/robustness.md
+        - file: chapters/results.md
+        - file: chapters/extensions.md
     - title: Conclusion
       children:
-        - file: chapters/discussion.md
-        - file: chapters/policy_implications.md
+        - file: chapters/conclusion.md
     - title: Appendix
       children:
         - file: chapters/technical_appendix.md
-        - file: chapters/data_appendix.md
 site:
   options:
     logo: ''
