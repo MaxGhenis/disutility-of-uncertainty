@@ -29,7 +29,7 @@ class Calibration:
 
     # US macro parameters
     MEAN_MARGINAL_RATE = 0.30  # From CBO
-    MEAN_HOURLY_WAGE = 27.5   # ~$55k annual at 2000 hrs
+    MEAN_HOURLY_WAGE = 27.5  # ~$55k annual at 2000 hrs
     MEAN_ANNUAL_EARNINGS = 55_000
     TOTAL_WORKERS = 160_000_000
     GDP = 28_000_000_000_000  # ~$28T
@@ -41,7 +41,7 @@ class Calibration:
         """Analytical per-worker DWL: 0.5 * eps * earnings * sigma^2 / (1 - tau)."""
         tau = tau if tau is not None else self.MEAN_MARGINAL_RATE
         earnings = earnings if earnings is not None else self.MEAN_ANNUAL_EARNINGS
-        return 0.5 * eps * earnings * sigma ** 2 / (1 - tau)
+        return 0.5 * eps * earnings * sigma**2 / (1 - tau)
 
     def _dwl_row(self, eps, sigma):
         """Build a result dict for one (elasticity, sigma) combination."""
@@ -94,9 +94,5 @@ class Calibration:
             self.MISPERCEPTION_STD_HIGH,
         ]
 
-        rows = [
-            self._dwl_row(eps, sigma)
-            for eps in elasticities
-            for sigma in sigmas
-        ]
+        rows = [self._dwl_row(eps, sigma) for eps in elasticities for sigma in sigmas]
         return pd.DataFrame(rows)

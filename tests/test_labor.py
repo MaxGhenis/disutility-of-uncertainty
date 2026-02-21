@@ -74,7 +74,9 @@ class TestIndividualDWL:
         """Misperception can only reduce welfare."""
         for delta in [-0.2, -0.1, -0.05, 0.05, 0.1, 0.2]:
             dwl = labor.individual_dwl(20.0, 0.3, 0.3 + delta, prefs)
-            assert dwl >= -1e-12, f"DWL should be non-negative, got {dwl} for delta={delta}"
+            assert (
+                dwl >= -1e-12
+            ), f"DWL should be non-negative, got {dwl} for delta={delta}"
 
     def test_approximately_symmetric(self, prefs):
         """DWL(+δ) ≈ DWL(-δ) for small δ (second-order effect)."""
@@ -126,7 +128,9 @@ class TestTaylorValidation:
         """Taylor approximation should be within 5% of MC at sigma=0.12 (calibrated value)."""
         w, tau, sigma = 20.0, 0.3, 0.12
         approx = labor.expected_dwl_approx(w, tau, sigma, prefs)
-        mc = labor.expected_dwl_monte_carlo(w, tau, sigma, prefs, n_draws=100_000, seed=42)
+        mc = labor.expected_dwl_monte_carlo(
+            w, tau, sigma, prefs, n_draws=100_000, seed=42
+        )
         assert mc == pytest.approx(approx, rel=0.05)
 
     def test_approx_diverges_at_large_sigma(self, prefs):
@@ -135,12 +139,16 @@ class TestTaylorValidation:
         # At sigma=0.12, should be close
         err_small = abs(
             labor.expected_dwl_approx(w, tau, 0.12, prefs)
-            - labor.expected_dwl_monte_carlo(w, tau, 0.12, prefs, n_draws=100_000, seed=42)
+            - labor.expected_dwl_monte_carlo(
+                w, tau, 0.12, prefs, n_draws=100_000, seed=42
+            )
         )
         # At sigma=0.30, should diverge more
         err_large = abs(
             labor.expected_dwl_approx(w, tau, 0.30, prefs)
-            - labor.expected_dwl_monte_carlo(w, tau, 0.30, prefs, n_draws=100_000, seed=42)
+            - labor.expected_dwl_monte_carlo(
+                w, tau, 0.30, prefs, n_draws=100_000, seed=42
+            )
         )
         assert err_large > err_small
 
@@ -150,14 +158,22 @@ class TestDWLMonteCarlo:
         """Analytical and Monte Carlo should agree for small σ."""
         w, tau, sigma = 20.0, 0.3, 0.03
         approx = labor.expected_dwl_approx(w, tau, sigma, prefs)
-        mc = labor.expected_dwl_monte_carlo(w, tau, sigma, prefs, n_draws=50_000, seed=42)
+        mc = labor.expected_dwl_monte_carlo(
+            w, tau, sigma, prefs, n_draws=50_000, seed=42
+        )
         assert mc == pytest.approx(approx, rel=0.10)
 
     def test_mc_nonnegative(self, prefs):
-        mc = labor.expected_dwl_monte_carlo(20.0, 0.3, 0.10, prefs, n_draws=10_000, seed=42)
+        mc = labor.expected_dwl_monte_carlo(
+            20.0, 0.3, 0.10, prefs, n_draws=10_000, seed=42
+        )
         assert mc >= 0
 
     def test_mc_increases_with_sigma(self, prefs):
-        mc1 = labor.expected_dwl_monte_carlo(20.0, 0.3, 0.05, prefs, n_draws=10_000, seed=42)
-        mc2 = labor.expected_dwl_monte_carlo(20.0, 0.3, 0.15, prefs, n_draws=10_000, seed=42)
+        mc1 = labor.expected_dwl_monte_carlo(
+            20.0, 0.3, 0.05, prefs, n_draws=10_000, seed=42
+        )
+        mc2 = labor.expected_dwl_monte_carlo(
+            20.0, 0.3, 0.15, prefs, n_draws=10_000, seed=42
+        )
         assert mc2 > mc1

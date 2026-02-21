@@ -13,8 +13,9 @@ from taxuncertainty.models.preferences import QuasilinearIsoelastic
 class SocialPlanner:
     """Utilitarian social planner with linear tax and lump-sum transfer."""
 
-    def _compute_hours_and_revenue(self, tax_rate, wages, prefs,
-                                    misperception_std=0, seed=42):
+    def _compute_hours_and_revenue(
+        self, tax_rate, wages, prefs, misperception_std=0, seed=42
+    ):
         """Shared helper: compute hours for each worker and total revenue.
 
         Returns
@@ -33,13 +34,15 @@ class SocialPlanner:
             perceived_taxes = np.clip(tax_rate + errors, 0.0, 1.0)
             net_wages = wages * (1.0 - perceived_taxes)
             hours = np.where(
-                perceived_taxes >= 1.0, 0.0,
+                perceived_taxes >= 1.0,
+                0.0,
                 (net_wages / prefs.psi) ** prefs.frisch_elasticity,
             )
         else:
             net_wages = wages * (1.0 - tax_rate)
             hours = np.where(
-                tax_rate >= 1.0, 0.0,
+                tax_rate >= 1.0,
+                0.0,
                 (net_wages / prefs.psi) ** prefs.frisch_elasticity,
             )
 
@@ -125,14 +128,15 @@ class SocialPlanner:
         exponent = 1.0 + 1.0 / eps
 
         consumption = wages * (1 - tax_rate) * hours + v
-        disutility = prefs.psi * hours ** exponent / exponent
+        disutility = prefs.psi * hours**exponent / exponent
         utilities = consumption - disutility
         weights = w_mean / wages
 
         return float(np.sum(weights * utilities) / n)
 
-    def social_welfare(self, tax_rate, wages, prefs, misperception_std=0, seed=42,
-                       n_mc=1000):
+    def social_welfare(
+        self, tax_rate, wages, prefs, misperception_std=0, seed=42, n_mc=1000
+    ):
         """Expected weighted-utilitarian social welfare (inequality-averse).
 
         Each worker's indirect utility is:
@@ -187,17 +191,23 @@ class SocialPlanner:
             perceived_taxes = np.clip(tax_rate + errors, 0.0, 1.0)
             net_wages = wages * (1.0 - perceived_taxes)
             hours = np.where(
-                perceived_taxes >= 1.0, 0.0,
+                perceived_taxes >= 1.0,
+                0.0,
                 (net_wages / prefs.psi) ** prefs.frisch_elasticity,
             )
             rev = tax_rate * np.sum(wages * hours)
-            total_welfare += self._welfare_one_draw(
-                tax_rate, wages, prefs, hours, rev
-            )
+            total_welfare += self._welfare_one_draw(tax_rate, wages, prefs, hours, rev)
         return total_welfare / n_mc
 
-    def optimal_tax(self, wages, prefs, misperception_std=0, seed=42,
-                    search_range=(0.0, 0.80), n_grid=81):
+    def optimal_tax(
+        self,
+        wages,
+        prefs,
+        misperception_std=0,
+        seed=42,
+        search_range=(0.0, 0.80),
+        n_grid=81,
+    ):
         """Find tax rate maximizing social welfare via grid search.
 
         Uses a two-pass approach: first a coarse grid, then a fine grid
@@ -223,6 +233,7 @@ class SocialPlanner:
         float
             Tax rate that maximizes social welfare.
         """
+
         def best_on_grid(lo, hi):
             grid = np.linspace(lo, hi, n_grid)
             welfares = [

@@ -58,7 +58,9 @@ class TestSocialWelfare:
     def test_welfare_higher_without_misperception(self, planner, wages, prefs):
         """Perfect information yields higher welfare."""
         w_certain = planner.social_welfare(0.3, wages, prefs, misperception_std=0)
-        w_uncertain = planner.social_welfare(0.3, wages, prefs, misperception_std=0.1, seed=42)
+        w_uncertain = planner.social_welfare(
+            0.3, wages, prefs, misperception_std=0.1, seed=42
+        )
         assert w_certain > w_uncertain
 
     def test_welfare_decreases_with_more_misperception(self, planner, wages, prefs):
@@ -75,7 +77,9 @@ class TestOptimalTax:
     def test_optimal_tax_decreases_with_misperception(self, planner, wages, prefs):
         """Key result: optimal tax lower under misperception."""
         tau_certain = planner.optimal_tax(wages, prefs, misperception_std=0)
-        tau_uncertain = planner.optimal_tax(wages, prefs, misperception_std=0.1, seed=42)
+        tau_uncertain = planner.optimal_tax(
+            wages, prefs, misperception_std=0.1, seed=42
+        )
         assert tau_uncertain < tau_certain
 
     def test_optimal_tax_with_equal_wages_is_zero(self, planner, prefs):

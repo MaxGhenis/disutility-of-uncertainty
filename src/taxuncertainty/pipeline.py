@@ -42,7 +42,11 @@ def generate_results(output_path=None, seed=42):
         }
     }
     """
-    output_path = Path(output_path) if output_path else Path(__file__).parent / "data" / "results.json"
+    output_path = (
+        Path(output_path)
+        if output_path
+        else Path(__file__).parent / "data" / "results.json"
+    )
 
     # Calibration
     cal = Calibration()
@@ -66,7 +70,8 @@ def generate_results(output_path=None, seed=42):
     planner = SocialPlanner()
     tau_certain = planner.optimal_tax(wages, prefs, misperception_std=0, seed=seed)
     tau_uncertain = planner.optimal_tax(
-        wages, prefs,
+        wages,
+        prefs,
         misperception_std=cal.MISPERCEPTION_STD_CENTRAL,
         seed=seed,
     )

@@ -11,9 +11,7 @@ import numpy as np
 from taxuncertainty.models.preferences import QuasilinearIsoelastic
 
 
-def optimal_hours(
-    wage: float, tax_rate: float, prefs: QuasilinearIsoelastic
-) -> float:
+def optimal_hours(wage: float, tax_rate: float, prefs: QuasilinearIsoelastic) -> float:
     """Optimal labor supply under the true tax rate.
 
     h* = (w(1-tau) / psi)^epsilon
@@ -195,8 +193,7 @@ def expected_dwl_monte_carlo(
     deltas = rng.normal(0.0, misperception_std, size=n_draws)
     perceived_taxes = np.clip(tax_rate + deltas, 0.0, 1.0)
 
-    dwl_values = np.array([
-        individual_dwl(wage, tax_rate, float(pt), prefs)
-        for pt in perceived_taxes
-    ])
+    dwl_values = np.array(
+        [individual_dwl(wage, tax_rate, float(pt), prefs) for pt in perceived_taxes]
+    )
     return float(np.mean(dwl_values))

@@ -12,7 +12,6 @@ import numpy as np
 
 from taxuncertainty.models.preferences import QuasilinearIsoelastic
 
-
 STANDARD_ANNUAL_HOURS = 2000
 
 
@@ -44,7 +43,7 @@ def _individual_dwl_from_wages(wage, tax_rate, misperception_std, prefs):
         return 0.0
     eps = prefs.frisch_elasticity
     annual_earnings = wage * STANDARD_ANNUAL_HOURS
-    return 0.5 * eps * annual_earnings * misperception_std ** 2 / (1 - tax_rate)
+    return 0.5 * eps * annual_earnings * misperception_std**2 / (1 - tax_rate)
 
 
 class PopulationWelfare:
@@ -83,9 +82,9 @@ class PopulationWelfare:
         tax_rates = np.asarray(tax_rates, dtype=float)
         eps = prefs.frisch_elasticity
         annual_earnings = wages * STANDARD_ANNUAL_HOURS
-        return float(np.sum(
-            0.5 * eps * annual_earnings * misperception_std ** 2 / (1 - tax_rates)
-        ))
+        return float(
+            np.sum(0.5 * eps * annual_earnings * misperception_std**2 / (1 - tax_rates))
+        )
 
     def total_dwl_individual_sum(self, wages, tax_rates, misperception_std, prefs):
         """Same as total_dwl -- explicit summation for testing.
@@ -108,8 +107,9 @@ class PopulationWelfare:
         """
         return self.total_dwl(wages, tax_rates, misperception_std, prefs)
 
-    def total_dwl_analytical(self, mean_wage, mean_tax_rate, misperception_std,
-                              prefs, n_workers=1):
+    def total_dwl_analytical(
+        self, mean_wage, mean_tax_rate, misperception_std, prefs, n_workers=1
+    ):
         """Shortcut using representative-agent approximation.
 
         total DWL ~ n * 0.5 * epsilon * (mean_wage * 2000) * sigma^2 / (1 - tau_bar)
