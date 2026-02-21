@@ -1,8 +1,8 @@
 """Results pipeline: generate all paper results and write to JSON.
 
 This module orchestrates the calibration, optimal tax computation,
-and sensitivity analysis, then serializes everything to a single
-JSON file that the paper can reference.
+sensitivity analysis, and empirical microsimulation results, then
+serializes everything to a single JSON file that the paper can reference.
 """
 
 import json
@@ -11,8 +11,69 @@ from pathlib import Path
 import numpy as np
 
 from taxuncertainty.analysis.calibration import Calibration
+from taxuncertainty.analysis.welfare import PopulationWelfare
 from taxuncertainty.models.planner import SocialPlanner
 from taxuncertainty.models.preferences import QuasilinearIsoelastic
+
+
+def _generate_empirical_section(cal, prefs):
+    """Generate empirical results from PolicyEngine-US microsimulation.
+
+    Parameters
+    ----------
+    cal : Calibration
+        Calibration instance for baseline comparison.
+    prefs : QuasilinearIsoelastic
+        Preference parameters.
+
+    Returns
+    -------
+    dict
+        Empirical results section for results.json.
+    """
+    from taxuncertainty.analysis.empirical import EmpiricalMTR
+
+    emp = EmpiricalMTR(year=2024, cache=True)
+    stats = emp.summary_stats()
+    quintiles_raw = emp.quintile_results()
+
+    # Compute DWL by quintile
+    welfare = PopulationWelfare()
+    sigma = cal.MISPERCEPTION_STD_CENTRAL
+
+    quintiles_with_dwl = []
+    total_dwl = 0.0
+    for q in quintiles_raw:
+        per_worker = 0.5 * prefs.frisch_elasticity * q["mean_earnings"] * sigma**2 / (1 - q["mean_mtr"])
+        q_dwl = per_worker * q["weighted_workers"]
+        total_dwl += q_dwl
+        quintiles_with_dwl.append({**q, "per_worker_dwl": per_worker, "quintile_total_dwl": q_dwl})
+
+    # Add share of total
+    for q in quintiles_with_dwl:
+        q["share_of_total_dwl"] = q["quintile_total_dwl"] / total_dwl if total_dwl > 0 else 0.0
+
+    # Aggregate DWL from microsimulation
+    aggregate_dwl = welfare.weighted_total_dwl(
+        emp.earnings, emp.mtr, emp.weights, sigma, prefs
+    )
+
+    # Stylized baseline comparison
+    stylized_dwl = cal.per_worker_dwl(
+        prefs.frisch_elasticity, sigma
+    ) * stats["total_weighted_workers"]
+
+    return {
+        "mtr_distribution": stats,
+        "aggregate_dwl": aggregate_dwl,
+        "aggregate_dwl_billions": aggregate_dwl / 1e9,
+        "quintiles": quintiles_with_dwl,
+        "comparison": {
+            "empirical_dwl_billions": aggregate_dwl / 1e9,
+            "stylized_dwl_billions": stylized_dwl / 1e9,
+            "ratio": aggregate_dwl / stylized_dwl if stylized_dwl > 0 else None,
+        },
+    }
 
 
 def generate_results(output_path=None, seed=42):
@@ -39,6 +100,13 @@ def generate_results(output_path=None, seed=42):
             "frisch_elasticity_central": 0.33,
             "misperception_std_central": 0.12,
             ...
+        },
+        "empirical": {
+            "mtr_distribution": { ...weighted stats },
+            "aggregate_dwl": float,
+            "aggregate_dwl_billions": float,
+            "quintiles": [ ...per-quintile breakdown ],
+            "comparison": { ...empirical vs stylized }
         }
     }
     """
@@ -99,6 +167,9 @@ def generate_results(output_path=None, seed=42):
             "seed": seed,
         },
     }
+
+    # Empirical microsimulation results
+    results["empirical"] = _generate_empirical_section(cal, prefs)
 
     # Ensure output directory exists
     output_path.parent.mkdir(parents=True, exist_ok=True)

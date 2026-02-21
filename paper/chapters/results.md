@@ -42,7 +42,39 @@ Because DWL is quadratic in $\sigma$, even partial reductions in misperception y
 
 To appreciate this magnitude, a \$17 billion welfare gain exceeds the annual budget of most federal information-provision programs and is achieved without any reduction in tax revenue: simplification merely helps workers perceive the rate they already face. The U.S. tax preparation industry generates roughly \$35 billion in annual revenue {cite:p}`irs2023databook`, suggesting that households already spend considerable resources trying to reduce their own $\sigma$. Public investments in simplification that lower $\sigma$ for all workers simultaneously would capture economies of scale unavailable to individual tax filers.
 
-In sum, the welfare costs of tax rate misperception range from 0.04% to 0.25% of GDP under every calibration considered. They are concentrated among middle-income workers, they reduce the optimal tax rate, and they imply large welfare gains from policies that make marginal rates more transparent.
+## Microsimulation results
+
+The stylized calculations above use a single representative marginal tax rate ($\bar{\tau} = 0.30$) and a lognormal wage distribution. To assess the distributional incidence of misperception-induced DWL across the actual income distribution, I apply the per-worker DWL formula to household-level data from PolicyEngine-US {cite:p}`policyengine2024`, a microsimulation model that computes comprehensive marginal tax rates for approximately 149 million working-age adults with positive employment income.
+
+### MTR distribution
+
+The weighted mean comprehensive MTR is 0.25, with a standard deviation of 0.16. The distribution is right-skewed: the median (0.26) is close to the mean, but the 90th percentile (0.45) is far above it, reflecting the steep statutory rates faced by high earners. At the bottom, 10% of workers face an MTR at or near zero, typically because they earn below the payroll tax threshold or receive offsetting credits.
+
+### DWL by income quintile
+
+Applying the per-worker DWL formula $\frac{1}{2}\varepsilon \cdot \text{earnings}_i \cdot \sigma^2 / (1 - \tau_i)$ with $\varepsilon = 0.33$ and $\sigma = 0.12$ to each worker in the microsimulation yields the distributional breakdown in {numref}`tab-quintile-dwl`.
+
+:::{table} Deadweight loss from tax misperception by income quintile
+:label: tab-quintile-dwl
+:align: center
+
+| Quintile | Mean earnings | Mean MTR | Per-worker DWL | Share of total |
+|:---:|---:|:---:|---:|---:|
+| 1 (lowest) | \$7,355 | 0.11 | \$20 | 1.8% |
+| 2 | \$23,550 | 0.23 | \$73 | 6.8% |
+| 3 | \$40,742 | 0.27 | \$132 | 12.3% |
+| 4 | \$64,301 | 0.31 | \$220 | 20.1% |
+| 5 (highest) | \$171,542 | 0.34 | \$614 | 58.9% |
+
+:::
+
+Three findings stand out. First, the top quintile bears 59% of total DWL despite constituting only 20% of workers. This reflects the multiplicative interaction of higher earnings and higher marginal rates in the DWL formula: workers earning \$172k at a 34% MTR lose \$614/year to misperception, compared to \$20/year for workers earning \$7k at an 11% MTR.
+
+Second, as a *fraction of earnings*, the distributional pattern is more uniform. The DWL-to-earnings ratio is $\frac{1}{2}\varepsilon\sigma^2/(1-\tau_i)$, which depends only on $\varepsilon$, $\sigma$, and the individual's MTR. Workers in the top quintile lose 0.36% of earnings, versus 0.27% for bottom-quintile workers---a narrower gap than the absolute dollar figures suggest. The $(1-\tau)$ denominator drives this mild progressivity: higher-MTR workers face a larger amplification of the same misperception variance.
+
+Third, the aggregate DWL from the microsimulation (\$36.6 billion) exceeds the stylized estimate (\$27.8 billion) by 32%. This divergence arises because the DWL formula is convex in both earnings and $1/(1-\tau)$: the actual distribution of incomes and tax rates has heavier tails than the representative-agent approximation, and Jensen's inequality ensures that the population-level DWL exceeds the DWL evaluated at population means. The stylized calculation understates aggregate costs by compressing the joint distribution of earnings and MTRs into a single representative point.
+
+In sum, the welfare costs of tax rate misperception range from 0.04% to 0.25% of GDP under every calibration considered, and the microsimulation analysis suggests aggregate costs of \$37 billion---32% above the stylized baseline. The costs are concentrated in absolute terms among higher earners but are moderately progressive as a share of earnings. These results imply large welfare gains from policies that make marginal rates more transparent, and they reduce the optimal tax rate by 1.6 percentage points.
 
 ```{bibliography}
 ```

@@ -107,6 +107,42 @@ class PopulationWelfare:
         """
         return self.total_dwl(wages, tax_rates, misperception_std, prefs)
 
+    def weighted_total_dwl(self, annual_earnings, tax_rates, weights, misperception_std, prefs):
+        """Weighted sum of expected DWL using annual earnings directly.
+
+        Unlike ``total_dwl`` (which takes hourly wages), this method accepts
+        annual earnings and sample weights, making it suitable for
+        microsimulation data where each observation represents multiple people.
+
+        Formula per worker: ``weight_i * 0.5 * eps * earnings_i * sigma^2 / (1 - tau_i)``
+
+        Parameters
+        ----------
+        annual_earnings : array-like
+            Annual earnings for each worker.
+        tax_rates : array-like
+            Marginal tax rate for each worker.
+        weights : array-like
+            Sample weight for each worker.
+        misperception_std : float
+            Standard deviation of misperception (same for all workers).
+        prefs : QuasilinearIsoelastic
+            Preference parameters.
+
+        Returns
+        -------
+        float
+            Total weighted expected DWL.
+        """
+        if misperception_std == 0:
+            return 0.0
+        annual_earnings = np.asarray(annual_earnings, dtype=float)
+        tax_rates = np.asarray(tax_rates, dtype=float)
+        weights = np.asarray(weights, dtype=float)
+        eps = prefs.frisch_elasticity
+        per_worker = 0.5 * eps * annual_earnings * misperception_std**2 / (1 - tax_rates)
+        return float(np.sum(weights * per_worker))
+
     def total_dwl_analytical(
         self, mean_wage, mean_tax_rate, misperception_std, prefs, n_workers=1
     ):

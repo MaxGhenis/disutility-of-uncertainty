@@ -8,6 +8,7 @@ Environment
 
 - Python: 3.10+ (as declared in `pyproject.toml`)
 - Install dependencies: `pip install -e ".[dev]"`
+- Install PolicyEngine-US for empirical microsimulation results: `pip install -e ".[dev,policyengine]"`
 - Optional: `mystmd` for building the paper (or use `make install`).
 
 Quick start
@@ -15,12 +16,14 @@ Quick start
 
 1. Create a virtual environment and install deps:
    - `python3 -m venv .venv && source .venv/bin/activate`
-   - `pip install -e ".[dev]"`
-2. Run the test suite:
-   - `python -m pytest tests/ -v --cov`
-3. Regenerate results:
+   - `pip install -e ".[dev,policyengine]"`
+2. Run the test suite (fast tests only):
+   - `python -m pytest tests/ -v --cov -m "not slow"`
+3. Run integration tests (requires PolicyEngine-US, takes several minutes):
+   - `python -m pytest tests/ -v -m slow`
+4. Regenerate results (includes PolicyEngine microsimulation):
    - `python -c "from taxuncertainty.pipeline import generate_results; generate_results()"`
-4. Build the paper:
+5. Build the paper:
    - `cd paper && myst build`
 
 What is generated
@@ -31,6 +34,9 @@ What is generated
   - DWL as share of earnings and GDP
   - Optimal tax rates under uncertainty
   - Sensitivity analysis across elasticity and misperception parameters
+  - Empirical MTR distribution from PolicyEngine-US microsimulation
+  - DWL by income quintile from household-level microsimulation data
+- `src/taxuncertainty/data/cache/` — Cached PolicyEngine microsimulation results (gitignored)
 
 Determinism and seeds
 ---------------------

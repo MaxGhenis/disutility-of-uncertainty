@@ -60,5 +60,23 @@ The central estimate of 0.11% of GDP is smaller than {cite:t}`skinner1988welfare
 
 These calibrated values align with the code implementation in the `Calibration` class, which uses identical parameter values and the same analytical formula to produce the sensitivity grid. All results are reproducible from the accompanying code repository.
 
+## Empirical marginal tax rate distribution
+
+The representative-agent calculations above assume a single mean marginal rate $\bar{\tau} = 0.30$ applied uniformly across workers. To assess the distributional implications of MTR heterogeneity, I compute household-level comprehensive marginal tax rates using PolicyEngine-US {cite:p}`policyengine2024`, a microsimulation model built on the Enhanced Current Population Survey. The simulation covers approximately 149 million working-age adults (18--64) with positive employment income in 2024.
+
+The weighted mean comprehensive MTR is 0.25, somewhat below the CBO estimate of 0.30 used in the stylized calibration. This difference reflects the large mass of low-income workers who face zero or low federal income tax rates, partially offset by payroll taxes. The weighted standard deviation is 0.16, and the distribution spans from 0.00 at the 10th percentile to 0.45 at the 90th percentile. The median MTR is 0.26, with an interquartile range of [0.20, 0.36].
+
+These empirical rates are *comprehensive*: they include federal income taxes, employee payroll taxes (Social Security and Medicare), state income taxes, and the phase-out of transfer programs (EITC, CTC, SNAP, Medicaid). This comprehensiveness is precisely the source of a critical scope mismatch with the misperception parameter $\sigma$.
+
+### The $\sigma$ scope mismatch
+
+The calibrated $\sigma = 0.12$ is drawn from {cite:t}`rees2020schmeduling`, who measured misperception of *federal income tax rates only*. Their survey instrument asked respondents to estimate federal marginal tax rates; it did not cover payroll taxes, state taxes, or benefit phase-outs. However, the marginal tax rates in both the stylized calibration ($\bar{\tau} = 0.30$) and the microsimulation include all of these components.
+
+This creates an asymmetry: $\tau$ is comprehensive but $\sigma$ captures only one component of the tax system. Workers who face EITC phase-outs, state income surtaxes, or benefit cliffs confront additional sources of complexity beyond the federal income tax schedule. If the misperception of each additional tax component is even partially independent of federal income tax misperception, then the true comprehensive $\sigma$ exceeds 0.12. This means the calibrated $\sigma = 0.12$ is best interpreted as a **lower bound** on the standard deviation of comprehensive MTR misperception.
+
+The magnitude of this understatement depends on how correlated the various misperception components are. If workers who misperceive their federal rate also misperceive payroll and state taxes in the same direction (correlated errors), the comprehensive $\sigma$ may be only modestly larger than 0.12. If the errors are largely independent---which is plausible given the distinct administrative origins of each tax---the comprehensive $\sigma$ could be substantially larger. A rough calculation: if federal income tax misperception contributes $\sigma_{\text{fed}} = 0.12$ and the combined payroll-plus-state-plus-benefit component contributes an independent $\sigma_{\text{other}} = 0.06$, the comprehensive $\sigma = \sqrt{0.12^2 + 0.06^2} \approx 0.13$. With a larger non-federal component ($\sigma_{\text{other}} = 0.10$), the comprehensive $\sigma$ would be approximately 0.16.
+
+Because DWL is quadratic in $\sigma$, even a modest understatement matters: $0.16^2 / 0.12^2 = 1.78$, implying the welfare costs could be 78% larger than the baseline estimate. The empirical microsimulation results in the next chapter provide a complementary perspective by using actual MTR heterogeneity rather than a single representative rate.
+
 ```{bibliography}
 ```

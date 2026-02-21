@@ -110,3 +110,63 @@ class TestCalibration:
             )
             dwls = subset["gdp_fraction_pct"].values
             assert all(dwls[i] <= dwls[i + 1] for i in range(len(dwls) - 1))
+
+
+class TestWeightedDWL:
+    """Tests for weighted_total_dwl using annual earnings directly."""
+
+    @pytest.fixture
+    def prefs(self):
+        return QuasilinearIsoelastic(psi=1.0, frisch_elasticity=0.33)
+
+    @pytest.fixture
+    def calc(self):
+        return PopulationWelfare()
+
+    def test_zero_when_no_misperception(self, calc, prefs):
+        earnings = np.array([40000.0, 55000.0, 80000.0])
+        tax_rates = np.array([0.25, 0.30, 0.35])
+        weights = np.array([1.0, 1.0, 1.0])
+        result = calc.weighted_total_dwl(earnings, tax_rates, weights, 0.0, prefs)
+        assert result == pytest.approx(0.0)
+
+    def test_positive_with_misperception(self, calc, prefs):
+        earnings = np.array([40000.0, 55000.0, 80000.0])
+        tax_rates = np.array([0.25, 0.30, 0.35])
+        weights = np.array([1.0, 1.0, 1.0])
+        result = calc.weighted_total_dwl(earnings, tax_rates, weights, 0.12, prefs)
+        assert result > 0
+
+    def test_weights_scale_result(self, calc, prefs):
+        """Doubling all weights should double the total DWL."""
+        earnings = np.array([40000.0, 55000.0, 80000.0])
+        tax_rates = np.array([0.25, 0.30, 0.35])
+        weights_1 = np.array([1.0, 1.0, 1.0])
+        weights_2 = np.array([2.0, 2.0, 2.0])
+        dwl_1 = calc.weighted_total_dwl(earnings, tax_rates, weights_1, 0.12, prefs)
+        dwl_2 = calc.weighted_total_dwl(earnings, tax_rates, weights_2, 0.12, prefs)
+        assert dwl_2 == pytest.approx(2.0 * dwl_1)
+
+    def test_unit_weights_match_unweighted(self, calc, prefs):
+        """Unit weights should give same result as total_dwl with equivalent hourly wages."""
+        earnings = np.array([55000.0, 55000.0, 55000.0])
+        tax_rates = np.array([0.30, 0.30, 0.30])
+        weights = np.array([1.0, 1.0, 1.0])
+        sigma = 0.12
+        weighted = calc.weighted_total_dwl(earnings, tax_rates, weights, sigma, prefs)
+        # Convert to hourly wages for the existing method
+        hourly_wages = earnings / 2000
+        unweighted = calc.total_dwl(hourly_wages, tax_rates, sigma, prefs)
+        assert weighted == pytest.approx(unweighted)
+
+    def test_formula_correctness(self, calc, prefs):
+        """Verify against hand-calculated result."""
+        earnings = np.array([50000.0])
+        tax_rates = np.array([0.30])
+        weights = np.array([1.0])
+        sigma = 0.10
+        eps = 0.33
+        # DWL = weight * 0.5 * eps * earnings * sigma^2 / (1 - tau)
+        expected = 1.0 * 0.5 * eps * 50000.0 * 0.01 / 0.70
+        result = calc.weighted_total_dwl(earnings, tax_rates, weights, sigma, prefs)
+        assert result == pytest.approx(expected)

@@ -56,6 +56,9 @@ python_files = "test_*.py"
 python_classes = "Test*"
 python_functions = "test_*"
 addopts = "--cov=src/taxuncertainty --cov-report=term-missing --cov-report=html"
+markers = [
+    "slow: marks tests that run PolicyEngine microsimulation (deselect with '-m \"not slow\"')",
+]
 
 [tool.black]
 line-length = 88

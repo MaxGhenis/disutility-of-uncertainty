@@ -89,5 +89,78 @@
     "gdp": 28000000000000,
     "psi": 1.0,
     "seed": 42
+  },
+  "empirical": {
+    "mtr_distribution": {
+      "weighted_mean": 0.251248300075531,
+      "weighted_std": 0.15615548016784184,
+      "p10": 0.0,
+      "p25": 0.1965000033378601,
+      "p50": 0.25999999046325684,
+      "p75": 0.3619999885559082,
+      "p90": 0.44865623116493225,
+      "n_observations": 19399,
+      "total_weighted_workers": 148732304.0,
+      "mean_earnings": 62008.8671875
+    },
+    "aggregate_dwl": 36642800010.2039,
+    "aggregate_dwl_billions": 36.642800010203906,
+    "quintiles": [
+      {
+        "quantile": 1,
+        "mean_earnings": 7354.87451171875,
+        "mean_mtr": 0.11414661258459091,
+        "n_observations": 2627,
+        "weighted_workers": 29740664.0,
+        "per_worker_dwl": 19.726945889804448,
+        "quintile_total_dwl": 586692469.4548551,
+        "share_of_total_dwl": 0.018466950018766796
+      },
+      {
+        "quantile": 2,
+        "mean_earnings": 23550.498046875,
+        "mean_mtr": 0.23364600539207458,
+        "n_observations": 3900,
+        "weighted_workers": 29751958.0,
+        "per_worker_dwl": 73.01584353064234,
+        "quintile_total_dwl": 2172364310.058243,
+        "share_of_total_dwl": 0.06837814566407233
+      },
+      {
+        "quantile": 3,
+        "mean_earnings": 40742.5,
+        "mean_mtr": 0.26600465178489685,
+        "n_observations": 3459,
+        "weighted_workers": 29733026.0,
+        "per_worker_dwl": 131.88663965705513,
+        "quintile_total_dwl": 3921388885.975851,
+        "share_of_total_dwl": 0.12343109266214287
+      },
+      {
+        "quantile": 4,
+        "mean_earnings": 64301.06640625,
+        "mean_mtr": 0.3054446280002594,
+        "n_observations": 4232,
+        "weighted_workers": 29055942.0,
+        "per_worker_dwl": 219.96710405013906,
+        "quintile_total_dwl": 6391351417.188806,
+        "share_of_total_dwl": 0.2011765504392282
+      },
+      {
+        "quantile": 5,
+        "mean_earnings": 171542.234375,
+        "mean_mtr": 0.33622896671295166,
+        "n_observations": 5181,
+        "weighted_workers": 30450714.0,
+        "per_worker_dwl": 614.0435909904188,
+        "quintile_total_dwl": 18698065772.78222,
+        "share_of_total_dwl": 0.5885472612157898
+      }
+    ],
+    "comparison": {
+      "empirical_dwl_billions": 36.642800010203906,
+      "stylized_dwl_billions": 27.766196409600003,
+      "ratio": 1.31969101815958
+    }
   }
 }
