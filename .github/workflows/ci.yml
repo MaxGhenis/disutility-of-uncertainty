@@ -69,6 +69,11 @@ jobs:
         pip install -e ".[dev,research]"
         npm install -g mystmd
     
+    - name: Install LaTeX
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra latexmk
+
     - name: Build MyST Book
       run: |
         cd paper
@@ -76,6 +81,12 @@ jobs:
         export BASE_URL="/disutility-of-uncertainty"
         myst build --html
         touch _build/html/.nojekyll
+
+    - name: Build PDF
+      run: |
+        cd paper
+        myst build --pdf
+        cp _build/exports/*.pdf _build/html/ 2>/dev/null || true
     
     - name: Upload book artifact
       uses: actions/upload-artifact@v4
