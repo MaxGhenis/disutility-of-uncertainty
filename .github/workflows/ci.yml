@@ -86,7 +86,7 @@ jobs:
       run: |
         cd paper
         myst build --pdf
-        cp _build/exports/*.pdf _build/html/ 2>/dev/null || true
+        cp exports/*.pdf _build/html/ 2>/dev/null || true
     
     - name: Upload book artifact
       uses: actions/upload-artifact@v4
