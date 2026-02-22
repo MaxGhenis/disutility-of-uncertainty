@@ -10,6 +10,34 @@ from pathlib import Path
 
 import numpy as np
 
+
+def _weighted_percentile(data, weights, percentile):
+    """Compute weighted percentile using linear interpolation.
+
+    Parameters
+    ----------
+    data : array-like
+        Data values.
+    weights : array-like
+        Non-negative weights.
+    percentile : float
+        Percentile in [0, 100].
+
+    Returns
+    -------
+    float
+        Weighted percentile value.
+    """
+    data = np.asarray(data)
+    weights = np.asarray(weights)
+    sorted_idx = np.argsort(data)
+    sorted_data = data[sorted_idx]
+    sorted_weights = weights[sorted_idx]
+    cum_w = np.cumsum(sorted_weights)
+    # Normalize to [0, 100]
+    cum_pct = 100 * (cum_w - 0.5 * sorted_weights) / cum_w[-1]
+    return float(np.interp(percentile, cum_pct, sorted_data))
+
 CACHE_DIR = Path(__file__).parent.parent / "data" / "cache"
 
 
@@ -101,11 +129,11 @@ class EmpiricalMTR:
         return {
             "weighted_mean": w_mean,
             "weighted_std": float(np.sqrt(w_var)),
-            "p10": float(np.percentile(self._mtr, 10)),
-            "p25": float(np.percentile(self._mtr, 25)),
-            "p50": float(np.percentile(self._mtr, 50)),
-            "p75": float(np.percentile(self._mtr, 75)),
-            "p90": float(np.percentile(self._mtr, 90)),
+            "p10": _weighted_percentile(self._mtr, self._weights, 10),
+            "p25": _weighted_percentile(self._mtr, self._weights, 25),
+            "p50": _weighted_percentile(self._mtr, self._weights, 50),
+            "p75": _weighted_percentile(self._mtr, self._weights, 75),
+            "p90": _weighted_percentile(self._mtr, self._weights, 90),
             "n_observations": len(self._mtr),
             "total_weighted_workers": float(np.sum(self._weights)),
             "mean_earnings": float(np.average(self._earnings, weights=self._weights)),
