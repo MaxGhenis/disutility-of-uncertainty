@@ -30,15 +30,6 @@ class TestPopulationDWL:
         total = calc.total_dwl(wages, tax_rates, 0.12, prefs)
         assert total > 0
 
-    def test_sum_of_individuals(self, calc, prefs):
-        """Total DWL = sum of individual DWLs (using analytical approx)."""
-        wages = np.array([15.0, 20.0, 30.0])
-        tax_rates = np.array([0.25, 0.30, 0.35])
-        sigma = 0.10
-        total = calc.total_dwl(wages, tax_rates, sigma, prefs)
-        individual_sum = calc.total_dwl_individual_sum(wages, tax_rates, sigma, prefs)
-        assert total == pytest.approx(individual_sum)
-
     def test_analytical_aggregate_close_to_sum(self, calc, prefs):
         """Analytical shortcut ≈ sum for homogeneous tax rates."""
         n = 100

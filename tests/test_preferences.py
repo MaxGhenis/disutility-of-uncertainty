@@ -1,7 +1,6 @@
 """Tests for preference models — TDD: written before implementation."""
 
 import pytest
-import numpy as np
 from taxuncertainty.models.preferences import QuasilinearIsoelastic, CobbDouglas
 
 

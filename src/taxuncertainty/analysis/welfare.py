@@ -15,37 +15,6 @@ from taxuncertainty.models.preferences import QuasilinearIsoelastic
 STANDARD_ANNUAL_HOURS = 2000
 
 
-def _individual_dwl_from_wages(wage, tax_rate, misperception_std, prefs):
-    """Per-worker DWL using hourly wages and standard annual hours.
-
-    DWL = 0.5 * epsilon * (wage * STANDARD_ANNUAL_HOURS) * sigma^2 / (1 - tau)
-
-    This uses the calibration-consistent approach where annual earnings
-    are computed as wage * 2000 hours, matching macro statistics.
-
-    Parameters
-    ----------
-    wage : float
-        Hourly wage for this worker.
-    tax_rate : float
-        Marginal tax rate.
-    misperception_std : float
-        Standard deviation of misperception.
-    prefs : QuasilinearIsoelastic
-        Preference parameters (only frisch_elasticity is used).
-
-    Returns
-    -------
-    float
-        Expected annual DWL for this worker.
-    """
-    if misperception_std == 0:
-        return 0.0
-    eps = prefs.frisch_elasticity
-    annual_earnings = wage * STANDARD_ANNUAL_HOURS
-    return 0.5 * eps * annual_earnings * misperception_std**2 / (1 - tax_rate)
-
-
 class PopulationWelfare:
     """Aggregate deadweight loss calculations for a population.
 
@@ -85,27 +54,6 @@ class PopulationWelfare:
         return float(
             np.sum(0.5 * eps * annual_earnings * misperception_std**2 / (1 - tax_rates))
         )
-
-    def total_dwl_individual_sum(self, wages, tax_rates, misperception_std, prefs):
-        """Same as total_dwl -- explicit summation for testing.
-
-        Parameters
-        ----------
-        wages : array-like
-            Hourly wage for each worker.
-        tax_rates : array-like
-            Marginal tax rate for each worker.
-        misperception_std : float
-            Standard deviation of misperception.
-        prefs : QuasilinearIsoelastic
-            Preference parameters.
-
-        Returns
-        -------
-        float
-            Total expected DWL (same as total_dwl).
-        """
-        return self.total_dwl(wages, tax_rates, misperception_std, prefs)
 
     def weighted_total_dwl(self, annual_earnings, tax_rates, weights, misperception_std, prefs):
         """Weighted sum of expected DWL using annual earnings directly.
@@ -168,7 +116,9 @@ class PopulationWelfare:
         float
             Approximate total DWL.
         """
-        per_worker = _individual_dwl_from_wages(
-            mean_wage, mean_tax_rate, misperception_std, prefs
-        )
+        if misperception_std == 0:
+            return 0.0
+        eps = prefs.frisch_elasticity
+        annual_earnings = mean_wage * STANDARD_ANNUAL_HOURS
+        per_worker = 0.5 * eps * annual_earnings * misperception_std**2 / (1 - mean_tax_rate)
         return n_workers * per_worker

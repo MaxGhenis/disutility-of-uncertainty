@@ -1,7 +1,6 @@
 """Tests for labor supply and DWL — TDD: written before implementation."""
 
 import pytest
-import numpy as np
 from taxuncertainty.models.preferences import QuasilinearIsoelastic
 from taxuncertainty.models import labor
 

@@ -3,9 +3,6 @@
 Provides utility function specifications used in labor supply and DWL calculations.
 """
 
-import numpy as np
-
-
 class QuasilinearIsoelastic:
     """Quasilinear utility with isoelastic labor disutility.
 
