@@ -20,13 +20,13 @@ The cross-sectional root-mean-square error of perceived minus actual marginal ra
 
 ## Mean marginal tax rate ($\bar{\tau}$)
 
-The Congressional Budget Office has published detailed estimates of effective marginal tax rates faced by U.S. workers. {cite:t}`cbo2012marginal` and {cite:t}`cbo2016marginal` compute effective rates that incorporate federal income taxes, payroll taxes (employer and employee shares), state income taxes, and the phase-out of major transfer programs. These reports find effective marginal rates of 25--32% for households in the middle three income quintiles, rising to 43% for high-income households (who face the top federal bracket plus the Medicare surtax).
+The Congressional Budget Office (CBO) has published detailed estimates of effective marginal tax rates (MTRs) faced by U.S. workers. {cite:t}`cbo2012marginal` and {cite:t}`cbo2016marginal` compute effective rates that incorporate federal income taxes, payroll taxes (employer and employee shares), state income taxes, and the phase-out of major transfer programs. These reports find effective marginal rates of 25--32% for households in the middle three income quintiles, rising to 43% for high-income households (who face the top federal bracket plus the Medicare surtax).
 
 For the representative-worker calculation, I use $\bar{\tau} = 0.30$, which reflects the earnings-weighted average across the working population. This figure includes the combined federal income tax rate (averaging roughly 18% across brackets), the employee share of payroll taxes (7.65%), and an average state income tax contribution of approximately 4%. The sensitivity to $\bar{\tau}$ enters through the $(1-\tau)$ denominator: at $\tau = 0.25$ the amplification factor is $1/0.75 = 1.33$, while at $\tau = 0.43$ it rises to $1/0.57 = 1.75$.
 
 ## Labor market parameters
 
-I calibrate the representative worker using standard Bureau of Labor Statistics (BLS) Occupational Employment and Wage Statistics data. Mean hourly wages across all occupations are approximately \$27.50 (2023 dollars). At 2,000 annual hours (50 weeks at 40 hours), this implies mean annual earnings of \$55,000. The total number of employed workers in the U.S. civilian labor force is approximately 160 million (Current Population Survey). U.S. GDP is approximately \$28 trillion, used as the denominator for expressing aggregate costs as a share of national output.
+I calibrate the representative worker using standard Bureau of Labor Statistics (BLS) Occupational Employment and Wage Statistics (OEWS) data {cite:p}`bls2023oews`. Mean hourly wages across all occupations are approximately \$27.50 (2023 dollars). At 2,000 annual hours (50 weeks at 40 hours), this implies mean annual earnings of \$55,000. The total number of employed workers in the U.S. civilian labor force is approximately 160 million {cite:p}`bls2024cps`. U.S. GDP is approximately \$28 trillion (Bureau of Economic Analysis), used as the denominator for expressing aggregate costs as a share of national output.
 
 For the optimal tax computation, wages are drawn from a lognormal distribution with log-standard-deviation 0.5, calibrated to match the mean hourly wage of \$27.50. This produces a wage distribution with a Gini coefficient of approximately 0.28, which is conservative relative to the full U.S. hourly wage distribution (Gini ~ 0.40).
 
@@ -63,6 +63,8 @@ These calibrated values align with the code implementation in the `Calibration` 
 ## Empirical marginal tax rate distribution
 
 The representative-agent calculations above assume a single mean marginal rate $\bar{\tau} = 0.30$ applied uniformly across workers. To assess the distributional implications of MTR heterogeneity, I compute household-level comprehensive marginal tax rates using PolicyEngine-US {cite:p}`policyengine2024`, a microsimulation model built on the Enhanced Current Population Survey. The simulation covers approximately 149 million working-age adults (18--64) with positive employment income in 2024.
+
+Marginal tax rates are clipped to the interval [0, 0.99] before analysis: benefit phase-outs can produce MTRs above 100% (benefit cliffs), and refundable credits can produce negative MTRs. I clip rather than exclude these observations to avoid selection bias, though the choice has minimal impact on weighted means because extreme MTRs affect a small share of the weighted population.
 
 The weighted mean comprehensive MTR is 0.25, somewhat below the CBO estimate of 0.30 used in the stylized calibration. This difference reflects the large mass of low-income workers who face zero or low federal income tax rates, partially offset by payroll taxes. The weighted standard deviation is 0.16, and the distribution spans from 0.00 at the 10th percentile to 0.45 at the 90th percentile. The median MTR is 0.26, with an interquartile range of [0.20, 0.36].
 

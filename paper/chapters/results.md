@@ -24,9 +24,9 @@ The per-worker DWL formula can be written as a fraction of that worker's earning
 
 $$\frac{\text{DWL}_i}{\text{earnings}_i} = \frac{1}{2} \frac{\varepsilon \, \sigma_i^2}{1 - \tau_i}$$
 
-Two forces shape the distributional pattern. The denominator $(1 - \tau_i)$ means that workers facing higher marginal rates lose a larger share of their earnings to misperception, all else equal. High-income workers face the steepest statutory rates, but they also tend to have lower $\sigma_i$ because they hire tax professionals and face fewer interacting provisions once above the main phase-out ranges.
+Two forces shape the distributional pattern under homogeneous $\sigma$. First, the multiplicative interaction of earnings and $1/(1-\tau_i)$ concentrates absolute DWL among high earners. Second, the denominator $(1 - \tau_i)$ means that workers facing higher marginal rates lose a larger *share* of their earnings to misperception, all else equal. The microsimulation results below confirm that the first force dominates: the top income quintile bears the majority of total DWL.
 
-Middle-income workers are likely the hardest hit. They navigate the densest region of the tax code: earned income tax credit (EITC) and Child Tax Credit (CTC) phase-outs, the transition from the 12% to the 22% federal bracket, alternative minimum tax (AMT) exposure, and overlapping state income taxes. These interacting provisions make it difficult to infer one's true marginal rate, implying a larger $\sigma_i$ than for workers at either tail of the income distribution. Combined with moderate-to-high marginal rates (often 30--40% when payroll and state taxes are included), the DWL-to-earnings ratio peaks in the middle of the distribution. This pattern inverts the common assumption that tax complexity primarily burdens the wealthy.
+If $\sigma$ varies across the income distribution---with middle-income workers facing higher misperception due to earned income tax credit (EITC) and Child Tax Credit (CTC) phase-outs, and high-income workers facing lower misperception due to use of tax professionals---the distributional pattern could shift toward the middle of the distribution. This possibility motivates the heterogeneous-$\sigma$ extension discussed in the conclusion.
 
 ## Optimal tax rate under misperception
 
@@ -34,13 +34,13 @@ A utilitarian planner choosing a linear tax rate to maximize social welfare face
 
 Under the baseline calibration, the optimal tax rate in the absence of misperception is 44.5%. When the planner accounts for $\sigma = 0.12$ misperception, the optimum falls to 42.9%, a decline of 1.6 percentage points. The planner accepts somewhat less redistribution because the marginal cost of public funds is higher when workers cannot perceive their tax rate accurately.
 
-A 1.6 percentage-point adjustment corresponds to approximately \$141 billion in annual revenue foregone -- revenue the planner judges is not worth collecting given the amplified behavioral distortions it would cause.
+A 1.6 percentage-point adjustment corresponds to approximately \$141 billion in annual revenue foregone---revenue the planner judges is not worth collecting given the amplified behavioral distortions it would cause. This figure should be interpreted as a *model-implied* revenue cost: it reflects the planner's optimal response within the linear-tax framework and does not account for the specific revenue structure of the actual U.S. tax code.
 
 ## Value of information
 
-Because DWL is quadratic in $\sigma$, even partial reductions in misperception yield large welfare gains. Reducing $\sigma$ from 0.12 to 0.08 -- plausibly achievable through tax simplification, better withholding tables, or enhanced taxpayer communication -- lowers total DWL from \$29.9 billion to \$13.3 billion, a saving of approximately \$17 billion per year.
+Because DWL is quadratic in $\sigma$, even partial reductions in misperception yield large welfare gains. Reducing $\sigma$ from 0.12 to 0.07---plausibly achievable through tax simplification, better withholding tables, or enhanced taxpayer communication---lowers total DWL from \$29.9 billion to \$10.2 billion, a reduction of approximately two-thirds (\$19.7 billion per year). Even a more modest reduction to $\sigma = 0.08$ would save \$16.6 billion annually.
 
-To appreciate this magnitude, a \$17 billion welfare gain exceeds the annual budget of most federal information-provision programs and is achieved without any reduction in tax revenue: simplification merely helps workers perceive the rate they already face. The U.S. tax preparation industry generates roughly \$35 billion in annual revenue {cite:p}`irs2023databook`, suggesting that households already spend considerable resources trying to reduce their own $\sigma$. Public investments in simplification that lower $\sigma$ for all workers simultaneously would capture economies of scale unavailable to individual tax filers.
+To appreciate this magnitude, a \$20 billion welfare gain exceeds the annual budget of most federal information-provision programs and is achieved without any reduction in tax revenue: simplification merely helps workers perceive the rate they already face. However, this comparison overstates the net gain to the extent that simplification requires revenue-reducing policy changes (e.g., eliminating provisions that serve distributional or incentive objectives). For comparison, the National Taxpayers Union Foundation estimates that U.S. taxpayers spend approximately \$260 billion annually on tax compliance costs, including both time and out-of-pocket expenses {cite:p}`ntu2023complexity`. The misperception-induced DWL documented here is an *additional* cost, distinct from compliance costs: it arises not from time spent filing but from the residual errors that persist even after filing.
 
 ## Microsimulation results
 
@@ -67,6 +67,8 @@ Applying the per-worker DWL formula $\frac{1}{2}\varepsilon \cdot \text{earnings
 | 5 (highest) | \$171,542 | 0.34 | \$614 | 58.9% |
 
 :::
+
+These results assume homogeneous $\sigma = 0.12$ across all quintiles. If misperception varies with income---as is likely, given that lower-income workers navigate denser phase-out regions while higher-income workers more frequently use professional tax preparers---the distributional pattern could shift. Heterogeneous $\sigma_i$ is explored as a direction for future work.
 
 Three findings stand out. First, the top quintile bears 59% of total DWL despite constituting only 20% of workers. This reflects the multiplicative interaction of higher earnings and higher marginal rates in the DWL formula: workers earning \$172k at a 34% MTR lose \$614/year to misperception, compared to \$20/year for workers earning \$7k at an 11% MTR.
 

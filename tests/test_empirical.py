@@ -58,14 +58,11 @@ class TestEmpiricalMTRMocked:
 
     @pytest.fixture
     def empirical(self, tmp_path):
-        with patch(
-            "policyengine_us.Microsimulation",
-            return_value=_make_mock_sim(),
+        with (
+            patch("policyengine_us.Microsimulation", return_value=_make_mock_sim()),
+            patch("taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path),
         ):
-            with patch(
-                "taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path
-            ):
-                return EmpiricalMTR(year=2024, cache=False)
+            return EmpiricalMTR(year=2024, cache=False)
 
     def test_filters_to_working_age_earners(self, empirical):
         """Should exclude children, elderly, and zero-earners."""
@@ -110,20 +107,15 @@ class TestEmpiricalMTRMocked:
 
     def test_cache_roundtrip(self, tmp_path):
         """Cached results should match original."""
-        with patch(
-            "policyengine_us.Microsimulation",
-            return_value=_make_mock_sim(),
+        with (
+            patch("policyengine_us.Microsimulation", return_value=_make_mock_sim()),
+            patch("taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path),
         ):
-            with patch(
-                "taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path
-            ):
-                e1 = EmpiricalMTR(year=2024, cache=True)
-                stats1 = e1.summary_stats()
+            e1 = EmpiricalMTR(year=2024, cache=True)
+            stats1 = e1.summary_stats()
 
-        # Load from cache (don't mock Microsimulation — it shouldn't be called)
-        with patch(
-            "taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path
-        ):
+        # Load from cache (don't mock Microsimulation -- it shouldn't be called)
+        with patch("taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path):
             e2 = EmpiricalMTR(year=2024, cache=True)
             stats2 = e2.summary_stats()
 

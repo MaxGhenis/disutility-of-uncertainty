@@ -1,9 +1,10 @@
 """Tests for the results pipeline — TDD: written before implementation."""
 
 import json
+
 import pytest
-from pathlib import Path
 from unittest.mock import patch
+
 from taxuncertainty.pipeline import generate_results
 from taxuncertainty.results import Results
 

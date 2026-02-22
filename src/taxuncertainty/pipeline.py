@@ -37,21 +37,31 @@ def _generate_empirical_section(cal, prefs):
     stats = emp.summary_stats()
     quintiles_raw = emp.quintile_results()
 
-    # Compute DWL by quintile
     welfare = PopulationWelfare()
     sigma = cal.MISPERCEPTION_STD_CENTRAL
+    eps = prefs.frisch_elasticity
 
+    # Compute per-quintile DWL using the standard formula:
+    #   per_worker_dwl = 0.5 * eps * earnings * sigma^2 / (1 - tau)
     quintiles_with_dwl = []
-    total_dwl = 0.0
     for q in quintiles_raw:
-        per_worker = 0.5 * prefs.frisch_elasticity * q["mean_earnings"] * sigma**2 / (1 - q["mean_mtr"])
-        q_dwl = per_worker * q["weighted_workers"]
-        total_dwl += q_dwl
-        quintiles_with_dwl.append({**q, "per_worker_dwl": per_worker, "quintile_total_dwl": q_dwl})
+        per_worker_dwl = (
+            0.5 * eps * q["mean_earnings"] * sigma**2 / (1 - q["mean_mtr"])
+        )
+        quintile_total_dwl = per_worker_dwl * q["weighted_workers"]
+        quintiles_with_dwl.append({
+            **q,
+            "per_worker_dwl": per_worker_dwl,
+            "quintile_total_dwl": quintile_total_dwl,
+        })
 
-    # Add share of total
+    # Compute each quintile's share of the total
+    quintile_dwl_sum = sum(q["quintile_total_dwl"] for q in quintiles_with_dwl)
     for q in quintiles_with_dwl:
-        q["share_of_total_dwl"] = q["quintile_total_dwl"] / total_dwl if total_dwl > 0 else 0.0
+        if quintile_dwl_sum > 0:
+            q["share_of_total_dwl"] = q["quintile_total_dwl"] / quintile_dwl_sum
+        else:
+            q["share_of_total_dwl"] = 0.0
 
     # Aggregate DWL from microsimulation
     aggregate_dwl = welfare.weighted_total_dwl(

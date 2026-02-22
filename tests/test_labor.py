@@ -153,6 +153,26 @@ class TestTaylorValidation:
         assert err_large > err_small
 
 
+class TestTaylorAtSensitivityExtremes:
+    """Validate the second-order approximation at the corners of the sensitivity grid."""
+
+    def test_approx_within_5pct_at_extreme(self):
+        """At eps=0.50, sigma=0.15, tau=0.43 the Taylor approx should be within 5% of MC."""
+        prefs = QuasilinearIsoelastic(psi=1.0, frisch_elasticity=0.50)
+        w, tau, sigma = 27.50, 0.43, 0.15
+        approx = labor.expected_dwl_approx(w, tau, sigma, prefs)
+        mc = labor.expected_dwl_monte_carlo(w, tau, sigma, prefs, n_draws=500_000, seed=42)
+        assert approx == pytest.approx(mc, rel=0.05)
+
+    def test_approx_within_3pct_at_baseline(self):
+        """At baseline (eps=0.33, sigma=0.12, tau=0.30) the error should be <3%."""
+        prefs = QuasilinearIsoelastic(psi=1.0, frisch_elasticity=0.33)
+        w, tau, sigma = 27.50, 0.30, 0.12
+        approx = labor.expected_dwl_approx(w, tau, sigma, prefs)
+        mc = labor.expected_dwl_monte_carlo(w, tau, sigma, prefs, n_draws=500_000, seed=42)
+        assert approx == pytest.approx(mc, rel=0.03)
+
+
 class TestDWLMonteCarlo:
     def test_close_to_approx_for_small_sigma(self, prefs):
         """Analytical and Monte Carlo should agree for small σ."""

@@ -38,6 +38,7 @@ def _weighted_percentile(data, weights, percentile):
     cum_pct = 100 * (cum_w - 0.5 * sorted_weights) / cum_w[-1]
     return float(np.interp(percentile, cum_pct, sorted_data))
 
+
 CACHE_DIR = Path(__file__).parent.parent / "data" / "cache"
 
 
@@ -126,14 +127,14 @@ class EmpiricalMTR:
         w_var = float(
             np.average((self._mtr - w_mean) ** 2, weights=self._weights)
         )
+        percentiles = {
+            f"p{p}": _weighted_percentile(self._mtr, self._weights, p)
+            for p in (10, 25, 50, 75, 90)
+        }
         return {
             "weighted_mean": w_mean,
             "weighted_std": float(np.sqrt(w_var)),
-            "p10": _weighted_percentile(self._mtr, self._weights, 10),
-            "p25": _weighted_percentile(self._mtr, self._weights, 25),
-            "p50": _weighted_percentile(self._mtr, self._weights, 50),
-            "p75": _weighted_percentile(self._mtr, self._weights, 75),
-            "p90": _weighted_percentile(self._mtr, self._weights, 90),
+            **percentiles,
             "n_observations": len(self._mtr),
             "total_weighted_workers": float(np.sum(self._weights)),
             "mean_earnings": float(np.average(self._earnings, weights=self._weights)),
@@ -153,7 +154,7 @@ class EmpiricalMTR:
         return labels
 
     def _quantile_results(self, n_groups):
-        """DWL breakdown by income quantile.
+        """Earnings and MTR statistics by income quantile.
 
         Parameters
         ----------
@@ -172,22 +173,24 @@ class EmpiricalMTR:
             mask = labels == q
             if not mask.any():
                 continue
-            e, m, w = self._earnings[mask], self._mtr[mask], self._weights[mask]
+            earnings = self._earnings[mask]
+            mtr = self._mtr[mask]
+            weights = self._weights[mask]
             results.append(
                 {
                     "quantile": q,
-                    "mean_earnings": float(np.average(e, weights=w)),
-                    "mean_mtr": float(np.average(m, weights=w)),
+                    "mean_earnings": float(np.average(earnings, weights=weights)),
+                    "mean_mtr": float(np.average(mtr, weights=weights)),
                     "n_observations": int(mask.sum()),
-                    "weighted_workers": float(np.sum(w)),
+                    "weighted_workers": float(np.sum(weights)),
                 }
             )
         return results
 
     def quintile_results(self):
-        """DWL breakdown by income quintile."""
+        """Earnings and MTR statistics by income quintile."""
         return self._quantile_results(5)
 
     def decile_results(self):
-        """DWL breakdown by income decile."""
+        """Earnings and MTR statistics by income decile."""
         return self._quantile_results(10)
