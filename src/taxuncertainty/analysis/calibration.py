@@ -13,7 +13,7 @@ class Calibration:
     Literature sources
     ------------------
     - Frisch elasticity: Chetty (2012) meta-analysis
-    - Misperception std: Rees-Jones & Taubinsky (2020), Gideon & Keen (2017)
+    - Misperception std: Rees-Jones & Taubinsky (2020), Gideon (2017)
     - US macro parameters: CBO, BLS
     """
 
@@ -22,7 +22,7 @@ class Calibration:
     FRISCH_ELASTICITY_CENTRAL = 0.33
     FRISCH_ELASTICITY_HIGH = 0.50
 
-    # From Rees-Jones & Taubinsky (2020) and Gideon & Keen (2017)
+    # From Rees-Jones & Taubinsky (2020) and Gideon (2017)
     MISPERCEPTION_STD_LOW = 0.08
     MISPERCEPTION_STD_CENTRAL = 0.12
     MISPERCEPTION_STD_HIGH = 0.15

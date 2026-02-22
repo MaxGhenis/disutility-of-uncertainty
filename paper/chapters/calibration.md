@@ -26,9 +26,9 @@ For the representative-worker calculation, I use $\bar{\tau} = 0.30$, which refl
 
 ## Labor market parameters
 
-I calibrate the representative worker using standard Bureau of Labor Statistics (BLS) Occupational Employment and Wage Statistics (OEWS) data {cite:p}`bls2023oews`. Mean hourly wages across all occupations are approximately \$27.50 (2023 dollars). At 2,000 annual hours (50 weeks at 40 hours), this implies mean annual earnings of \$55,000. The total number of employed workers in the U.S. civilian labor force is approximately 160 million {cite:p}`bls2024cps`. U.S. GDP is approximately \$28 trillion (Bureau of Economic Analysis), used as the denominator for expressing aggregate costs as a share of national output.
+I calibrate the representative worker using standard Bureau of Labor Statistics (BLS) Occupational Employment and Wage Statistics (OEWS) data {cite:p}`bls2023oews`. Mean hourly wages across all occupations are approximately \$27.50 (2023 dollars). At 2,000 annual hours (50 weeks at 40 hours), this implies mean annual earnings of \$55,000. The total number of employed workers in the U.S. civilian labor force is approximately 160 million {cite:p}`bls2024cps`. U.S. GDP is approximately \$28 trillion {cite:p}`bea2024gdp`, used as the denominator for expressing aggregate costs as a share of national output.
 
-For the optimal tax computation, wages are drawn from a lognormal distribution with log-standard-deviation 0.5, calibrated to match the mean hourly wage of \$27.50. This produces a wage distribution with a Gini coefficient of approximately 0.28, which is conservative relative to the full U.S. hourly wage distribution (Gini ~ 0.40).
+For the optimal tax computation, I draw wages from a lognormal distribution with log-standard-deviation 0.5, calibrated to match the mean hourly wage of \$27.50. This produces a wage distribution with a Gini coefficient of approximately 0.28, which is conservative relative to the full U.S. hourly wage distribution (Gini ~ 0.40).
 
 ## Baseline and sensitivity results
 
@@ -78,7 +78,7 @@ This creates an asymmetry: $\tau$ is comprehensive but $\sigma$ captures only on
 
 The magnitude of this understatement depends on how correlated the various misperception components are. If workers who misperceive their federal rate also misperceive payroll and state taxes in the same direction (correlated errors), the comprehensive $\sigma$ may be only modestly larger than 0.12. If the errors are largely independent---which is plausible given the distinct administrative origins of each tax---the comprehensive $\sigma$ could be substantially larger. A rough calculation: if federal income tax misperception contributes $\sigma_{\text{fed}} = 0.12$ and the combined payroll-plus-state-plus-benefit component contributes an independent $\sigma_{\text{other}} = 0.06$, the comprehensive $\sigma = \sqrt{0.12^2 + 0.06^2} \approx 0.13$. With a larger non-federal component ($\sigma_{\text{other}} = 0.10$), the comprehensive $\sigma$ would be approximately 0.16.
 
-Because DWL is quadratic in $\sigma$, even a modest understatement matters: $0.16^2 / 0.12^2 = 1.78$, implying the welfare costs could be 78% larger than the baseline estimate. The empirical microsimulation results in the next chapter provide a complementary perspective by using actual MTR heterogeneity rather than a single representative rate.
+Because DWL is quadratic in $\sigma$, even an understatement of 0.04 matters: $0.16^2 / 0.12^2 = 1.78$, implying the welfare costs could be 78% larger than the baseline estimate. The empirical microsimulation results in the next chapter provide a complementary perspective by using actual MTR heterogeneity rather than a single representative rate.
 
 ```{bibliography}
 ```
