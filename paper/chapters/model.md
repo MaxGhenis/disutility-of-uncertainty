@@ -14,7 +14,7 @@ where $\sigma$ measures the severity of misperception---the misperception error 
 
 The normality assumption is a modeling convenience that delivers tractable closed-form results. The DWL formula depends only on $E[\delta^2] = \sigma^2$, so it holds for any symmetric distribution with variance $\sigma^2$, not just the Gaussian. Departures from normality (e.g., heavier tails or discreteness in actual misperception) would affect higher-order corrections to the Taylor approximation but not the leading term. The Monte Carlo validation in the approximation accuracy subsection confirms that the second-order formula is robust to the clipping of extreme draws at the [0, 1] boundary.
 
-The mean-zero assumption ($E[\delta_i] = 0$) is a simplification. {cite:t}`rees2020schmeduling` document that misperception is partly systematic: "ironing" taxpayers tend to perceive their marginal rate as closer to their average rate, which in a progressive system means $E[\delta_i] < 0$ (underestimation). Decomposing misperception into bias $\mu_\delta = E[\delta_i]$ and noise $\sigma^2 = \text{Var}(\delta_i)$, the DWL formula generalizes to include a bias term: $E[\text{DWL}] \approx \frac{1}{2}\varepsilon w h^* (\mu_\delta^2 + \sigma^2)/(1-\tau)$. The mean-zero case studied here therefore provides a lower bound on the welfare cost, since any systematic bias adds to the total. The calibrated $\sigma = 0.12$ already incorporates both systematic and idiosyncratic components of the cross-sectional dispersion in perceived rates, so it partially captures the bias channel. Specifically, the calibrated $\sigma = 0.12$ is best interpreted as the root-mean-square error (RMSE) of the misperception distribution, since it is derived from the cross-sectional dispersion of (perceived - actual) rates which includes any systematic component. Under this interpretation, $\sigma^2 = \mu_\delta^2 + \text{Var}(\delta_i)$, and the mean-zero DWL formula $\frac{1}{2}\varepsilon w h^* \sigma^2 / (1-\tau)$ remains correct with $\sigma$ interpreted as the RMSE rather than the standard deviation of mean-zero noise.
+The mean-zero assumption ($E[\delta_i] = 0$) is a simplification. {cite:t}`rees2020schmeduling` document that misperception is partly systematic: "ironing" taxpayers tend to perceive their marginal rate as closer to their average rate, which in a progressive system means $E[\delta_i] < 0$ (underestimation). Decomposing misperception into bias $\mu_\delta = E[\delta_i]$ and noise $\sigma^2 = \text{Var}(\delta_i)$, the DWL formula generalizes to include a bias term: $E[\text{DWL}] \approx \frac{1}{2}\varepsilon w h^* (\mu_\delta^2 + \sigma^2)/(1-\tau)$. If systematic bias is present, the total welfare cost would be larger than the mean-zero case studied here. The calibrated $\sigma = 0.12$ already incorporates both systematic and idiosyncratic components of the cross-sectional dispersion in perceived rates, so it partially captures the bias channel. Specifically, the calibrated $\sigma = 0.12$ is best interpreted as the root-mean-square error (RMSE) of the misperception distribution, since it is derived from the cross-sectional dispersion of (perceived - actual) rates which includes any systematic component. Under this interpretation, $\sigma^2 = \mu_\delta^2 + \text{Var}(\delta_i)$, and the mean-zero DWL formula $\frac{1}{2}\varepsilon w h^* \sigma^2 / (1-\tau)$ remains correct with $\sigma$ interpreted as the RMSE rather than the standard deviation of mean-zero noise.
 
 Preferences are quasilinear in consumption with isoelastic labor disutility:
 
@@ -22,7 +22,7 @@ $$
 U(C, h) = C - \psi \frac{h^{1 + 1/\varepsilon}}{1 + 1/\varepsilon},
 $$
 
-where $C$ is consumption, $h$ is hours of labor, $\varepsilon > 0$ is the Frisch elasticity of labor supply, and $\psi > 0$ is a scale parameter governing the disutility of work. Quasilinear preferences eliminate income effects on labor supply, so the Frisch elasticity coincides with the uncompensated and compensated elasticities. This tractability is not merely convenient; it isolates the substitution-effect channel through which tax misperception distorts behavior, as discussed below.
+where $C$ is consumption, $h$ is hours of labor, $\varepsilon > 0$ is the Frisch elasticity of labor supply, and $\psi > 0$ is a scale parameter governing the disutility of work. Quasilinear preferences eliminate income effects on labor supply, so the Frisch elasticity coincides with the uncompensated and compensated elasticities. This tractability isolates the substitution-effect channel through which tax misperception distorts behavior, as discussed below.
 
 The worker's budget constraint is
 
@@ -128,7 +128,7 @@ Because the formula is a second-order Taylor expansion of utility around the opt
 
 The formula reveals several comparative statics.
 
-*Quadratic in $\sigma$.* Doubling the standard deviation of misperception quadruples the expected welfare cost. This convexity implies large returns to reducing the worst misperceptions---moving from $\sigma = 0.15$ to $\sigma = 0.10$ reduces costs by more than moving from $\sigma = 0.10$ to $\sigma = 0.05$. For policy, this means that interventions targeting the most confused taxpayers (those facing complex phase-out interactions) yield the highest welfare gains per dollar spent.
+*Quadratic in $\sigma$.* Doubling the standard deviation of misperception quadruples the expected welfare cost. This convexity implies that reducing misperception from $\sigma = 0.15$ to $\sigma = 0.10$ (a 56% reduction in $\sigma^2$) lowers DWL by more than reducing from $\sigma = 0.10$ to $\sigma = 0.05$ (a 75% reduction in $\sigma^2$ but from a lower base).
 
 *Linear in $\varepsilon$.* More elastic labor supply amplifies the cost of misperception because workers with elastic supply distort their hours more in response to a given perceived price change. If labor supply were perfectly inelastic ($\varepsilon = 0$), misperception would have no welfare cost at all---workers would supply the same hours regardless of their beliefs about tax rates. The empirical magnitude of $\varepsilon$ is therefore a key input to the calibration.
 
@@ -136,7 +136,7 @@ A note on elasticity concepts is warranted. The Frisch elasticity $\varepsilon$ 
 
 *Denominator $(1 - \tau)$.* Higher tax rates amplify the welfare cost of misperception. This occurs because the same absolute misperception $\delta$ represents a larger proportional change in the net-of-tax wage when $\tau$ is high. A 10-percentage-point misperception shifts the net-of-tax rate from 70% to 60% (a 14% change) when $\tau = 0.30$, but from 40% to 30% (a 25% change) when $\tau = 0.60$.
 
-*Connection to Harberger triangles.* The formula is a direct application of the Harberger approximation to the deadweight loss of taxation, except that the distortionary "wedge" is not the tax itself but the misperception $\delta$. Just as the traditional DWL of a tax $\tau$ is approximately $\frac{1}{2}\varepsilon \tau^2 / (1-\tau)$ times earnings, the DWL of misperception replaces $\tau^2$ with $\sigma^2$. The analogy makes precise the sense in which tax complexity acts like an additional implicit tax on the economy.
+*Connection to Harberger triangles.* The formula is a direct application of the Harberger approximation to the deadweight loss of taxation, except that the distortionary "wedge" is not the tax itself but the misperception $\delta$. Just as the traditional DWL of a tax $\tau$ is approximately $\frac{1}{2}\varepsilon \tau^2 / (1-\tau)$ times earnings, the DWL of misperception replaces $\tau^2$ with $\sigma^2$. The structural parallel clarifies that misperception generates a welfare loss with the same second-order form as a tax distortion, though unlike a tax, misperception generates no offsetting revenue.
 
 ## Social planner extension
 
@@ -156,7 +156,7 @@ When workers misperceive the tax rate ($\sigma > 0$), the planner faces an addit
 
 The optimal tax rate $\tau^*$ is therefore decreasing in $\sigma$. As misperception worsens, the planner optimally reduces the tax rate, accepting less redistribution in exchange for lower misperception-induced deadweight loss. In the extreme of perfect information ($\sigma = 0$), the planner chooses the standard optimal tax; as $\sigma$ grows large, the optimal rate converges toward zero because the misperception cost eventually dominates the redistribution benefit.
 
-The model predicts that a reduction in $\sigma$ permits higher $\tau$ at constant total DWL, implying that simplification and progressivity are complements rather than substitutes.
+The model predicts that a reduction in $\sigma$ permits higher $\tau$ at constant total DWL. Whether real-world measures to reduce misperception are compatible with maintaining or increasing progressivity is an empirical question beyond the scope of this model.
 
 ## Why quasilinear preferences, not Cobb-Douglas?
 
