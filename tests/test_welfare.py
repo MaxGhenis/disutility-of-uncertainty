@@ -93,6 +93,16 @@ class TestCalibration:
             dwls = subset["gdp_fraction_pct"].values
             assert all(dwls[i] <= dwls[i + 1] for i in range(len(dwls) - 1))
 
+    def test_analytical_zero_when_no_misperception(self, cal):
+        """total_dwl_analytical returns 0 when sigma = 0."""
+        prefs = QuasilinearIsoelastic(psi=cal.PSI, frisch_elasticity=0.33)
+        result = cal.per_worker_dwl(0.33, 0.0)
+        assert result == pytest.approx(0.0)
+        # Also test the PopulationWelfare method directly
+        welfare = PopulationWelfare()
+        result2 = welfare.total_dwl_analytical(27.5, 0.30, 0.0, prefs, n_workers=100)
+        assert result2 == pytest.approx(0.0)
+
     def test_sensitivity_monotonic_in_elasticity(self, table):
         """DWL increases monotonically with Frisch elasticity."""
         for sigma in table["misperception_std"].unique():

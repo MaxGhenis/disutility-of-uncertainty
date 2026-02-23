@@ -2,11 +2,14 @@
 
 import json
 
+import numpy as np
 import pytest
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 
-from taxuncertainty.pipeline import generate_results
+from taxuncertainty.pipeline import generate_results, _generate_empirical_section
 from taxuncertainty.results import Results
+from taxuncertainty.analysis.calibration import Calibration
+from taxuncertainty.models.preferences import QuasilinearIsoelastic
 
 
 def _mock_empirical_section(cal, prefs):
@@ -122,6 +125,75 @@ class TestEmpiricalSection:
         assert "ratio" in comp
 
 
+class TestGenerateEmpiricalSection:
+    """Test _generate_empirical_section with mocked PolicyEngine."""
+
+    def _make_mock_sim(self):
+        """Create a mock Microsimulation with realistic test data."""
+        n = 100
+        rng = np.random.default_rng(42)
+        ages = np.concatenate([
+            rng.integers(0, 17, size=20),
+            rng.integers(18, 64, size=60),
+            rng.integers(65, 90, size=20),
+        ]).astype(np.float32)
+        emp_inc = np.zeros(n, dtype=np.float32)
+        emp_inc[20:75] = rng.lognormal(10.5, 0.8, size=55).astype(np.float32)
+        mtr = np.zeros(n, dtype=np.float32)
+        mtr[20:75] = rng.normal(0.30, 0.10, size=55).astype(np.float32)
+        weights = rng.uniform(500, 3000, size=n).astype(np.float32)
+        sim = MagicMock()
+
+        class MockSeries:
+            def __init__(self, values):
+                self.values = np.asarray(values, dtype=np.float32)
+
+        def mock_calculate(var_name, year):
+            data = {
+                "employment_income": emp_inc,
+                "marginal_tax_rate": mtr,
+                "person_weight": weights,
+                "age": ages,
+            }
+            return MockSeries(data[var_name])
+
+        sim.calculate = mock_calculate
+        return sim
+
+    def test_generates_valid_structure(self, tmp_path):
+        cal = Calibration()
+        prefs = QuasilinearIsoelastic(
+            psi=cal.PSI, frisch_elasticity=cal.FRISCH_ELASTICITY_CENTRAL
+        )
+        with (
+            patch("policyengine_us.Microsimulation", return_value=self._make_mock_sim()),
+            patch("taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path),
+        ):
+            result = _generate_empirical_section(cal, prefs)
+
+        assert "mtr_distribution" in result
+        assert "aggregate_dwl" in result
+        assert "aggregate_dwl_billions" in result
+        assert "quintiles" in result
+        assert "comparison" in result
+        assert result["aggregate_dwl"] > 0
+        assert len(result["quintiles"]) == 5
+
+    def test_quintile_shares_sum_to_one(self, tmp_path):
+        cal = Calibration()
+        prefs = QuasilinearIsoelastic(
+            psi=cal.PSI, frisch_elasticity=cal.FRISCH_ELASTICITY_CENTRAL
+        )
+        with (
+            patch("policyengine_us.Microsimulation", return_value=self._make_mock_sim()),
+            patch("taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path),
+        ):
+            result = _generate_empirical_section(cal, prefs)
+
+        shares = [q["share_of_total_dwl"] for q in result["quintiles"]]
+        assert sum(shares) == pytest.approx(1.0)
+
+
 class TestResultsSingleton:
     def test_loads_from_file(self, results_path):
         r = Results(results_path)
@@ -136,3 +208,8 @@ class TestResultsSingleton:
         r = Results(results_path)
         assert isinstance(r.baseline.total_dwl_billions_fmt, str)
         assert isinstance(r.baseline.gdp_fraction_pct_fmt, str)
+
+    def test_default_path(self):
+        """Results() with no argument loads from package data directory."""
+        r = Results()
+        assert r.baseline.total_dwl_billions > 0
