@@ -1,0 +1,1164 @@
+{
+  "archive_sha256": "c578518776c9cd97cc0bcf340558a9574ed2088cfeb5d1b610274e5d7ab48b15",
+  "archive_url": "https://www.dropbox.com/s/2q47bj8arbcgr3i/Schmeduling%20Replication%20Code.zip?dl=1",
+  "citation": "Alex Rees-Jones and Dmitry Taubinsky (2020), Measuring \u201cSchmeduling\u201d, Review of Economic Studies 87(5), 2399\u20132438; doi:10.1093/restud/rdz045",
+  "encoding_note": "Native unused financial-literacy label triggers pandas Latin-1 fallback. Analyses use numeric fields; original string forecasts are not interpreted as raw survey exports.",
+  "members": {
+    "Replication Code/README.txt": {
+      "bytes": 992,
+      "sha256": "b7ca568355ec9a2ac958f46fe8afc206be397fe901ffa780854ff1f3ff57b507"
+    },
+    "Replication Code/Study 1/Figure 2 and 3 analysis.do": {
+      "bytes": 3384,
+      "sha256": "5e030644f77c6d84273e41e4e661ba80d4ea8fbb159a1255770ccef1b3ec8255"
+    },
+    "Replication Code/Study 1/Figure 6.do": {
+      "bytes": 4561,
+      "sha256": "386c85636877264f38873a0dfe8be08641e81527ceb6bbf7b11f500f4d0220e7"
+    },
+    "Replication Code/Study 1/RJT_study_1_data.dta": {
+      "bytes": 93035383,
+      "sha256": "bcce8a42c02febba3e5906d9bfba1357d2bad904f2bd2e1bbea2b73611304e83"
+    },
+    "Replication Code/Study 1/Table 1.do": {
+      "bytes": 2651,
+      "sha256": "c744801b986785c8dda03b84c28a85f0f55583f31cb34cc3c9ad305b13fd7b9f"
+    },
+    "Replication Code/Study 1/Table 2 and Figure 4.do": {
+      "bytes": 6218,
+      "sha256": "9b2a23414822cb07d00e4ba1ab02529e169636ff3d41f967b055d92a9a6e0a74"
+    },
+    "Replication Code/Study 1/Table 3 in sample.do": {
+      "bytes": 2990,
+      "sha256": "24b1a48775520bae4ce0a2509e3239bf690986d7b3229df76b8057e9caeffe95"
+    },
+    "Replication Code/Study 1/Table 3 out of sample.do": {
+      "bytes": 3034,
+      "sha256": "7b2053e9d6ff77273ec46bad4c704765999037188e16d2f842d85c4d11824899"
+    },
+    "Replication Code/Study 1/Table 5 and Figure 8.do": {
+      "bytes": 10061,
+      "sha256": "62264e0627d20025a17ea4a2573289bfec50d91eb1b109617681d5c9b56a0134"
+    },
+    "Replication Code/Study 1/Table 6.do": {
+      "bytes": 4744,
+      "sha256": "e078d943317f04ab4f26f05f25028bd10c6b69c77956af437fd9b7ae60b4c5df"
+    },
+    "Replication Code/Study 1/individualestimates.dta": {
+      "bytes": 78948107,
+      "sha256": "b87be2619addc3a542cc54f479cd8ce743784424940a100885ba09143d32f6ba"
+    },
+    "Replication Code/Study 2/RJT_study_2_data.dta": {
+      "bytes": 539062,
+      "sha256": "d326b9a3e64480d06ebbe98f8d1eddcf238abc2b5e74af3699a9865bf598434b"
+    },
+    "Replication Code/Study 2/Table 4.do": {
+      "bytes": 2995,
+      "sha256": "0c6622410f47209b2cbdf7bd1c32adcc6e9d6f05729dec1722cee40ba9de2754"
+    }
+  },
+  "metadata": {
+    "RJT_study_1_data": {
+      "qnum_counts": {
+        "1": 4633,
+        "10": 4633,
+        "11": 4633,
+        "12": 4633,
+        "13": 4633,
+        "14": 4633,
+        "15": 4633,
+        "16": 4633,
+        "2": 4633,
+        "3": 4633,
+        "4": 4633,
+        "5": 4633,
+        "6": 4633,
+        "7": 4633,
+        "8": 4633,
+        "9": 4633
+      },
+      "respondents": 4633,
+      "rows": 74128,
+      "variables": {
+        "Confidence_deduction": {
+          "dtype": "int8",
+          "label": "Confidence in answering the number of claimed deductions being correct",
+          "missing": 0
+        },
+        "Confidence_exemptions": {
+          "dtype": "int8",
+          "label": "Confidence in number of exemptions",
+          "missing": 0
+        },
+        "Confidence_filingstatus": {
+          "dtype": "int8",
+          "label": "Confidence in your filing status",
+          "missing": 0
+        },
+        "Confidence_income": {
+          "dtype": "int8",
+          "label": "Confidence that reported income is within $1000 of being correct",
+          "missing": 0
+        },
+        "DOBLFred": {
+          "dtype": "str",
+          "label": "DO-BL-Fred",
+          "missing": 0
+        },
+        "DOBLFredmarriedfilingjointly": {
+          "dtype": "str",
+          "label": "DO-BL-Fred-marriedfilingjointly",
+          "missing": 0
+        },
+        "DOBLWorksalience": {
+          "dtype": "str",
+          "label": "DO-BL-Worksalience",
+          "missing": 0
+        },
+        "DOBRFL_75": {
+          "dtype": "str",
+          "label": "DO-BR-FL_75",
+          "missing": 0
+        },
+        "Education": {
+          "dtype": "str",
+          "label": "Education",
+          "missing": 0
+        },
+        "Education_numeric": {
+          "dtype": "float64",
+          "label": "Education",
+          "missing": 3072
+        },
+        "MaritalStatus": {
+          "dtype": "str",
+          "label": "Marital Status",
+          "missing": 0
+        },
+        "NumberofChildren": {
+          "dtype": "str",
+          "label": "Number of Children",
+          "missing": 0
+        },
+        "Q218": {
+          "dtype": "int8",
+          "label": "Born before Jan 2, 1950",
+          "missing": 0
+        },
+        "Q219": {
+          "dtype": "float64",
+          "label": "Spouse born before Jan 2, 1950",
+          "missing": 34144
+        },
+        "Q30": {
+          "dtype": "str",
+          "label": "Hours worked at primary job per week",
+          "missing": 0
+        },
+        "Q33": {
+          "dtype": "str",
+          "label": "Pretax earnings from primary job",
+          "missing": 0
+        },
+        "Q50_1": {
+          "dtype": "str",
+          "label": "Guess of State Sales Tax",
+          "missing": 0
+        },
+        "Q_TotalDuration": {
+          "dtype": "str",
+          "label": "Survey time (in seconds)",
+          "missing": 0
+        },
+        "Work1": {
+          "dtype": "str",
+          "label": "Work1",
+          "missing": 0
+        },
+        "Work2": {
+          "dtype": "str",
+          "label": "Work2",
+          "missing": 0
+        },
+        "age": {
+          "dtype": "int8",
+          "label": "Age Range",
+          "missing": 0
+        },
+        "alreadydidtaxes": {
+          "dtype": "int8",
+          "label": "Return Submission Status",
+          "missing": 0
+        },
+        "amtowntax": {
+          "dtype": "float32",
+          "label": "Actual own tax owed (calculated)",
+          "missing": 0
+        },
+        "ans": {
+          "dtype": "str",
+          "label": "",
+          "missing": 0
+        },
+        "ansm": {
+          "dtype": "float64",
+          "label": "",
+          "missing": 34112
+        },
+        "attention": {
+          "dtype": "float32",
+          "label": "Failed attention test",
+          "missing": 0
+        },
+        "bachelors_degree": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 3072
+        },
+        "bracket": {
+          "dtype": "float32",
+          "label": "Tax bracket for Fred's income amount",
+          "missing": 0
+        },
+        "claimedeitc": {
+          "dtype": "float64",
+          "label": "Claimed EITC",
+          "missing": 2128
+        },
+        "complete": {
+          "dtype": "int8",
+          "label": "Completed survey",
+          "missing": 0
+        },
+        "deductiontype": {
+          "dtype": "int8",
+          "label": "Deduction claimed",
+          "missing": 0
+        },
+        "elasticgiving": {
+          "dtype": "float32",
+          "label": "Willing to donate $1 to charity with 100% match",
+          "missing": 0
+        },
+        "employed": {
+          "dtype": "int8",
+          "label": "Employment status",
+          "missing": 0
+        },
+        "exempphaseoutthreshold": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "exemptions": {
+          "dtype": "float32",
+          "label": "Exemptions claimed",
+          "missing": 0
+        },
+        "extraschedule": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "filingdate": {
+          "dtype": "datetime64[s]",
+          "label": "Date return was submitted",
+          "missing": 11920
+        },
+        "filingstatus": {
+          "dtype": "int8",
+          "label": "Filing status",
+          "missing": 0
+        },
+        "flexiblehours": {
+          "dtype": "float64",
+          "label": "Flexible work hours",
+          "missing": 28464
+        },
+        "fredexempphaseout": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "fredtaxinc": {
+          "dtype": "float32",
+          "label": "Fred's taxable income",
+          "missing": 0
+        },
+        "gender": {
+          "dtype": "int32",
+          "label": "Gender",
+          "missing": 0
+        },
+        "health": {
+          "dtype": "int8",
+          "label": "Health Self-Assessment",
+          "missing": 0
+        },
+        "highincomedraw": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "highschool_degree": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 3072
+        },
+        "income": {
+          "dtype": "float32",
+          "label": "Own total income",
+          "missing": 0
+        },
+        "insurance": {
+          "dtype": "int8",
+          "label": "Health insurance status",
+          "missing": 0
+        },
+        "iron": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "localdraw": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "mid": {
+          "dtype": "int32",
+          "label": "mid",
+          "missing": 0
+        },
+        "mlinflation": {
+          "dtype": "int8",
+          "label": "Inflation understanding measure: Imagine that the interest rate on your savings ",
+          "missing": 0
+        },
+        "mlmeasure": {
+          "dtype": "float32",
+          "label": "Answered all three financial literacy questions correctly",
+          "missing": 0
+        },
+        "mlnumeracy": {
+          "dtype": "int8",
+          "label": "Numeracy measure: Suppose you had $100 in a savings account and the interest rat",
+          "missing": 0
+        },
+        "mlrisk": {
+          "dtype": "int8",
+          "label": "Risk understanding measure: \u0093Buying a single company stock usually provides a sa",
+          "missing": 0
+        },
+        "ownbracket": {
+          "dtype": "float32",
+          "label": "Tax bracket for respondent's income amount",
+          "missing": 0
+        },
+        "ownexempphaseout": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "ownmarginalrate": {
+          "dtype": "float32",
+          "label": "Marginal tax rate associated with respondent's taxable income",
+          "missing": 0
+        },
+        "owntaxinc": {
+          "dtype": "float32",
+          "label": "Own taxable income",
+          "missing": 0
+        },
+        "paytype": {
+          "dtype": "float64",
+          "label": "Salaried or wage employee",
+          "missing": 28464
+        },
+        "personfiling": {
+          "dtype": "int8",
+          "label": "Who completed (will complete) your 2014 Federal Tax Return?",
+          "missing": 0
+        },
+        "personfiling_other": {
+          "dtype": "str",
+          "label": "Free response for other",
+          "missing": 0
+        },
+        "poly1": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "poly2": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "poly3": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "poly4": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "poly5": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "prepforretirement": {
+          "dtype": "float64",
+          "label": "Preparation for retirement (0-10)",
+          "missing": 28464
+        },
+        "qnum": {
+          "dtype": "int8",
+          "label": "",
+          "missing": 0
+        },
+        "ran": {
+          "dtype": "int32",
+          "label": "Fred's Income",
+          "missing": 0
+        },
+        "random": {
+          "dtype": "str",
+          "label": "Random number used to create Fred income value near own income",
+          "missing": 0
+        },
+        "retsavingsrate": {
+          "dtype": "float64",
+          "label": "Percent of income saved for retirement in past 3 years",
+          "missing": 28864
+        },
+        "savingenough": {
+          "dtype": "float64",
+          "label": "Are you saving enough for retirement?",
+          "missing": 28464
+        },
+        "scheduleb": {
+          "dtype": "int8",
+          "label": "Schedule B: Interest and Ordinary Dividends",
+          "missing": 0
+        },
+        "schedulec": {
+          "dtype": "int8",
+          "label": "Schedule C: Profit or Loss From Business",
+          "missing": 0
+        },
+        "scheduled": {
+          "dtype": "int8",
+          "label": "Schedule D: Capital Gains and Losses",
+          "missing": 0
+        },
+        "schedulee": {
+          "dtype": "int8",
+          "label": "Schedule E: Supplemental Income and Loss",
+          "missing": 0
+        },
+        "schedulef": {
+          "dtype": "int8",
+          "label": "Schedule F: Profit or Loss From Farming",
+          "missing": 0
+        },
+        "sdamount": {
+          "dtype": "float32",
+          "label": "Amount of Standard Deduction",
+          "missing": 0
+        },
+        "similar": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "spotlight": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "startdate": {
+          "dtype": "datetime64[s]",
+          "label": "",
+          "missing": 0
+        },
+        "surveyversion": {
+          "dtype": "str",
+          "label": "",
+          "missing": 0
+        },
+        "tax": {
+          "dtype": "float32",
+          "label": "Actual tax owed",
+          "missing": 0
+        },
+        "taxguess": {
+          "dtype": "str",
+          "label": "",
+          "missing": 0
+        },
+        "taxguessds": {
+          "dtype": "float64",
+          "label": "Perceived Taxes",
+          "missing": 0
+        },
+        "taxguessmain": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "tg0to100": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "tgw1": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "tgw5": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "timeatjob": {
+          "dtype": "float64",
+          "label": "Time worked at primary job",
+          "missing": 28464
+        },
+        "turbotax": {
+          "dtype": "int8",
+          "label": "Use of tax preparation software, such as TurboTax",
+          "missing": 0
+        },
+        "work1": {
+          "dtype": "float64",
+          "label": "Work1",
+          "missing": 29600
+        },
+        "work2": {
+          "dtype": "float64",
+          "label": "Work2",
+          "missing": 29712
+        }
+      }
+    },
+    "individualestimates": {
+      "qnum_counts": {
+        "10": 4197,
+        "11": 4197,
+        "12": 4197,
+        "13": 4197,
+        "14": 4197,
+        "15": 4197,
+        "16": 4197,
+        "3": 4197,
+        "4": 4197,
+        "5": 4197,
+        "6": 4197,
+        "7": 4197,
+        "8": 4197,
+        "9": 4197
+      },
+      "respondents": 4197,
+      "rows": 58758,
+      "variables": {
+        "Confidence_deduction": {
+          "dtype": "int8",
+          "label": "Confidence in answering the number of claimed deductions being correct",
+          "missing": 0
+        },
+        "Confidence_exemptions": {
+          "dtype": "int8",
+          "label": "Confidence in number of exemptions",
+          "missing": 0
+        },
+        "Confidence_filingstatus": {
+          "dtype": "int8",
+          "label": "Confidence in your filing status",
+          "missing": 0
+        },
+        "Confidence_income": {
+          "dtype": "int8",
+          "label": "Confidence that reported income is within $1000 of being correct",
+          "missing": 0
+        },
+        "DOBLFred": {
+          "dtype": "str",
+          "label": "DO-BL-Fred",
+          "missing": 0
+        },
+        "DOBLFredmarriedfilingjointly": {
+          "dtype": "str",
+          "label": "DO-BL-Fred-marriedfilingjointly",
+          "missing": 0
+        },
+        "DOBLWorksalience": {
+          "dtype": "str",
+          "label": "DO-BL-Worksalience",
+          "missing": 0
+        },
+        "DOBRFL_75": {
+          "dtype": "str",
+          "label": "DO-BR-FL_75",
+          "missing": 0
+        },
+        "Education": {
+          "dtype": "str",
+          "label": "Education",
+          "missing": 0
+        },
+        "Education_numeric": {
+          "dtype": "float64",
+          "label": "Education",
+          "missing": 2240
+        },
+        "MaritalStatus": {
+          "dtype": "str",
+          "label": "Marital Status",
+          "missing": 0
+        },
+        "NumberofChildren": {
+          "dtype": "str",
+          "label": "Number of Children",
+          "missing": 0
+        },
+        "Q218": {
+          "dtype": "int8",
+          "label": "Born before Jan 2, 1950",
+          "missing": 0
+        },
+        "Q219": {
+          "dtype": "float64",
+          "label": "Spouse born before Jan 2, 1950",
+          "missing": 26824
+        },
+        "Q30": {
+          "dtype": "str",
+          "label": "Hours worked at primary job per week",
+          "missing": 0
+        },
+        "Q33": {
+          "dtype": "str",
+          "label": "Pretax earnings from primary job",
+          "missing": 0
+        },
+        "Q50_1": {
+          "dtype": "str",
+          "label": "Guess of State Sales Tax",
+          "missing": 0
+        },
+        "Q_TotalDuration": {
+          "dtype": "str",
+          "label": "Survey time (in seconds)",
+          "missing": 0
+        },
+        "Work1": {
+          "dtype": "str",
+          "label": "Work1",
+          "missing": 0
+        },
+        "Work2": {
+          "dtype": "str",
+          "label": "Work2",
+          "missing": 0
+        },
+        "_est_r1": {
+          "dtype": "int8",
+          "label": "esample() from estimates store",
+          "missing": 0
+        },
+        "_est_r2": {
+          "dtype": "int8",
+          "label": "esample() from estimates store",
+          "missing": 0
+        },
+        "_est_r3": {
+          "dtype": "int8",
+          "label": "esample() from estimates store",
+          "missing": 0
+        },
+        "_est_r4": {
+          "dtype": "int8",
+          "label": "esample() from estimates store",
+          "missing": 0
+        },
+        "age": {
+          "dtype": "int8",
+          "label": "Age Range",
+          "missing": 0
+        },
+        "alreadydidtaxes": {
+          "dtype": "int8",
+          "label": "Return Submission Status",
+          "missing": 0
+        },
+        "amtowntax": {
+          "dtype": "float32",
+          "label": "Actual own tax owed (calculated)",
+          "missing": 0
+        },
+        "ans": {
+          "dtype": "str",
+          "label": "",
+          "missing": 0
+        },
+        "ansm": {
+          "dtype": "float64",
+          "label": "",
+          "missing": 26796
+        },
+        "attention": {
+          "dtype": "float32",
+          "label": "Failed attention test",
+          "missing": 0
+        },
+        "bachelors_degree": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 2240
+        },
+        "bracket": {
+          "dtype": "float32",
+          "label": "Tax bracket for Fred's income amount",
+          "missing": 0
+        },
+        "claimedeitc": {
+          "dtype": "float64",
+          "label": "Claimed EITC",
+          "missing": 1554
+        },
+        "complete": {
+          "dtype": "int8",
+          "label": "Completed survey",
+          "missing": 0
+        },
+        "deductiontype": {
+          "dtype": "int8",
+          "label": "Deduction claimed",
+          "missing": 0
+        },
+        "didowntaxes": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "elasticgiving": {
+          "dtype": "float32",
+          "label": "Willing to donate $1 to charity with 100% match",
+          "missing": 0
+        },
+        "employed": {
+          "dtype": "int8",
+          "label": "Employment status",
+          "missing": 0
+        },
+        "errorhit1": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 58576
+        },
+        "errorhit2": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 58576
+        },
+        "errorhit3": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 58660
+        },
+        "errorhit4": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 58660
+        },
+        "exempphaseoutthreshold": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "exemptions": {
+          "dtype": "float32",
+          "label": "Exemptions claimed",
+          "missing": 0
+        },
+        "extraschedule": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "filingdate": {
+          "dtype": "datetime64[s]",
+          "label": "Date return was submitted",
+          "missing": 9632
+        },
+        "filingstatus": {
+          "dtype": "int8",
+          "label": "Filing status",
+          "missing": 0
+        },
+        "flexiblehours": {
+          "dtype": "float64",
+          "label": "Flexible work hours",
+          "missing": 23590
+        },
+        "fredexempphaseout": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "fredtaxinc": {
+          "dtype": "float32",
+          "label": "Fred's taxable income",
+          "missing": 0
+        },
+        "gamma_i1": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 182
+        },
+        "gamma_i2": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 182
+        },
+        "gamma_i3": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 98
+        },
+        "gamma_i4": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 98
+        },
+        "gamma_s1": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 182
+        },
+        "gamma_s2": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 182
+        },
+        "gamma_s3": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 98
+        },
+        "gamma_s4": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 98
+        },
+        "gender": {
+          "dtype": "int32",
+          "label": "Gender",
+          "missing": 0
+        },
+        "group": {
+          "dtype": "float32",
+          "label": "group(mid)",
+          "missing": 0
+        },
+        "health": {
+          "dtype": "int8",
+          "label": "Health Self-Assessment",
+          "missing": 0
+        },
+        "highincomedraw": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "highschool_degree": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 2240
+        },
+        "income": {
+          "dtype": "float32",
+          "label": "Own total income",
+          "missing": 0
+        },
+        "insurance": {
+          "dtype": "int8",
+          "label": "Health insurance status",
+          "missing": 0
+        },
+        "iron": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "localdraw": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "mid": {
+          "dtype": "int32",
+          "label": "mid",
+          "missing": 0
+        },
+        "mlinflation": {
+          "dtype": "int8",
+          "label": "Inflation understanding measure: Imagine that the interest rate on your savings ",
+          "missing": 0
+        },
+        "mlmeasure": {
+          "dtype": "float32",
+          "label": "Answered all three financial literacy questions correctly",
+          "missing": 0
+        },
+        "mlnumeracy": {
+          "dtype": "int8",
+          "label": "Numeracy measure: Suppose you had $100 in a savings account and the interest rat",
+          "missing": 0
+        },
+        "mlrisk": {
+          "dtype": "int8",
+          "label": "Risk understanding measure: \u0093Buying a single company stock usually provides a sa",
+          "missing": 0
+        },
+        "ownbracket": {
+          "dtype": "float32",
+          "label": "Tax bracket for respondent's income amount",
+          "missing": 0
+        },
+        "ownexempphaseout": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "ownmarginalrate": {
+          "dtype": "float32",
+          "label": "Marginal tax rate associated with respondent's taxable income",
+          "missing": 0
+        },
+        "owntaxinc": {
+          "dtype": "float32",
+          "label": "Own taxable income",
+          "missing": 0
+        },
+        "paytype": {
+          "dtype": "float64",
+          "label": "Salaried or wage employee",
+          "missing": 23590
+        },
+        "personfiling": {
+          "dtype": "int8",
+          "label": "Who completed (will complete) your 2014 Federal Tax Return?",
+          "missing": 0
+        },
+        "personfiling_other": {
+          "dtype": "str",
+          "label": "Free response for other",
+          "missing": 0
+        },
+        "poly1": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "poly2": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "poly3": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "poly4": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "poly5": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "prepforretirement": {
+          "dtype": "float64",
+          "label": "Preparation for retirement (0-10)",
+          "missing": 23590
+        },
+        "qnum": {
+          "dtype": "int8",
+          "label": "",
+          "missing": 0
+        },
+        "ran": {
+          "dtype": "int32",
+          "label": "Fred's Income",
+          "missing": 0
+        },
+        "random": {
+          "dtype": "str",
+          "label": "Random number used to create Fred income value near own income",
+          "missing": 0
+        },
+        "residmisperception1": {
+          "dtype": "float32",
+          "label": "Prediction",
+          "missing": 16788
+        },
+        "residmisperception2": {
+          "dtype": "float32",
+          "label": "Prediction",
+          "missing": 0
+        },
+        "residmplowerci1": {
+          "dtype": "float32",
+          "label": "95% lower bound: residmisperception1",
+          "missing": 16788
+        },
+        "residmplowerci2": {
+          "dtype": "float32",
+          "label": "95% lower bound: residmisperception2",
+          "missing": 0
+        },
+        "residmpupperci1": {
+          "dtype": "float32",
+          "label": "95% upper bound: residmisperception1",
+          "missing": 16788
+        },
+        "residmpupperci2": {
+          "dtype": "float32",
+          "label": "95% upper bound: residmisperception2",
+          "missing": 0
+        },
+        "retsavingsrate": {
+          "dtype": "float64",
+          "label": "Percent of income saved for retirement in past 3 years",
+          "missing": 23898
+        },
+        "savingenough": {
+          "dtype": "float64",
+          "label": "Are you saving enough for retirement?",
+          "missing": 23590
+        },
+        "scheduleb": {
+          "dtype": "int8",
+          "label": "Schedule B: Interest and Ordinary Dividends",
+          "missing": 0
+        },
+        "schedulec": {
+          "dtype": "int8",
+          "label": "Schedule C: Profit or Loss From Business",
+          "missing": 0
+        },
+        "scheduled": {
+          "dtype": "int8",
+          "label": "Schedule D: Capital Gains and Losses",
+          "missing": 0
+        },
+        "schedulee": {
+          "dtype": "int8",
+          "label": "Schedule E: Supplemental Income and Loss",
+          "missing": 0
+        },
+        "schedulef": {
+          "dtype": "int8",
+          "label": "Schedule F: Profit or Loss From Farming",
+          "missing": 0
+        },
+        "sdamount": {
+          "dtype": "float32",
+          "label": "Amount of Standard Deduction",
+          "missing": 0
+        },
+        "similar": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "spotlight": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "startdate": {
+          "dtype": "datetime64[s]",
+          "label": "",
+          "missing": 0
+        },
+        "surveyversion": {
+          "dtype": "str",
+          "label": "",
+          "missing": 0
+        },
+        "tax": {
+          "dtype": "float32",
+          "label": "Actual tax owed",
+          "missing": 0
+        },
+        "taxguess": {
+          "dtype": "str",
+          "label": "",
+          "missing": 0
+        },
+        "taxguessds": {
+          "dtype": "float64",
+          "label": "Perceived Taxes",
+          "missing": 0
+        },
+        "taxguessmain": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "tg0to100": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "tgw1": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "tgw5": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "timeatjob": {
+          "dtype": "float64",
+          "label": "Time worked at primary job",
+          "missing": 23590
+        },
+        "turbotax": {
+          "dtype": "int8",
+          "label": "Use of tax preparation software, such as TurboTax",
+          "missing": 0
+        },
+        "usedturbotax": {
+          "dtype": "float32",
+          "label": "",
+          "missing": 0
+        },
+        "work1": {
+          "dtype": "float64",
+          "label": "Work1",
+          "missing": 24136
+        },
+        "work2": {
+          "dtype": "float64",
+          "label": "Work2",
+          "missing": 24220
+        }
+      }
+    }
+  },
+  "raw_data_policy": "Read archive in memory. No raw microdata copied, modified, committed or published."
+}

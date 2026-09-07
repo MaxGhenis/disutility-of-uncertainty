@@ -1,0 +1,4 @@
+panel,n,respondents,coefficient,cluster_se,difference_from_completed_adapter,se_difference_from_completed_adapter
+full,58758,4197,0.617411758535,0.00960838551952,1.11022302463e-16,0
+mid_range,41970,4197,0.819287789634,0.0133397248371,0,0
+local,17937,4197,0.805843693211,0.042979782605,0,0

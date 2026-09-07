@@ -20,3 +20,14 @@ Live fetch attempted and blocked: could not resolve github.com in sandbox.
 4. Write quantitative methods report, tests and durable handoff; commit each milestone.
 
 Only study1-audit/ and this progress file will change from the base. Raw source archives stay immutable. Final report will also be saved to lane result.md.
+
+## Checkpoint: native replication and local diagnostics
+- Pinned archive/member hashes, actual variable labels, dtype/missingness and consulted-source hashes saved.
+- Independently reproduced Table 1 pooled coefficients/SEs and all 484 cells of Appendix A5–A8.
+- Recovered positive-tax retained individual parameters to <4e-6; OLS also solves source convergence failures. These are heuristic coefficients, not individual MTRs.
+- Audited 31 numeric columns shared between native datasets; exact match on 58,758 retained forecast rows.
+- Computed selection, nonlinearity, leverage, processing, split-forecast and finite-sample sensitivity tables.
+- First 16 analytical/adversarial estimator tests pass. Full native tests and final reproducibility check next.
+- New observations: q2 is integer-truncated own income (19 fractional-income cases); 13 own-bracket respondents have stored-tax nonlinearity associated with exemption phaseout.
+
+Next: correlated measurement-error demonstrations, primary-source-linked interpretation, bounded independent review if an authorized subscription lane is accessible, final validated report and handoff.

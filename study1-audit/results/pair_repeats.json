@@ -1,0 +1,21 @@
+{
+  "duplicate_income_outcome_ranges": {
+    "max": 401.0,
+    "mean": 401.0,
+    "median": 401.0,
+    "min": 401.0,
+    "n": 1,
+    "p05": 401.0,
+    "p25": 401.0,
+    "p75": 401.0,
+    "p95": 401.0,
+    "p99": 401.0,
+    "sd": 0.0
+  },
+  "identical_income_pair": 0,
+  "identical_prewinsor_pair_forecasts": 1120,
+  "identical_processed_pair_forecasts": 1130,
+  "incidental_duplicate_income_groups": 1,
+  "incidental_duplicate_income_respondents": 1,
+  "pair_slope_abs_above_one": 1413
+}

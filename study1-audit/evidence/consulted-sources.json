@@ -1,0 +1,46 @@
+{
+  "article_text": {
+    "path": "/Users/maxghenis/capacity-sprint-20260907/disutility/source-evidence/article.txt",
+    "sha256": "2160f554b828fb86fea8e477f27fe78eb02abab0a1f1fe2a650104ab88d13a31"
+  },
+  "appendix_text": {
+    "path": "/Users/maxghenis/capacity-sprint-20260907/disutility/source-evidence/appendix.txt",
+    "sha256": "a97ba04ae1df92daddba00b65f7f1f8bbcae6f14dbc7462c7f3bd8bdfc9112e2"
+  },
+  "article_pdf": {
+    "path": "/Users/maxghenis/capacity-sprint-20260907/research-disutility/sources/mirror/arj_paper.pdf",
+    "sha256": "abcd0bbd03c6abf68b97a87bd5dcaa6eead7753ad04dba55a7eb91f349022c81"
+  },
+  "appendix_pdf": {
+    "path": "/Users/maxghenis/capacity-sprint-20260907/research-disutility/sources/mirror/arj_onlineapp.pdf",
+    "sha256": "0fade17d06b4488d51a2f142bcd76d2d432b00d782de7679e585325518faf2b1"
+  },
+  "survey_pdf": {
+    "path": "/Users/maxghenis/capacity-sprint-20260907/research-disutility/sources/mirror/arj_surveyapp.pdf",
+    "sha256": "896973a81ec0297398f6dfeba81a58d2b04dfa9d4df35f1af59e9e3b05326f0f"
+  },
+  "completed_adapter": {
+    "path": "/Users/maxghenis/disutility-of-uncertainty-calibration-20260907/src/taxuncertainty/analysis/rjt_replication.py",
+    "sha256": "09b7d7caba127015d66671f8ac3e15b093a4cbc47672708621303b81672d414a"
+  },
+  "completed_aggregate": {
+    "path": "/Users/maxghenis/disutility-of-uncertainty-calibration-20260907/src/taxuncertainty/data/rjt_replication.json",
+    "sha256": "1475ef4c31e8df0b45b437d5ea340f76c260ccd13a1085c843b74cd988540628"
+  },
+  "completed_mapping": {
+    "path": "/Users/maxghenis/disutility-of-uncertainty-calibration-20260907/calibration/NATIVE_MAPPING.md",
+    "sha256": "2323f8263c19cc9eba1f8966a2760687092ff0f572b7571b8f6fc29abbad9072"
+  },
+  "source_manifest": {
+    "path": "/Users/maxghenis/capacity-sprint-20260907/research-disutility/source-manifest.json",
+    "sha256": "8b0708a55f42c658cdc20a4d17533677c40cbf0edb4c4b6edf5734d3585e7f08"
+  },
+  "no_reset": {
+    "path": "/Users/maxghenis/capacity-sprint-20260907/no-reset.json",
+    "sha256": "8b7f37db5e084eed3eb960141c189483606f8286a1624b8f1b50ff92d06503c1"
+  },
+  "account_configuration": {
+    "path": "/Users/maxghenis/chief-of-staff/subfleet/codex-accounts.json",
+    "sha256": "65fdcdb7af7d17cdb0e497ecc0b6017123306054a6bfbcc2e405cb331a5100a9"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "python": "3.13.9",
+  "numpy": "2.5.2",
+  "pandas": "3.0.5",
+  "pytest": "8.4.2",
+  "base": "5d134c14630613ff32819abe99ad5109b65b07a5",
+  "live_fetch": "blocked: Could not resolve host: github.com"
+}
