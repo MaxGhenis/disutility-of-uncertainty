@@ -322,7 +322,13 @@ def paper_artifacts(results):
         "rjt_respondents": str(study2["table4_primary"]["n"]),
         "rjt_archive_hash": empirical["provenance"]["archive_sha256"][:12],
     }
-    money = lambda value: f"{value:,.2f}"
+
+    def money(value):
+        # Different numerical backends can leave roundoff of either sign at an
+        # exact zero. Normalize its displayed cents, preserving raw accounting.
+        formatted = f"{value:,.2f}"
+        return "0.00" if formatted == "-0.00" else formatted
+
     selected_accuracy = [
         row
         for row in results["approximation_accuracy"]

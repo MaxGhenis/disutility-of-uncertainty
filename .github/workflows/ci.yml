@@ -78,6 +78,9 @@ jobs:
 
     - name: Setup Quarto
       uses: quarto-dev/quarto-actions/setup@v2
+      env:
+        # TinyTeX's release lookup otherwise shares an unauthenticated API quota.
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         version: '1.9.36'
         tinytex: true

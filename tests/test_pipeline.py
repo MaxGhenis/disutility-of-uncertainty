@@ -153,3 +153,19 @@ def test_observed_calibration_drives_paper_but_never_replaces_belief_inputs(resu
         paper_artifacts(changed)["generated/scenarios.md"]
         == paper_artifacts(results)["generated/scenarios.md"]
     )
+
+
+def test_paper_zero_cents_ignore_backend_roundoff_without_changing_accounting(results):
+    changed = json.loads(json.dumps(results))
+    for key in ("private_regret", "revenue_change", "social_loss"):
+        changed["scenarios"][0]["worker"][key] = -1e-11
+    assert (
+        paper_artifacts(changed)["generated/scenarios.md"]
+        == paper_artifacts(results)["generated/scenarios.md"]
+    )
+    assert changed["scenarios"][0]["worker"]["revenue_change"] == -1e-11
+    changed["scenarios"][0]["worker"]["revenue_change"] = -0.01
+    assert (
+        "| No error | 0.00 | -0.01 | 0.00 |"
+        in paper_artifacts(changed)["generated/scenarios.md"]
+    )

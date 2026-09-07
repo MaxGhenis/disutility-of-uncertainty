@@ -197,3 +197,16 @@ These are local self-checks; no independent semantic reviewer completed.
   Draft PR text and handoff now describe the actual empirical implementation.
 - Next: complete wheel verification, open the authorized draft, integrate review
   findings and preserve exact final artifacts and remote-check status.
+
+## Draft PR and CI fixes
+
+- Opened draft PR https://github.com/MaxGhenis/disutility-of-uncertainty/pull/3
+  from freshly verified origin/main 5d134c1. Remote branch and PR head were checked.
+- Installed-wheel smoke passes: all 24 source/data files match; complete model
+  and calibration results reproduce without PolicyEngine or Matplotlib.
+- First CI runs exposed a generated scenarios-table mismatch and an intermittent
+  TinyTeX release-lookup HTTP 403. Added a regression-tested display normalization
+  for negative zero cents (raw accounting unchanged) and Quarto's documented
+  GH_TOKEN setup for authenticated release lookup.
+- Both publication/deployment jobs are skipped on the draft. Next: confirm the
+  corrected CI run and integrate pending exact-scope empirical review findings.
