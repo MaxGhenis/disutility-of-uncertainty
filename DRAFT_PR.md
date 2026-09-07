@@ -1,55 +1,56 @@
-# Rebuild welfare accounting and add signed-error identification
+# Rebuild welfare accounting and calibrate observed tax-perception error bounds
 
 The previous pipeline interpreted private optimization losses as national social
 welfare costs and attributed an unsupported 0.12 RMSE to survey evidence. This
-change separates exact private regret, government revenue changes and social
-welfare under explicit fiscal closure and social weights. The 0.12 latent RMSE
-remains illustrative, and the unsupported national estimates are withdrawn.
+rebuild separates exact private regret, revenue changes and social welfare under
+explicit fiscal closure and social weights. It preserves feasible nonlinear
+budget choices and a provenance-checked real PolicyEngine household fixture.
+The 0.12 latent RMSE remains illustrative; national welfare claims are withdrawn.
 
-The rebuild also preserves explicit nonlinear budget choices and a
-provenance-validated real PolicyEngine household fixture. Results, tables,
-figures and inline paper values are generated from the same pipeline.
+The empirical addition reads the real, checksum-pinned Rees-Jones/Taubinsky
+replication archive. It reproduces the three pooled Study 1 Table 1 panels and
+Study 2 primary/subgroup benchmarks, checks all 4,582 raw choice rows against
+native selection flags, and exports canonical observed-error intervals. For the
+3,130 retained Study 2 respondents, author-convention bias bounds are +4.65 to
++14.37 percentage points and RMSE bounds are 22.57 to 29.63 points. Payoff-only
+endpoint bounds, attention-selection sensitivity and assumed measurement-noise
+ranges are reported separately. These quantities do not replace welfare inputs.
 
-The new calibration layer provides checksum-validated canonical data schemas,
-signed moments, equal respondent mass, cluster bootstrap, local tax-forecast
-slopes, MPL perception intervals, and conditional measurement-error and
-tax-component bounds. It distinguishes the source's pooled fixed-effects scaling
-coefficient from individual signed errors. The paper now explains these
-identification limits and the remaining empirical work.
+The mapping documents incomplete original cleaning, the 89 Study 1 local draws
+outside respondents' own brackets, and an apparent reversal of Appendix A9's
+reinclusion labels. Pooled ironing coefficients are not interpreted as an
+identified distribution of latent types. Study 2 has one MPL per respondent;
+response noise and population/tax-component transport remain unresolved. Raw
+microdata are not vendored: the archive contains no explicit redistribution
+licence. The committed aggregate artifact carries source and calculation hashes.
 
-All bundled calibration examples are explicitly synthetic. Native field mapping,
-cleaning and licensing for the author-linked Rees-Jones/Taubinsky archive remain
-unverified because this execution environment cannot download it. No empirical
-microdata calibration, latent behavioral distribution or national welfare
-estimate is claimed.
+Validation completed locally:
 
-Validation:
+- 257 tests pass with the actual pinned archive; one optional live PolicyEngine
+  integration test skipped; 93% coverage. No new PolicyEngine computation.
+- The native integration test regenerates the complete aggregate cache and
+  round-trips both canonical CSV variants. Tests also cover source-flag mismatch,
+  published benchmarks, payoff inequalities, FE weighting, arbitrary biased and
+  correlated noise, checksum drift and preserving output on invalid input.
+- Fatal flake8, Black, isort, mypy on 20 source files, citations and generated
+  numerical/text/figure checks pass.
+- Quarto builds HTML and a 16-page PDF; affected empirical pages 7-9 visually
+  inspected. All empirical tables are generated from the checked aggregate cache.
 
-- 239 tests pass; one opt-in live PolicyEngine integration test skipped; 93%
-  overall coverage. Existing household fixture validated offline.
-- Fatal flake8, Black, isort, mypy on 19 source files, citation checks and
-  `git diff --check` pass.
-- Generated-results checks pass; Quarto builds HTML and a 15-page PDF. New paper
-  pages inspected visually.
-- Fresh runtime-only wheel installation matches all 22 packaged source/data
-  files and reproduces model results and the calibration example without
-  PolicyEngine or Matplotlib.
-- Regression tests cover response-noise amplification, design weighting,
-  interval endpoints, component cancellation, large-bias variance stability and
-  preservation of existing output on invalid input.
+Review scope and status:
 
-Review and handoff:
+- Initial independent host review of `b978633` found no actionable issues in the
+  earlier offline adapters. It does not approve empirical ingestion.
+- A separate bounded review of empirical commit `10e9321` is pending. Claude
+  subscription attempts exhausted available lanes; the same scope was submitted
+  on the authorized pinned Axiom Codex subscription lane. No resets or overflow.
+- Both original dirty checkouts remain preserved; the rebuilt state was copied
+  exactly to this isolated continuation and committed before new work.
+- Live `origin/main` was fetched and remains `5d134c1`; no incoming base changes.
+- This PR remains draft. Draft previews are disabled; publication and merge are
+  outside this change's authorization. Remote CI status is reported separately.
 
-- Both preexisting dirty checkouts were preserved by binary diff, untracked-file
-  archive and per-file hashes; the rebuild was committed in an isolated worktree.
-- Independent semantic review did not complete: Claude credential access and
-  pinned Codex network resolution were blocked. No approval is claimed.
-- The local base is recorded `origin/main` at
-  `5d134c14630613ff32819abe99ad5109b65b07a5`; fresh fetch, push and GitHub API access
-  are blocked. Refresh and safely integrate the base before opening this draft.
-- Draft PRs skip automated Netlify publication. No publication or merge is part
-  of this handoff. Remote CI has not run.
-
-Next: inspect and hash the replication archive, verify its licence and native
-field/selection mapping, reproduce source benchmarks, then report signed moments
-with processing, measurement-error and population-coverage sensitivity.
+Next scientific step: obtain independent repeated or otherwise validated
+measurements linking choice-rationalizing errors to stable, decision-relevant
+beliefs; audit any Study 1 individual slope estimator for processing and income
+span sensitivity before using it as a welfare input.

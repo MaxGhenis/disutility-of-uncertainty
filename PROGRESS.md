@@ -186,3 +186,14 @@ These are local self-checks; no independent semantic reviewer completed.
   without clipping or broken equations. Generated-results/citations checks pass.
 - Next: obtain the empirical milestone's bounded independent review, preserve
   exact reviewed commit evidence, and prepare the live-base draft PR.
+
+## Review and draft preparation
+
+- Preserved exact empirical review target 10e93217d4e49e80c743f27bc6542e02b7ef4411.
+- Requested one bounded semantic review. Claude subscription lanes returned hard
+  limits/auth failure; submitted the same scope on authorized pinned Axiom Codex
+  capacity. This is distinct from the old killed network-stuck review.
+- Refetched live origin/main, unchanged at 5d134c1; GitHub authentication works.
+  Draft PR text and handoff now describe the actual empirical implementation.
+- Next: complete wheel verification, open the authorized draft, integrate review
+  findings and preserve exact final artifacts and remote-check status.
