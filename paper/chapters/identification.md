@@ -18,14 +18,16 @@ individual rate-error RMSE. The archive already excludes some original survey
 completers and provides processed forecasts. Reproducing the remaining
 attention filter and regression does not reconstruct earlier cleaning.
 
-Our canonical adapter proposes a distinct descriptive statistic: fit perceived
+Our Study 1 audit implements a distinct descriptive statistic: fit perceived
 and true tax against income within each respondent's local draws, then subtract
 the slopes. Both regressions include an intercept, so a constant liability
 level error does not mechanically become a slope error. Native inspection shows
 that 89 forecasts flagged as local lie outside the respondent's own nominal
 bracket. A strictly within-bracket slope analysis must therefore distinguish
-its sample from the published local regression. No Study 1 latent dispersion
-estimate is inferred from that regression here.
+its sample from the published local regression. @sec-study1-audit reports the
+validated selection, stored-tax nonaffinity, affine-fit and within-survey
+covariance diagnostics. Neither that audit nor the pooled regression identifies
+a stable latent dispersion parameter.
 
 Study 2 in @rees2020schmeduling uses choices between taxable and untaxed money
 under experimental schedules. Our adapter checks every native A/B choice

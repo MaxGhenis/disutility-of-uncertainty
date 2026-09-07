@@ -137,3 +137,8 @@ inequalities preserve finite intervals and retain negative endpoints. Optional
 `rate_support: [0,1]` at the payload level reproduces the article's footnote-28
 support convention; it requires a `manifest.rate_support_reason`. Every such
 restriction is recorded, and no midpoint estimate is silently substituted.
+
+The [Study 1 appendix evidence](study1/README.md) adds a frozen, independently
+audited aggregate package and reproducible local-archive command. Its observed
+projection and measurement-sensitivity results remain separate from Study 2's
+interval calibration and the model's illustrative 0.12 latent RMSE.

@@ -130,3 +130,17 @@ mean responses therefore cannot determine the heterogeneous belief variance
 needed for welfare calculations. Claims based on preliminary individual-type
 classifications or interval-regression residual variance are not adopted here.
 The illustrative .12 parameter is unchanged.
+
+## Validated Study 1 appendix evidence
+
+The independently reviewed audit at `a5191ea9f81fd414d9fbf547995dcb31341aa875`
+now supplies the paper's separate finite-design evidence appendix. See
+[reproduction and licensing](study1/README.md) and its exact-file manifest.
+The precision-only report correction at `935ed77` leaves every included
+scientific aggregate and estimator unchanged. Selection and observed-point
+true-tax nonaffinity, joint affine-model/error-cap compatibility, and same-session
+covariance sensitivities are documented explicitly. The 555/2470 count is not an
+identified type share; the covariance decomposition requires a common target
+and assumptions about error covariance. No latent belief input or Study 2
+result is replaced. Earlier prospective descriptions are superseded only within
+this scoped, reproducible audit.

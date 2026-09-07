@@ -248,3 +248,30 @@ These are local self-checks; no independent semantic reviewer completed.
   inspect affected pages, and write STUDY1-REVIEW-READY.md for host review.
 - No nested reviewers, raw-data redistribution, new model/API computation,
   publication or merge. The draft branch will receive a normal fast-forward update.
+
+## Study 1 scientific integration checkpoint
+
+- Packaged 18 byte-identical audit files from independently reviewed a5191ea:
+  five audit-authored scripts, ten aggregate outputs and three dependency files.
+  No raw microdata, original DO files or source PDFs are included. All included
+  files also match the owner's precision-only correction commit 935ed77.
+- The new temporary-directory reproduction wrapper reran the frozen native
+  calculations with the pinned archive: all ten aggregate files reproduce byte
+  for byte. The source lane and prior continuation remain untouched.
+- Added a checksum-checked aggregate importer and separate `study1_evidence`
+  results field. Nine integration tests cover source/provenance drift, exact
+  cohort selection, percentage-point units, covariance decomposition, the exact
+  correlation threshold and isolation from welfare inputs/Study 2 outputs.
+- Full local suite: 267 passed, one optional live PE skip, 92% coverage. Lint,
+  Black/isort, mypy, generated results and citations pass. No live PE computation.
+- Every preexisting result equals PR head 8e05267 except the model source hash.
+  Study 2 cache, household fixture, welfare inputs/tables and figures are byte
+  identical. The latent RMSE stays 0.12 and no national calibration is claimed.
+- Added a generated three-table appendix with selection, processing/nonaffinity,
+  dollar-cap compatibility and same-survey covariance caveats. Corrected a Quarto
+  inline-math shortcode rendering defect found during PDF inspection; numerical
+  variables now render as numbers. HTML/PDF and affected-page inspection are
+  recorded in the lane artifacts. New integration review remains pending.
+- Next: freeze the exact integration head and diff in STUDY1-REVIEW-READY.md,
+  update the existing draft PR normally from the live verified base, and save
+  rendered artifacts, test evidence and handoff. No nested reviewer was launched.

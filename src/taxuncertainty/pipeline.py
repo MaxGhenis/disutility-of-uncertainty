@@ -20,6 +20,7 @@ from taxuncertainty.analysis.calibration import (
 )
 from taxuncertainty.analysis.policyengine_budgets import load_household_budget
 from taxuncertainty.analysis.rjt_replication import load_replication
+from taxuncertainty.analysis.study1_evidence import load_evidence
 from taxuncertainty.models.accounting import evaluate_worker
 from taxuncertainty.models.beliefs import NormalBeliefs
 from taxuncertainty.models.planner import SocialPlanner
@@ -263,6 +264,7 @@ def compute_results(seed=42):
         "nonlinear_examples": _budget_examples(inputs),
         "household_fixture": _household_fixture(),
         "observed_calibration": load_replication(),
+        "study1_evidence": load_evidence(),
         "validation": {
             "baseline_private_quadrature_difference": abs(
                 high_order.private_regret - unbiased["worker"]["private_regret"]
@@ -308,6 +310,11 @@ def paper_artifacts(results):
     inverse = {row["id"]: row for row in results["planner"]["inverse_wage"]}
     empirical = results["observed_calibration"]
     study1, study2 = empirical["study1"], empirical["study2"]
+    audit = results["study1_evidence"]
+    native = audit["native_checks"]
+    screened = audit["selection"][3]
+    own = next(r for r in audit["slope_diagnostics"] if r["panel"] == "own_bracket")
+    repeat = audit["repeated"]
     numbers = {
         "unbiased_private": f'{lookup["unbiased"]["worker"]["private_regret"]:.2f}',
         "unbiased_revenue_loss": f'{-lookup["unbiased"]["worker"]["revenue_change"]:.2f}',
@@ -321,6 +328,46 @@ def paper_artifacts(results):
         "model_hash": results["provenance"]["model_source_sha256"][:12],
         "rjt_respondents": str(study2["table4_primary"]["n"]),
         "rjt_archive_hash": empirical["provenance"]["archive_sha256"][:12],
+        "s1_archive_people": f'{native["archive_respondents"]:,}',
+        "s1_archive_rows": f'{native["archive_forecasts"]:,}',
+        "s1_people": f'{native["primary_respondents"]:,}',
+        "s1_rows": f'{native["primary_forecasts"]:,}',
+        "s1_reused_rows": f'{native["retained_estimates_rows"]:,}',
+        "s1_reused_columns": str(native["retained_numeric_columns_exactly_matched"]),
+        "s1_compatible_100": str(
+            next(
+                r["compatible"]
+                for r in audit["affine_compatibility"]
+                if r["dollar_cap"] == 100
+            )
+        ),
+        "s1_incidental_repeat_gap": f'{audit["pair_repeats"]["duplicate_income_outcome_ranges"]["max"]:,.0f}',
+        "s1_float_changes": str(native["processed_differences_only_float32"]),
+        "s1_other_changes": str(native["processed_differences_beyond_float32"]),
+        "s1_other_people": str(native["respondents_changed_beyond_float32"]),
+        "s1_outside": str(native["local_outside_own_bracket"]),
+        "s1_nonaffine": str(own["observed_nonlinear_gt_005"]),
+        "s1_affine_candidate_n": f'{own["n_ge3_distinct"]:,}',
+        "s1_nominal_departure": f'{own["nominal_max_deviation"]["max"]:,.2f}',
+        "s1_phaseout_rows": str(native["within_bracket_phaseout_forecasts"]),
+        "s1_phaseout_discrepancy": f'{audit["independent_arithmetic"]["nominal_departure_minus_stored_phaseout_tax_max_abs_dollars"]:.7f}',
+        "s1_selected_n": f'{screened["n"]:,}',
+        "s1_selected_income": f'{screened["median_income"]:,.0f}',
+        "s1_original_income": f'{audit["selection"][0]["median_income"]:,.0f}',
+        "s1_selected_bias": f'{100*screened["mean_error"]:.2f}',
+        "s1_minimum_cap": f'{audit["affine_compatibility"][0]["median_minimum_dollar_error"]:,.2f}',
+        "s1_repeat_n": f'{repeat["n"]:,}',
+        "s1_repeat_covariance": f'{10000*repeat["covariance"]:.2f}',
+        "s1_repeat_se": f'{10000*repeat["covariance_jackknife_se"]:.2f}',
+        "s1_repeat_correlation": f'{repeat["correlation"]:.7f}',
+        "s1_repeat_var_a": f'{repeat["var_a"]:.10f}',
+        "s1_repeat_var_b": f'{repeat["var_b"]:.10f}',
+        "s1_repeat_covariance_fraction": f'{repeat["covariance"]:.10f}',
+        "s1_pair_radius": f'{100*audit["selection"][0]["median_box_radius_100"]:.2f}',
+        "s1_selected_radius": f'{100*screened["median_box_radius_100"]:.2f}',
+        "s1_full_main_sd": f'{100*audit["full_range_processing_sd"]["taxguessmain"]:.2f}',
+        "s1_full_unwinsorized_sd": f'{100*audit["full_range_processing_sd"]["taxguessds"]:.2f}',
+        "s1_full_tgw5_sd": f'{100*audit["full_range_processing_sd"]["tgw5"]:.2f}',
     }
 
     def money(value):
@@ -336,6 +383,56 @@ def paper_artifacts(results):
     ]
     artifacts = {
         "_variables.yml": _json(numbers),
+        "generated/study1-selection.md": _table(
+            ["Income design", "N", "Median span ($)", "Error SD (pp)"],
+            [
+                [
+                    label,
+                    f'{row["n"]:,}',
+                    f'{row["median_span"]:,.0f}',
+                    f'{100*row["sd_error"]:,.2f}',
+                ]
+                for label, row in zip(
+                    (
+                        "Own-income pair",
+                        "Native local",
+                        "Own bracket: 3+, affine",
+                        "Own bracket: 4+, affine, span 5k+",
+                        "Own bracket: 4+, affine, span 10k+",
+                        "All 14 random draws",
+                    ),
+                    audit["selection"],
+                )
+            ],
+            "Study 1 finite-design signed slope errors using processed forecasts. Counts 3+/4+ mean distinct observed incomes; span cutoffs are dollars. The observed affine screen requires at least three incomes and maximum stored-tax OLS residual at most \\$0.05. Equal respondent mass; SD denominator N. No slope clipping or latent-noise correction.",
+            "tbl-study1-selection",
+        ),
+        "generated/study1-affine.md": _table(
+            ["Cap per answer ($)", "Compatible / N", "Share (%)", "Median width (pp)"],
+            [
+                [
+                    f'{r["dollar_cap"]:,}',
+                    f'{r["compatible"]:,} / {r["respondents"]:,}',
+                    f'{100*r["compatible"]/r["respondents"]:.1f}',
+                    f'{100*r["median_width_among_compatible"]:.2f}',
+                ]
+                for r in audit["affine_compatibility"]
+            ],
+            "Compatibility with some affine forecast function and an assumed uniform dollar-error cap in the 2,470-person screened sample. Width is the feasible slope-set width among compatible respondents only; shares are not identified belief types.",
+            "tbl-study1-affine",
+        ),
+        "generated/study1-covariance.md": _table(
+            ["Assumed error correlation", "Implied common-target SD (pp)"],
+            [
+                [
+                    f'{r["assumed_error_correlation"]:.7f}',
+                    f'{100*r["implied_common_target_sd"]:.2f}',
+                ]
+                for r in audit["correlated_error_sensitivity"][::2]
+            ],
+            "Conditional second-moment decompositions for N=1,986. Errors are assumed orthogonal to the same latent target. The last row uses the observed correlation, displayed rounded; the exact zero-variance identity does not hold at a literal correlation of 0.100000. These are sensitivities, not estimates of error correlation or latent variance.",
+            "tbl-study1-covariance",
+        ),
         "generated/empirical-noise.md": _table(
             [
                 "Assumed noise RMSE cap (pp)",

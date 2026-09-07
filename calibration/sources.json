@@ -63,5 +63,16 @@
     "method": "fresh HTTPS download from author-linked Dropbox URL by implementation lane",
     "sha256": "c578518776c9cd97cc0bcf340558a9574ed2088cfeb5d1b610274e5d7ab48b15",
     "matches_research_lane_archive": true
+  },
+  "study1_appendix_audit": {
+    "reviewed_commit": "a5191ea9f81fd414d9fbf547995dcb31341aa875",
+    "precision_only_report_commit": "935ed77d4a7afe4ed721f1ff6dd147254a9ff4bf",
+    "included_frozen_files_unchanged_at_precision_commit": true,
+    "bundle_manifest": "study1/manifest.json",
+    "aggregate_cache": "../src/taxuncertainty/data/study1_evidence.json",
+    "reproduction": "study1/reproduce.py",
+    "inherited_review": "reviews/study1-a5191ea.md",
+    "review_sha256": "58ba502e1c09bc567a1eb19ba2d96d48bf0eccf09ef7d0545b969fa5f7579178",
+    "scope": "Finite-design Study 1 forecast projections, selection and stored-tax audits, conditional affine compatibility and within-survey covariance sensitivity. No latent variance or national welfare calibration. Independent review of the subsequent paper/importer integration is separate."
   }
 }

@@ -1,0 +1,26 @@
+{
+  "full": {
+    "cluster_se": 0.009608385519515717,
+    "coefficient": 0.6174117585350005,
+    "difference_from_completed_adapter": 1.1102230246251565e-16,
+    "n": 58758,
+    "respondents": 4197,
+    "se_difference_from_completed_adapter": 0.0
+  },
+  "local": {
+    "cluster_se": 0.04297978260502916,
+    "coefficient": 0.8058436932109119,
+    "difference_from_completed_adapter": 0.0,
+    "n": 17937,
+    "respondents": 4197,
+    "se_difference_from_completed_adapter": 0.0
+  },
+  "mid_range": {
+    "cluster_se": 0.013339724837056071,
+    "coefficient": 0.8192877896337636,
+    "difference_from_completed_adapter": 0.0,
+    "n": 41970,
+    "respondents": 4197,
+    "se_difference_from_completed_adapter": 0.0
+  }
+}

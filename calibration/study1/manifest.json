@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "audit_commit": "a5191ea9f81fd414d9fbf547995dcb31341aa875",
+  "archive_sha256": "c578518776c9cd97cc0bcf340558a9574ed2088cfeb5d1b610274e5d7ab48b15",
+  "policy": "Only audit-authored code, aggregates and benchmark inputs. No raw or canonical microdata, original DO files or source PDFs. Archive redistribution licence not established.",
+  "files": {
+    "scripts/audit.py": {
+      "sha256": "cbd1af85093a66f18532a606fb057a82698e67a854fbda43fa01120cd836e0d3",
+      "bytes": 28004,
+      "source_path": "study1-audit/scripts/audit.py"
+    },
+    "scripts/estimators.py": {
+      "sha256": "b39ef31d36d7e76e796930ea2b9804a5dce6225f543393df2c46e78949d85c46",
+      "bytes": 9802,
+      "source_path": "study1-audit/scripts/estimators.py"
+    },
+    "scripts/sensitivity.py": {
+      "sha256": "c1cf4b2af4df637169635b6817dec030af12b623a0e694f2f6ac4f39d58e9a6a",
+      "bytes": 10991,
+      "source_path": "study1-audit/scripts/sensitivity.py"
+    },
+    "scripts/sources.py": {
+      "sha256": "5d78d9897190d0923764b0233ce96aefbd0500053a1df52c582b25ec0f8537dc",
+      "bytes": 4435,
+      "source_path": "study1-audit/scripts/sources.py"
+    },
+    "scripts/verify_native_arithmetic.py": {
+      "sha256": "07e63ac76a35adb992390a6fbf955d235e62f4340e279ff20a81e924ce57dee6",
+      "bytes": 3426,
+      "source_path": "study1-audit/scripts/verify_native_arithmetic.py"
+    },
+    "evidence/completed-adapter-benchmark.json": {
+      "sha256": "220184a6a5b3a103944cf1e6312e51b4076c113bb47c8fd1aa08f599562f36d5",
+      "bytes": 1230,
+      "source_path": "study1-audit/evidence/completed-adapter-benchmark.json"
+    },
+    "evidence/published-grids.json": {
+      "sha256": "eac2666890112f12d95bf1384a39910d6d28be52bbee99bedecfb922f9299650",
+      "bytes": 6401,
+      "source_path": "study1-audit/evidence/published-grids.json"
+    },
+    "requirements.txt": {
+      "sha256": "97ab2f497816684fda6f1a5e3a3c4090f3c4b2892f59a0d7e0b8ad5f7a92ba3a",
+      "bytes": 41,
+      "source_path": "study1-audit/requirements.txt"
+    },
+    "results/selection.csv": {
+      "sha256": "8d2fb41c24483bd6f1ad3ab03413f38616931e51284931ad90e31a144f1e692b",
+      "bytes": 30809,
+      "source_path": "study1-audit/results/selection.csv"
+    },
+    "results/slope_diagnostics.json": {
+      "sha256": "8026a60dfe53300418d34b7d864a36434874e04d3a013e02485498597ab916be",
+      "bytes": 20686,
+      "source_path": "study1-audit/results/slope_diagnostics.json"
+    },
+    "results/affine_belief_falsification.csv": {
+      "sha256": "0ccf71bd38b45ee9f7b4027de4ea9c8c4f8189acb41b2b81dced878890ead1f4",
+      "bytes": 4209,
+      "source_path": "study1-audit/results/affine_belief_falsification.csv"
+    },
+    "results/repeated_measures.csv": {
+      "sha256": "c0878a3d13fb954e766c09b6e84e48257e4555cbfe057ff05c990798bd87b02f",
+      "bytes": 17491,
+      "source_path": "study1-audit/results/repeated_measures.csv"
+    },
+    "results/correlated_error_sensitivity.csv": {
+      "sha256": "b59eb71188b9ecff5ca64d0b8bda49c2237a7817cb67f1f0e5a1aa17e22b217b",
+      "bytes": 1941,
+      "source_path": "study1-audit/results/correlated_error_sensitivity.csv"
+    },
+    "results/native_checks.json": {
+      "sha256": "16cef8f562d95649859e4c298675e2b1ca60b51b263146a57313996fbfed9b88",
+      "bytes": 1363,
+      "source_path": "study1-audit/results/native_checks.json"
+    },
+    "results/independent_arithmetic.json": {
+      "sha256": "9a77078e881f19135c8a15ff74217130ed81f107660cfa1b9a14f6b95a8922a1",
+      "bytes": 636,
+      "source_path": "study1-audit/results/independent_arithmetic.json"
+    },
+    "results/pair_repeats.json": {
+      "sha256": "c2a2eefdae63b513052e5fc9efb0ee76848c0b4b89ad0ce694e6a1bd34402fbe",
+      "bytes": 488,
+      "source_path": "study1-audit/results/pair_repeats.json"
+    },
+    "results/processing_sensitivity.csv": {
+      "sha256": "286f37a013430c5ba6c13b528dbe88f29a56e9b4ceee06b70d1874018ff6cf90",
+      "bytes": 2202,
+      "source_path": "study1-audit/results/processing_sensitivity.csv"
+    },
+    "results/pooled_benchmarks.json": {
+      "sha256": "6a843dab13599d4f9c6c31bfb900d1e3f9d087887220c08371c4c229dd68bbc5",
+      "bytes": 720,
+      "source_path": "study1-audit/results/pooled_benchmarks.json"
+    }
+  }
+}

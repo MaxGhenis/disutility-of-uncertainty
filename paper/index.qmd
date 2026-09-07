@@ -41,6 +41,10 @@ A worker who acts on a mistaken marginal tax rate can lose privately while incre
 
 {{< include chapters/technical_appendix.md >}}
 
+{{< include chapters/study1_appendix.md >}}
+
+{{< pagebreak >}}
+
 # References {.unnumbered}
 
 ::: {#refs}
