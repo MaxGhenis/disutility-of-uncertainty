@@ -2,13 +2,13 @@
 
 ## State
 
-Validated draft PR [#3](https://github.com/MaxGhenis/disutility-of-uncertainty/pull/3)
-on isolated branch `sprint/signed-error-calibration-20260907`. Native empirical
-integration is complete and independently reviewed at exact 10e9321; subsequent
-CI-only formatting/setup fixes pass local and remote checks. Both original
-dirty checkouts remain intact. The model's 0.12 latent RMSE remains illustrative,
-and no national welfare estimate is claimed. Earlier checkpoints below are
-historical; `HANDOFF.md` gives current status and scientific next steps.
+Integrating the independently verified Study 1 audit into draft PR #3 as a narrow
+appendix and reproducible aggregate evidence package. This isolated continuation
+starts at verified PR head `8e052674594673d1090bfb9aedf1086566500c90` on branch
+`sprint/study1-evidence-integration-20260907`. A fresh fetch and live PR check on
+2026-09-07 confirm base `5d134c14630613ff32819abe99ad5109b65b07a5` is unchanged.
+The prior continuation and both dirty originals remain untouched. Study 2 results
+and the illustrative 0.12 welfare input will be preserved.
 
 ## Done
 
@@ -233,3 +233,18 @@ These are local self-checks; no independent semantic reviewer completed.
 - Next scientific step: independently validated behavioral measurements and
   population/component transport; audit Study 1 slope processing and spans before
   treating any descriptive dispersion as a welfare input.
+
+## Study 1 integration started
+
+- Read the completed audit and independent host review of exact commit
+  `a5191ea9f81fd414d9fbf547995dcb31341aa875`. That review verified native source
+  mappings, pooled benchmarks, the affine-fit calculation and covariance
+  sensitivity; it does not cover this integration.
+- Owner's report precision correction is pending; the exact aggregate correlation
+  is 0.10026128922382825. Neither 555/2470 affine-compatible forecasts nor the
+  covariance sensitivity identify stable belief types or latent welfare variance.
+- Next: package minimal frozen aggregates and reproducible audit code, generate a
+  qualified appendix, test provenance/units/unchanged welfare inputs, render and
+  inspect affected pages, and write STUDY1-REVIEW-READY.md for host review.
+- No nested reviewers, raw-data redistribution, new model/API computation,
+  publication or merge. The draft branch will receive a normal fast-forward update.
