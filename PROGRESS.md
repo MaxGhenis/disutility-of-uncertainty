@@ -2,13 +2,14 @@
 
 ## State
 
-Integrating the independently verified Study 1 audit into draft PR #3 as a narrow
-appendix and reproducible aggregate evidence package. This isolated continuation
-starts at verified PR head `8e052674594673d1090bfb9aedf1086566500c90` on branch
-`sprint/study1-evidence-integration-20260907`. A fresh fetch and live PR check on
-2026-09-07 confirm base `5d134c14630613ff32819abe99ad5109b65b07a5` is unchanged.
-The prior continuation and both dirty originals remain untouched. Study 2 results
-and the illustrative 0.12 welfare input will be preserved.
+Study 1 appendix integration is implemented and validated at
+`09a5685bef8e614ed77f8878426efd347727de12`, ready for focused host review.
+The exact inherited/new review scopes are in `STUDY1-REVIEW-READY.md`.
+The isolated continuation is `sprint/study1-evidence-integration-20260907`, based
+on verified draft PR #3 head 8e05267. Main remains 5d134c1 after a fresh fetch.
+The existing draft receives a normal fast-forward update; all Study 2 findings
+and welfare inputs remain unchanged. Latent RMSE 0.12 stays illustrative.
+The previous continuation and both dirty originals remain untouched.
 
 ## Done
 
@@ -279,3 +280,13 @@ These are local self-checks; no independent semantic reviewer completed.
 - Artifact cleanup: excluded Quarto's transient `paper/index.tex`, which was
   staged during rendering. The final review diff contains generated Markdown/JSON
   inputs; the complete rendered PDF/HTML are preserved in the lane export.
+
+## Review-ready delivery checkpoint
+
+- Exact integration target and binary diff are saved with inherited/new review
+  scopes; no new integration approval is claimed. A fresh installed wheel
+  reproduces all results and matches 26 packaged source/data files without PE
+  or Matplotlib. Final appendix and bibliography pages render correctly.
+- Updated draft description and handoff to the actual final scientific scope.
+  Next: normal fast-forward draft update, verify remote checks, preserve final
+  artifacts/configuration and report the outstanding host-review step.

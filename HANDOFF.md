@@ -1,85 +1,66 @@
-# Empirical calibration handoff
+# Study 1 integration handoff
 
 ## State
 
-Validated draft PR https://github.com/MaxGhenis/disutility-of-uncertainty/pull/3
-on `sprint/signed-error-calibration-20260907` in
-`/Users/maxghenis/disutility-of-uncertainty-calibration-20260907`. Exact empirical
-review target is `10e93217d4e49e80c743f27bc6542e02b7ef4411`; initial clean host
-review covers only `b9786339f636f5c1f9c510b18610fe6c4dcb7036`.
-The 0.12 latent RMSE remains illustrative. Observed experimental interval
-calibration is implemented and validated; no national welfare claim is made.
+The narrow Study 1 evidence appendix is implemented and locally validated at
+`09a5685bef8e614ed77f8878426efd347727de12`. Focused independent integration
+review is pending; see [exact review scope](STUDY1-REVIEW-READY.md).
+Existing draft: https://github.com/MaxGhenis/disutility-of-uncertainty/pull/3.
+Remote PR branch: `sprint/signed-error-calibration-20260907`.
+Local continuation: `sprint/study1-evidence-integration-20260907` at
+`/Users/maxghenis/disutility-of-uncertainty-study1-integration-20260907`.
+It starts at verified PR head 8e05267; fetched main is 5d134c1.
+The previous continuation and both original dirty checkouts remain intact.
 
 ## Done
 
-- Entire validated September 5 rebuild preserved on a reviewable isolated branch.
-  Both original dirty checkouts remain intact; lane `preservation/` has original
-  binary diffs, untracked archives and per-file hashes.
-- Canonical signed-error and instrument schemas; observed moments, respondent
-  bootstrap, interval bounds and explicit noise/component sensitivity.
-- Native checksum-pinned RJT ZIP reader, raw-choice/selection checks, Study 1
-  pooled and Study 2 OLS benchmark reproduction, endpoint and attention variants.
-- Real aggregate cache and generated paper tables. Primary observed bias bounds
-  +4.65 to +14.37 pp; RMSE bounds 22.57 to 29.63 pp under author support.
-- `calibration/NATIVE_MAPPING.md` records field meanings, exact filters, omitted
-  original cleaning, source-label discrepancy and data/licence limitations.
-- 258 tests passed including actual archive integration; one optional live PE
-  skip; lint/types and generated-result/citation checks pass. Paper renders to
-  16 pages, with empirical pages inspected.
+- Preserved the exact independently reviewed audit a5191ea through 18 unchanged
+  code/aggregate files and SHA256 manifest. All included files also match the
+  precision-only report correction 935ed77. No raw microdata, original DO files
+  or source PDFs are included.
+- Added a separate aggregate importer/cache and three generated appendix tables.
+  The paper explains selection, retained processing, observed-point true-tax
+  nonaffinity, exact tolerances/units, affine-model/error-cap compatibility,
+  repeated-measure assumptions, covariance sensitivity and population/tax scope.
+- The 555/2470 result is not a belief-type classification or irrationality claim.
+  Error correlation is unmeasured; approximately 0.1002613 is the displayed
+  observed correlation, not a literal 0.100000 threshold.
+- Study 2 bounds are unchanged: author-support bias +4.65 to +14.37 pp, RMSE
+  22.57 to 29.63 pp. Every existing result except the model source fingerprint is
+  unchanged. Welfare inputs and figures remain byte-identical; latent RMSE 0.12
+  stays illustrative. No national welfare estimate is identified.
+- Full suite 267 passed, one optional live PE skip, 92% coverage; final focused
+  suite 21 passed. Nine integration tests are new. Lint/types/citations/generated
+  checks pass. Native wrapper reproduces ten included aggregate files exactly.
+- Fresh wheel: 26 packaged source/data files match, all results reproduce without
+  PE or Matplotlib. HTML/PDF generated; pages 7 and 16-20 inspected. The 20-page
+  PDF and full HTML tree are saved in the lane's `study1-integration/paper/`.
 
-## Review and delivery status
+## Reproduce and review
 
-- Initial b978633 review and empirical 10e9321 review both found no actionable
-  findings in their exact scopes. Reports are committed in `calibration/reviews/`.
-  The empirical reviewer independently reproduced the archive and ran 23 focused
-  tests; five temporary-file-dependent tests were deselected in its read-only
-  sandbox. The implementation lane ran all tests, including those five.
-- Later commit 9611794 fixes signed-zero display and authenticates the TinyTeX
-  release lookup. It changes no empirical estimator or welfare formula; local
-  regression tests and remote test/paper jobs pass. It is outside 10e9321 review.
-- PR #3 remains draft. Both deployment jobs are skipped. Live base was verified
-  at 5d134c14630613ff32819abe99ad5109b65b07a5; no incoming changes required merging.
-- Fresh direct archive download matches the source-lane copy exactly. Local
-  `source-evidence/verify-experimental-taxes.py` independently reconciles all
-  45,820 native tax-table entries and assigned ATR/MTR amounts.
-- Both original dirty checkouts still match their snapshots (50/72 files and
-  statuses), with both reset controls intact. No new live PE or paid computation.
-
-## Remaining scientific work
-
-The source lane's final `identification.md` had not arrived at this checkpoint;
-its source manifest and coordinator corrections were inspected. Consult the
-final memo when present, corroborating any new claims against its evidence.
-`identification-unreviewed.md` remains unvalidated. Do not edit that lane.
-
-A strictly local Study 1 slope calibration needs its own defined estimand and
-processing/span audit. A preliminary read-only probe found that nominal bracket
-matching does not guarantee an affine true-tax schedule and that short spans
-can dominate dispersion. Those exploratory values are not adopted as parameters
-or published results. Use the canonical adapter's linearity safeguards and
-explicit sample auditing; do not simply apply the source local flag.
-
-## Reproduction
-
-See `REPRODUCING.md` and `calibration/NATIVE_MAPPING.md`. Local pinned archive:
+[Package instructions](calibration/study1/README.md) describe an offline aggregate
+check and optional pinned-archive reproduction. The source archive remains at
 `/Users/maxghenis/capacity-sprint-20260907/disutility/source-evidence/Schmeduling_Replication_Code.zip`.
-Canonical author/payoff CSVs, manifests and reports are in lane `empirical/`.
-They are local review artifacts, not redistributed in the Git repository.
+The source licence is unspecified; obtain/retain it separately under applicable
+terms. `make generate` and `make replicate` generate paper inputs/artifacts from
+checked caches, with no live PolicyEngine execution.
 
-Set `RJT_ARCHIVE` to that ZIP when running `tests/test_rjt_replication.py` to
-execute real-data checks. Without it, default tests validate mapping invariants
-and cache integrity; they do not claim a fresh microdata replication.
-`make replicate check-results check-citations` regenerates the paper from the
-verified aggregate cache. It never substitutes empirical moments for beliefs.
+The inherited audit review a5191ea does not approve this integration. Its 28-test,
+36-file and independent native/LP/covariance verification remains exact-scope
+historical evidence. New host review should focus on the importer, units/cohorts,
+appendix claims, reproduction packaging and isolation from welfare/Study 2 inputs.
+No nested reviewers were launched. Durable patch, frozen head, logs, preservation
+comparison and paper artifacts are in
+`/Users/maxghenis/capacity-sprint-20260907/disutility/study1-integration/`.
 
-## Scientific next step
+## Next
 
-A latent-error calibration still requires a credible behavioral measurement
-model and population/tax-component coverage. A single experimental MPL or pooled
-ironing coefficient cannot identify individual stable belief variance. Study 1
-individual slopes also need cleaning, within-bracket and income-span sensitivity;
-small dollar-response errors can be amplified by short distances. Keep observed
-bounds and assumed noise limits separate from these unresolved parameters.
+Complete the focused host integration review against 09a5685 and fix actionable
+file/line findings on this isolated continuation, preserving the exact reviewed
+head. Keep draft status and reverify current base before subsequent updates.
+Further scientific calibration requires independent measurements supporting a
+common stable belief target, noise/covariance restrictions and population/tax
+coverage. Do not infer latent variance or national welfare from these diagnostics.
 
-No reset, paid overflow/API/remote compute, publication or merge. Stop launching
-new work at 21:00 America/New_York and checkpoint safe in-flight milestones.
+No reset, paid overflow/API/remote compute, publication or merge. Stop new work
+at 21:00 America/New_York on September 7 and checkpoint safe in-flight work.
