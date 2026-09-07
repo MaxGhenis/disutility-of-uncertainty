@@ -2,7 +2,9 @@
 
 ## State
 
-The validated September 5 rebuild is preserved byte-for-byte on isolated branch
+Validated offline milestone complete; native-data ingestion, remote draft PR and
+independent semantic review remain blocked. See `HANDOFF.md` for the exact
+remaining actions. The validated September 5 rebuild is preserved byte-for-byte on isolated branch
 `sprint/signed-error-calibration-20260907`. Both preexisting dirty checkouts remain
 intact. This is a conditional modeling note, not a national welfare estimate.
 The 0.12 latent error RMSE remains illustrative.
@@ -114,3 +116,19 @@ Two concrete local checks found and reproduced defects in the new adapter:
 Also retained upstream transformation descriptions and added the calibration
 calculation-source hash to reports. All 51 targeted adapter tests and mypy pass.
 These are local self-checks; no independent semantic reviewer completed.
+
+## Final checkpoint
+
+- Final suite: 239 passed, 1 optional integration skip, 93% coverage; all lint,
+  format, type, citation and generated-result checks pass.
+- Fresh runtime-only wheel smoke: 22 packaged source/data files match; full model
+  results, the calibration example and stored household fixture reproduce.
+- Final paper: 15-page PDF and HTML, new pages and abstract visually checked.
+- Preservation recheck: all 50 original and 72 rebuild file states/statuses match
+  their initial manifests; both original branches unchanged.
+- `auto_reset.enabled=false`, reset block enabled, automatic expiry false; no
+  reset, paid compute, publication, merge or messages to people.
+- Draft-PR text in `DRAFT_PR.md`; network prevents actual push/PR. `HANDOFF.md`
+  records the archive/base/review blockers and exact continuation sequence.
+- Final lane export: Git bundle, patch, wheel, rendered paper, validation logs,
+  artifact hashes, `REPORT.md` and requested output `result.md`.
