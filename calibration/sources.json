@@ -1,51 +1,61 @@
 {
   "schema_version": 1,
   "checked_on": "2026-09-07",
-  "microdata_replication_completed": false,
+  "microdata_replication_completed": true,
+  "replication_scope": "Study 1 pooled Table 1 panels; Study 2 Table 4 main/subgroup and A9 OLS sensitivity counts and coefficients; no claim of complete paper or original cleaning replication",
+  "native_mapping": "NATIVE_MAPPING.md",
   "sources": [
     {
-      "id": "rjt-2020",
-      "kind": "primary_article",
-      "url": "https://doi.org/10.1093/restud/rdz045",
-      "public_mirror": "https://alexreesjones.github.io/papers/Measuring%20Schmeduling.pdf",
-      "access": "Read using web tool; no local binary hash",
-      "sha256": null,
-      "locations": [
-        "Sections 2.2, 3.1-3.3; Table 1",
-        "Sections 4.1-4.2; footnote 28"
-      ],
-      "evidence": "Study designs, local fixed-effects estimand, measurement-error cautions, sample counts, MPL inequalities and endpoint convention"
-    },
-    {
-      "id": "rjt-author-links",
-      "kind": "author_publications_page",
+      "id": "author_page_taubinsky",
       "url": "https://www.dmitrytaubinsky.com/",
-      "access": "Read using web tool; replication link verified",
-      "sha256": null
+      "http_status": 200,
+      "bytes": 399952,
+      "sha256": "606ab0589f619f000ab209f9f7fded891426a94adde4baa614df5a52970c1ae4"
     },
     {
-      "id": "rjt-replication",
-      "kind": "author_linked_replication_archive",
-      "url": "https://www.dropbox.com/s/2q47bj8arbcgr3i/Schmeduling%20Replication%20Code.zip?dl=0",
-      "resolved_url": "https://www.dropbox.com/scl/fi/i5dkqpz8c4zhb9qy7q2jb/Schmeduling-Replication-Code.zip?rlkey=qu78xg1q0yv5daka7312isga2&dl=0",
-      "access": "Web tool opened landing page with no archive contents; terminal curl failed DNS resolution for www.dropbox.com",
-      "sha256": null,
-      "microdata_included": null,
-      "license": "Unverified; do not redistribute before inspection",
-      "native_variable_mapping": "Unverified"
+      "id": "article_pdf_mirror_rees_jones",
+      "url": "https://alexreesjones.github.io/papers/Measuring%20Schmeduling.pdf",
+      "http_status": 200,
+      "bytes": 5639946,
+      "sha256": "abcd0bbd03c6abf68b97a87bd5dcaa6eead7753ad04dba55a7eb91f349022c81"
     },
     {
-      "id": "rjt-online-appendix",
-      "kind": "primary_appendix",
-      "url": "https://alexreesjones.github.io/papers/Measuring%20Schmeduling%20Online%20Appendix.pdf",
-      "access": "Public link located; detailed appendix analysis pending",
-      "sha256": null
+      "id": "online_appendix",
+      "url": "https://www.dropbox.com/s/dc7uaetdq0qpiti/Measuring%20Schmeduling%20Online%20Appendix.pdf?dl=1",
+      "mirror_url": "https://alexreesjones.github.io/papers/Measuring%20Schmeduling%20Online%20Appendix.pdf",
+      "http_status": 200,
+      "mirror_is_byte_identical": true,
+      "pages": 36,
+      "bytes": 1763914,
+      "sha256": "0fade17d06b4488d51a2f142bcd76d2d432b00d782de7679e585325518faf2b1"
     },
     {
-      "id": "claude-source-memo",
-      "kind": "independent_research_memo",
-      "path": "/Users/maxghenis/capacity-sprint-20260907/research-disutility/retry-result.md",
-      "access": "Read; selected source locations checked against primary article; derivation corrections documented in IDENTIFICATION.md"
+      "id": "survey_appendix",
+      "url": "https://www.dropbox.com/s/1erfc18gw626xfw/Measuring%20Schmeduling%20Survey%20Appendix.pdf?dl=1",
+      "mirror_url": "https://alexreesjones.github.io/papers/Measuring%20Schmeduling%20Survey%20Appendix.pdf",
+      "http_status": 200,
+      "mirror_is_byte_identical": true,
+      "pages": 39,
+      "bytes": 3205709,
+      "sha256": "896973a81ec0297398f6dfeba81a58d2b04dfa9d4df35f1af59e9e3b05326f0f"
+    },
+    {
+      "id": "study2_qsf",
+      "url": "https://www.dropbox.com/s/io3bv9l5gpdthbz/Schmeduling_Study_2.qsf?dl=1",
+      "http_status": 200,
+      "bytes": 205901,
+      "sha256": "06cf4808209845a984f3aa03ced032b781164fa790a324782d6c35b1bd904f1a"
+    },
+    {
+      "id": "replication_archive",
+      "url": "https://www.dropbox.com/s/2q47bj8arbcgr3i/Schmeduling%20Replication%20Code.zip?dl=1",
+      "linked_from": "author_page_taubinsky (link text: 'Replication Code')",
+      "http_status": 200,
+      "contains_microdata": true,
+      "bytes": 48016289,
+      "sha256": "c578518776c9cd97cc0bcf340558a9574ed2088cfeb5d1b610274e5d7ab48b15"
     }
-  ]
+  ],
+  "licence": "No explicit redistribution licence in archive; raw and canonical microdata kept local",
+  "source_lane_status": "Research source manifest and coordinator corrections consulted. Preliminary identification-unreviewed.md is not validated evidence."
 }

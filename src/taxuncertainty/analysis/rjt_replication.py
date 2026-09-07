@@ -263,6 +263,38 @@ def study1_benchmarks(frame):
     }
 
 
+def interval_noise_sensitivity(sample, noise_rmse_limits=(0, 0.05, 0.10, 0.20)):
+    """Conservative latent ranges under an assumed sample L2 bound on noise.
+
+    These ranges union the observed interval bounds with triangle inequalities.
+    They allow arbitrary noise bias and covariance, and need not be sharp or
+    jointly attainable. No positive noise limit is estimated by these data.
+    """
+    observed = sample.interval_bounds()
+    limits = np.asarray(noise_rmse_limits, dtype=float)
+    if limits.ndim != 1 or not np.isfinite(limits).all() or (limits < 0).any():
+        raise ValueError("noise RMSE limits must be finite and nonnegative")
+    return {
+        "assumption": "e_observed=e_latent+noise, with supplied upper bound on equal-respondent sample noise RMSE; arbitrary bias and covariance",
+        "interpretation": "conditional outer sensitivity ranges, not estimates, confidence intervals or national welfare inputs",
+        "unbounded_noise": "no finite latent RMSE upper bound identified",
+        "rows": [
+            {
+                "noise_rmse_max": float(a),
+                "latent_bias_outer": [
+                    observed["bias"][0] - float(a),
+                    observed["bias"][1] + float(a),
+                ],
+                "latent_rmse_outer": [
+                    max(0.0, observed["rmse"][0] - float(a)),
+                    observed["rmse"][1] + float(a),
+                ],
+            }
+            for a in limits
+        ],
+    }
+
+
 def reproduce(study1, study2):
     checks = validate_study2(study2)
     masks = study2_masks(study2)
@@ -334,6 +366,9 @@ def reproduce(study1, study2):
                 key: sample.interval_bounds() for key, sample in samples.items()
             },
             "midpoint_imputation_moments": asdict(midpoint.moments()),
+            "measurement_noise_sensitivity": interval_noise_sensitivity(
+                samples["author"]
+            ),
             "include_final_attention_interval_bounds": study2_sample(
                 study2, include_final_attention=True
             ).interval_bounds(),

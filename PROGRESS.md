@@ -170,3 +170,19 @@ These are local self-checks; no independent semantic reviewer completed.
   regenerated-cache equality and both canonical CSV round-trips. Lint/types pass.
 - Next: wire scoped aggregate tables into the paper, finish empirical sensitivity
   and independent review of the new exact commit, then create an authorized draft PR.
+
+## Empirical paper checkpoint
+
+- Wired the checked native aggregate cache into the normal pipeline and generated
+  empirical benchmark, interval and noise-sensitivity tables. Observed calibration
+  is explicitly separate from all welfare-model belief inputs.
+- Added arbitrary-bias/covariance noise sensitivity conditional on supplied RMSE
+  caps. Random feasible-vector tests verify coverage; caps are assumptions.
+- Full suite with actual archive: 257 passed, one optional live PolicyEngine skip,
+  93% coverage. All lint, formatting and type checks pass.
+- Updated source manifest, identification protocol, abstract, conclusion and
+  reproduction instructions. Raw/canonical microdata remain outside the repo.
+- Quarto rendered HTML and a 16-page PDF; empirical pages 7-9 visually inspected
+  without clipping or broken equations. Generated-results/citations checks pass.
+- Next: obtain the empirical milestone's bounded independent review, preserve
+  exact reviewed commit evidence, and prepare the live-base draft PR.

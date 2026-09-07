@@ -137,3 +137,19 @@ def test_nonlinear_examples_keep_private_and_fiscal_effects_separate(results):
             outcome["private_regret"] - outcome["revenue_change"]
         )
         assert row["status"].startswith("synthetic")
+
+
+def test_observed_calibration_drives_paper_but_never_replaces_belief_inputs(results):
+    empirical = results["observed_calibration"]
+    assert not empirical["welfare_input_replaced"]
+    assert not empirical["study2"]["latent_beliefs_identified"]
+    assert results["scenarios"][1]["beliefs"]["std_error"] == 0.12
+    changed = json.loads(json.dumps(results))
+    changed["observed_calibration"]["study2"]["interval_bounds"]["author"]["bias"][
+        0
+    ] = 0.1234
+    assert "12.34 to" in paper_artifacts(changed)["generated/empirical-intervals.md"]
+    assert (
+        paper_artifacts(changed)["generated/scenarios.md"]
+        == paper_artifacts(results)["generated/scenarios.md"]
+    )

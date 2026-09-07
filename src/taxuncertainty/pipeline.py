@@ -19,6 +19,7 @@ from taxuncertainty.analysis.calibration import (
     private_regret_approx,
 )
 from taxuncertainty.analysis.policyengine_budgets import load_household_budget
+from taxuncertainty.analysis.rjt_replication import load_replication
 from taxuncertainty.models.accounting import evaluate_worker
 from taxuncertainty.models.beliefs import NormalBeliefs
 from taxuncertainty.models.planner import SocialPlanner
@@ -261,6 +262,7 @@ def compute_results(seed=42):
         "bias_curve": bias_curve,
         "nonlinear_examples": _budget_examples(inputs),
         "household_fixture": _household_fixture(),
+        "observed_calibration": load_replication(),
         "validation": {
             "baseline_private_quadrature_difference": abs(
                 high_order.private_regret - unbiased["worker"]["private_regret"]
@@ -304,6 +306,8 @@ def paper_artifacts(results):
     scenarios = results["scenarios"]
     lookup = {row["id"]: row for row in scenarios}
     inverse = {row["id"]: row for row in results["planner"]["inverse_wage"]}
+    empirical = results["observed_calibration"]
+    study1, study2 = empirical["study1"], empirical["study2"]
     numbers = {
         "unbiased_private": f'{lookup["unbiased"]["worker"]["private_regret"]:.2f}',
         "unbiased_revenue_loss": f'{-lookup["unbiased"]["worker"]["revenue_change"]:.2f}',
@@ -315,6 +319,8 @@ def paper_artifacts(results):
         "optimal_unbiased": f'{100*inverse["unbiased"]["optimum"]["tax_rate"]:.2f}',
         "optimal_bias_minus_3": f'{100*inverse["bias_minus_3"]["optimum"]["tax_rate"]:.2f}',
         "model_hash": results["provenance"]["model_source_sha256"][:12],
+        "rjt_respondents": str(study2["table4_primary"]["n"]),
+        "rjt_archive_hash": empirical["provenance"]["archive_sha256"][:12],
     }
     money = lambda value: f"{value:,.2f}"
     selected_accuracy = [
@@ -324,6 +330,65 @@ def paper_artifacts(results):
     ]
     artifacts = {
         "_variables.yml": _json(numbers),
+        "generated/empirical-noise.md": _table(
+            [
+                "Assumed noise RMSE cap (pp)",
+                "Latent bias outer (pp)",
+                "Latent RMSE outer (pp)",
+            ],
+            [
+                [f'{100*row["noise_rmse_max"]:.0f}']
+                + [
+                    f"{100*row[key][0]:.2f} to {100*row[key][1]:.2f}"
+                    for key in ("latent_bias_outer", "latent_rmse_outer")
+                ]
+                for row in study2["measurement_noise_sensitivity"]["rows"]
+            ],
+            "Conditional measurement-noise sensitivity for the primary author-support sample. Caps are assumptions, not data estimates. Noise may be biased and correlated with latent error. Ranges are conservative and need not be jointly attainable; no finite latent upper bound follows without a noise bound.",
+            "tbl-empirical-noise",
+        ),
+        "generated/empirical-benchmarks.md": _table(
+            ["Replication target", "N forecasts/choices", "Coefficient", "SE"],
+            [
+                [
+                    "Study 1 local scale",
+                    study1["table1_pooled_panels"]["local"]["forecasts"],
+                    f'{study1["table1_pooled_panels"]["local"]["coefficient"]:.5f}',
+                    f'{study1["table1_pooled_panels"]["local"]["clustered_standard_error"]:.5f}',
+                ]
+            ]
+            + [
+                [
+                    f"Study 2 {key}",
+                    study2["table4_primary"]["n"],
+                    f'{study2["table4_primary"]["coefficients"][key]:.5f}',
+                    f'{study2["table4_primary"]["standard_errors"][key]:.5f}',
+                ]
+                for key in ("ATR", "MTR", "constant")
+            ],
+            "Independent native-archive reproduction of selected Table 1 and Table 4 benchmarks in Rees-Jones and Taubinsky (2020). Study 1 uses respondent-clustered SEs; Study 2 uses classical OLS SEs. The Study 1 panel includes 4,197 respondents.",
+            "tbl-empirical-benchmarks",
+        ),
+        "generated/empirical-intervals.md": _table(
+            ["Convention/sample", "Bias (pp)", "RMSE (pp)", "SD outer (pp)"],
+            [
+                [label]
+                + [
+                    f"{100*bounds[key][0]:.2f} to {100*bounds[key][1]:.2f}"
+                    for key in ("bias", "rmse", "sd_outer")
+                ]
+                for label, bounds in (
+                    ("Primary, author support", study2["interval_bounds"]["author"]),
+                    ("Primary, payoff only", study2["interval_bounds"]["payoff"]),
+                    (
+                        "Include final-attention failures",
+                        study2["include_final_attention_interval_bounds"],
+                    ),
+                )
+            ],
+            "Observed signed-error identification bounds under monetary-choice rationalization, in percentage points. Primary sample N=3,130; final-attention reinclusion N=3,603 with author support. Bounds are marginal, not joint or confidence intervals; SD bounds are conservative. No bound removes response noise or establishes population transport.",
+            "tbl-empirical-intervals",
+        ),
         "generated/scenarios.md": _table(
             ["Scenario", "Private loss", "Revenue change", "Social loss"],
             [

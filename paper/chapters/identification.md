@@ -9,28 +9,65 @@ therefore keeps observed error moments separate from latent belief inputs.
 
 ## Two instruments, different information
 
-Study 1 in @rees2020schmeduling elicits federal tax-liability forecasts for a simplified
-hypothetical filer. Local forecasts permit an analysis of perceived slopes.
-The reported respondent-fixed-effects scaling coefficient in Table 1 is 0.81,
-with a standard error of 0.043. It is a coefficient from regressing perceived on
-true tax within respondents, not an individual rate-error RMSE. The source's
-selection and winsorization choices also matter for any new dispersion analysis.
+Study 1 in @rees2020schmeduling elicits federal tax-liability forecasts for a
+simplified hypothetical filer. We independently reproduce the pooled panels of
+Table 1 from the author-linked replication archive. The local coefficient in
+@tbl-empirical-benchmarks regresses perceived on true tax within respondents.
+Its weighting depends on within-person true-tax variation; it is not an
+individual rate-error RMSE. The archive already excludes some original survey
+completers and provides processed forecasts. Reproducing the remaining
+attention filter and regression does not reconstruct earlier cleaning.
 
-Our adapter proposes a distinct descriptive statistic: fit perceived and true
-tax against income within each respondent's local draws, then subtract the two
-slopes. Both regressions include an intercept, so a constant error in the level
-of reported liability does not mechanically become a slope error. The adapter
-records exclusions, income spans and leverage, and reports the pooled source
-estimand separately. Its canonical input schema has been tested; mapping the
-replication archive's native fields and reproducing its cleaning remain
-unverified. Consequently, no empirical microdata moments are reported here.
+Our canonical adapter proposes a distinct descriptive statistic: fit perceived
+and true tax against income within each respondent's local draws, then subtract
+the slopes. Both regressions include an intercept, so a constant liability
+level error does not mechanically become a slope error. Native inspection shows
+that 89 forecasts flagged as local lie outside the respondent's own nominal
+bracket. A strictly within-bracket slope analysis must therefore distinguish
+its sample from the published local regression. No Study 1 latent dispersion
+estimate is inferred from that regression here.
 
-Study 2 in @rees2020schmeduling infers perceived rates from choices between taxable and
-untaxed money under experimental tax schedules. These choices identify
-intervals. The article's midpoint coding and endpoint convention are described
-in section 4.1.3 and footnote 28. Our adapter preserves the inequalities and
-records an optional support restriction explicitly. It does not infer individual
-within-interval dispersion from a midpoint.
+Study 2 in @rees2020schmeduling uses choices between taxable and untaxed money
+under experimental schedules. Our adapter checks every native A/B choice
+against the source monotonicity, first-switch and endpoint flags, then retains
+the inequalities. The final attention flag is available, but its underlying
+answer is absent. The source exclusion sequence gives 4,582, 3,868, 3,689 and
+{{< var rjt_respondents >}} observations. The last group supplies the observed
+interval calibration below. The archive checksum begins
+{{< var rjt_archive_hash >}}; full member and calculation hashes accompany the
+aggregate results.
+
+{{< include generated/empirical-benchmarks.md >}}
+
+## Observed experimental error bounds
+
+For each retained Study 2 respondent, the twelve choices bound the perceived
+rate that rationalizes their monetary choices. Subtracting the assigned MTR
+gives a signed error interval. Minimizing or maximizing each error or squared
+error separately gives sharp marginal bias and RMSE bounds for this sample.
+SD has a conservative outer bound because its mean and second moment vary
+jointly. These are new descriptive calculations from the replication data,
+not latent error estimates reported by the original authors.
+
+{{< include generated/empirical-intervals.md >}}
+
+The first row follows the article's footnote 28 convention, restricting retained
+rates to [0,1]. The second uses only the monetary inequalities: for 72 retained
+respondents the lowest interval expands from [0,0.05] to [-0.05,0.05]. The
+endpoint screen by itself does not justify a nonnegative lower endpoint.
+The third row reintroduces final-attention failures while preserving monotone
+choices and the endpoint screen. Respondents failing the endpoint screen have
+open intervals, so source 0/1 imputations in sensitivity regressions do not
+identify finite error-moment bounds for them.
+
+The positive mean-error range is specific to this experimental sample and its
+assigned schedules. It is not a contradiction of the Study 1 pooled local
+scaling coefficient: the instruments, tax objects, populations and estimands
+differ. It also provides no estimate of heterogeneous latent ironing shares.
+Our replication reproduces Appendix A9's sensitivity coefficients and counts,
+but its printed labels for the two reintroduced groups appear reversed relative
+to native flags. The outputs name the actual filters and record this
+discrepancy; the primary regression is unaffected.
 
 ## Observed moments and response noise
 
@@ -81,6 +118,14 @@ $u$ is bounded by $a$, the triangle inequality gives only
 $$\mathrm{RMSE}_{\mathrm{latent}}\in
 [\max(0,\mathrm{RMSE}_{\mathrm{obs}}-a),\mathrm{RMSE}_{\mathrm{obs}}+a].$$
 
+For the real Study 2 intervals, @tbl-empirical-noise unions the observed bounds
+with these triangle inequalities under several assumed noise-RMSE caps.
+The mean-noise magnitude is bounded by the same cap through Cauchy-Schwarz.
+No cap is estimated by the experiment; this calculation makes the unresolved
+measurement assumption visible rather than selecting a reliability value.
+
+{{< include generated/empirical-noise.md >}}
+
 For interval observations, we report marginal bounds on bias, second moment,
 RMSE and MAE, and conservative outer bounds on SD. These endpoints need not be
 jointly attainable. Interval identification, response-noise sensitivity and
@@ -90,6 +135,7 @@ Neither instrument directly measures the comprehensive incentive faced by a
 representative U.S. worker. Federal, state, payroll and benefit errors can have
 offsetting biases and nonzero covariance. A federal-only RMSE is thus not
 automatically a lower bound for their sum. Transport across populations, tax
-components and choice contexts requires additional evidence. Until those links
-and the native-data mapping are validated, the model's 12-point latent RMSE
-remains an illustrative assumption.
+components and choice contexts requires additional evidence. The native mapping
+and selected benchmarks are now validated, but the behavioral and transport
+links remain unresolved. The model's 12-point latent RMSE therefore remains an
+illustrative assumption, separate from the observed experimental bounds.

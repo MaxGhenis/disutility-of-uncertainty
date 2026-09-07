@@ -8,5 +8,7 @@
   "optimal_informed": "44.53",
   "optimal_unbiased": "42.93",
   "optimal_bias_minus_3": "45.63",
-  "model_hash": "ee8ac25edfc4"
+  "model_hash": "b3472a74eaf0",
+  "rjt_respondents": "3130",
+  "rjt_archive_hash": "c578518776c9"
 }

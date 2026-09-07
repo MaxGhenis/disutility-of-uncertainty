@@ -1,12 +1,19 @@
 # What the available evidence identifies
 
-The present empirical deliverable is a validated adapter and an identification
-protocol. It is **not a completed microdata replication**. The public article is
-readable through the web tool, but this execution environment cannot resolve
-Dropbox for the author-linked archive download. Its contents, native variable
-names and redistribution licence are unverified. This access failure does not
-establish that data are unavailable to other researchers. Exact URLs and access
-states are recorded in `sources.json`.
+The author-linked replication archive is now downloaded, checksum-pinned and
+mapped to native variables. We independently reproduced the three pooled Study 1
+Table 1 panels and Study 2 primary/subgroup counts and midpoint regressions.
+`NATIVE_MAPPING.md` records the precise filters, code locations, endpoint
+conventions and a discrepancy in Appendix A9's group labels. The project stores
+aggregate results; raw microdata remain local because no explicit redistribution
+licence was found in the package.
+
+Observed Study 2 intervals now give a scoped empirical result. In the primary
+sample of 3,130, author-support bias bounds are +4.65 to +14.37 percentage points,
+and RMSE bounds are 22.57 to 29.63 points. These are marginal identification
+bounds for choice-rationalizing errors, not confidence intervals or latent
+belief parameters. The paper tables are generated from the hashed aggregate
+cache; use those artifacts for full precision and payoff-only sensitivity.
 
 ## Primary evidence and replication targets
 
@@ -48,7 +55,9 @@ It equals a weighted mean of `b_i/t_i` for respondents with nonzero true tax
 variation. It does not equal an unweighted mean of those ratios, and a value of
 0.81 does not identify a mean error of -19 percentage points. The signed adapter
 reports the pooled coefficient separately from equal-respondent error moments.
-Its native-source mapping still needs verification before either is empirical.
+The source pooled benchmark is independently reproduced. Individual local slopes
+remain a separate estimand; the native local flag includes 89 forecasts outside
+the respondent's own bracket, and earlier cleaning is not fully reconstructible.
 
 If each dollar forecast contains independent mean-zero noise with variance
 `s_eta²`, a correctly specified local slope has noise variance `s_eta²/Sxx_i`.
@@ -105,15 +114,19 @@ signed errors, interval identification, response-noise assumptions and welfare
 inputs. It complements the original paper's welfare analysis; it does not claim
 to be the first welfare calibration of tax misperception.
 
-## Next empirical step
+## Remaining identification work
 
-Obtain the author-linked archive through an available public download route;
-hash it, inspect its licence, README and cleaning code, and inventory its data.
-Map native respondent/draw identifiers, true and forecast taxes, income,
-own-bracket rules, selection and treatment flags into the canonical schemas.
-Keep raw and processed inputs separately hashed. Reproduce sample counts and
-the appropriate Table 1 or Study 2 benchmarks before reporting new moments.
-Run raw-versus-source-winsorized and minimum-span sensitivity with exclusion and
-composition tables. Report confidence intervals separately from measurement-error
-and MPL bounds. A verified behavioral link and population/component coverage
-remain necessary before replacing any welfare-model input.
+The native archive mapping and selected benchmark replication are complete.
+What remains is a defensible behavioral and population link. Neither repeated
+forecast tasks at different incomes nor one MPL per respondent separates stable
+latent heterogeneity from response noise without additional restrictions.
+Any individual Study 1 slope analysis must audit source-winsorized versus
+pre-winsorization forecasts, own-bracket selection, true-tax nonlinearity and
+minimum income spans. A change in span threshold changes the included population.
+
+The source's Table 2 mean ironing coefficient does not distinguish a homogeneous
+partially ironing population from an all-or-nothing mixture. Even a good fit to
+mean responses therefore cannot determine the heterogeneous belief variance
+needed for welfare calculations. Claims based on preliminary individual-type
+classifications or interval-regression residual variance are not adopted here.
+The illustrative .12 parameter is unchanged.

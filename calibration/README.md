@@ -4,6 +4,15 @@ The default model still assumes a latent RMSE of 0.12. The adapter here computes
 **observed study-sample errors**, not a national distribution of decision-relevant
 beliefs. `examples/` contains invented software fixtures, labelled synthetic.
 
+## Reproduce the real archive
+
+The native Rees-Jones/Taubinsky adapter now reproduces selected source benchmarks
+and exports observed Study 2 error intervals. See [NATIVE_MAPPING.md](NATIVE_MAPPING.md)
+for the exact mapping, source-label discrepancy, limits and commands. The
+committed aggregate cache contains real study-sample results, and the `examples/`
+fixtures remain synthetic. The default pipeline verifies cache/source integrity
+and generates scoped empirical paper tables without downloading microdata.
+
 ## Reproduce the offline example
 
 ```sh

@@ -83,5 +83,10 @@ It does not overwrite the model's illustrative beliefs or compute national
 welfare. Run the synthetic canonical instrument examples to reproduce the
 adapter outputs, then inspect the manifest, selection diagnostics and report.
 `calibration/IDENTIFICATION.md` gives the proposed estimands, source locations,
-noise assumptions and remaining native-data mapping work. The default test suite
+noise assumptions and unresolved behavioral/population links.
+`calibration/NATIVE_MAPPING.md` documents the verified native archive mapping,
+actual-data command and optional `RJT_ARCHIVE` integration test. The committed
+`data/rjt_replication.json` is an aggregate cache; the default pipeline checks
+its hashes and published benchmark gates before generating empirical tables.
+These observed quantities never replace the illustrative belief parameters. The default test suite
 checks these adapters without downloading source data or calling any API.

@@ -12,6 +12,7 @@ from taxuncertainty.analysis.rjt_replication import (
     ARCHIVE_SHA256,
     artifact_hash,
     fixed_effects_scale,
+    interval_noise_sensitivity,
     load_replication,
     main,
     midpoint_ols,
@@ -177,6 +178,26 @@ def test_archive_integrity_fails_before_parsing_and_preserves_output(tmp_path):
         main(["--archive", str(archive), "--output-dir", str(out)])
     assert previous.read_text() == "previous validated result"
     assert len(list(out.iterdir())) == 1
+
+
+def test_interval_noise_bounds_cover_arbitrarily_correlated_biased_noise():
+    sample = study2_sample(native())
+    rng = np.random.default_rng(421)
+    ranges = interval_noise_sensitivity(sample)
+    for _ in range(30):
+        errors = np.array([rng.uniform(*r.error_interval) for r in sample.observations])
+        for row in ranges["rows"]:
+            noise = rng.normal(0.4, 1, len(errors))
+            noise *= row["noise_rmse_max"] / np.sqrt(np.mean(noise**2))
+            latent = errors - noise
+            for key, value in (
+                ("latent_bias_outer", latent.mean()),
+                ("latent_rmse_outer", np.sqrt(np.mean(latent**2))),
+            ):
+                lo, hi = row[key]
+                assert lo - 1e-12 <= value <= hi + 1e-12
+    with pytest.raises(ValueError, match="finite and nonnegative"):
+        interval_noise_sensitivity(sample, [-0.1])
 
 
 def test_committed_empirical_cache_has_current_provenance_and_published_benchmarks(

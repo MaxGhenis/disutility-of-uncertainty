@@ -58,7 +58,9 @@ bias, dispersion, measurement error and tax/population coverage. The
 local tax-liability slopes and interval-valued choices, checksum-validated CSVs,
 respondent-cluster bootstrap and conditional identification bounds.
 
-All bundled calibration examples are synthetic software fixtures. The
-Rees-Jones/Taubinsky replication archive's native data mapping is still
-unverified; the 0.12 latent RMSE remains illustrative. Source URLs and the exact
-access blocker are recorded in [the source manifest](calibration/sources.json).
+The [native archive adapter](calibration/NATIVE_MAPPING.md) now reproduces
+selected Rees-Jones/Taubinsky benchmarks and observed Study 2 error bounds.
+Real aggregate results are stored with source and calculation hashes; canonical
+examples remain synthetic fixtures. Measurement noise and population transport
+remain unresolved, so the 0.12 latent RMSE stays illustrative.
+[Source provenance](calibration/sources.json) records the verified archive.

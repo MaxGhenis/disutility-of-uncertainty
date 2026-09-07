@@ -12,7 +12,7 @@
       "Replication Code/Study 2/RJT_study_2_data.dta": "d326b9a3e64480d06ebbe98f8d1eddcf238abc2b5e74af3699a9865bf598434b"
     },
     "calculation_sources": {
-      "rjt_replication.py": "c548471a46dbb0b40c157e01c65535ba1635148f160d2e81112cb28592b91081",
+      "rjt_replication.py": "09b7d7caba127015d66671f8ac3e15b093a4cbc47672708621303b81672d414a",
       "signed_errors.py": "3a88e6f12bdd68fba19b1eae95b259a4a65b6296d9b888508b8ca74594db5403",
       "tax_forecasts.py": "7c740e65f56d490d25b5edecb42c81c1fadaeba7ddad7e1a841a678f8ba42dfd"
     },
@@ -291,6 +291,57 @@
       "rmse": 0.2592625139354568,
       "mae": 0.195471245338932
     },
+    "measurement_noise_sensitivity": {
+      "assumption": "e_observed=e_latent+noise, with supplied upper bound on equal-respondent sample noise RMSE; arbitrary bias and covariance",
+      "interpretation": "conditional outer sensitivity ranges, not estimates, confidence intervals or national welfare inputs",
+      "unbounded_noise": "no finite latent RMSE upper bound identified",
+      "rows": [
+        {
+          "noise_rmse_max": 0.0,
+          "latent_bias_outer": [
+            0.04648561694275456,
+            0.14369008978620496
+          ],
+          "latent_rmse_outer": [
+            0.22566019278275595,
+            0.29629635822836337
+          ]
+        },
+        {
+          "noise_rmse_max": 0.05,
+          "latent_bias_outer": [
+            -0.0035143830572454404,
+            0.19369008978620494
+          ],
+          "latent_rmse_outer": [
+            0.17566019278275596,
+            0.34629635822836335
+          ]
+        },
+        {
+          "noise_rmse_max": 0.1,
+          "latent_bias_outer": [
+            -0.05351438305724544,
+            0.24369008978620496
+          ],
+          "latent_rmse_outer": [
+            0.12566019278275595,
+            0.3962963582283634
+          ]
+        },
+        {
+          "noise_rmse_max": 0.2,
+          "latent_bias_outer": [
+            -0.15351438305724546,
+            0.34369008978620497
+          ],
+          "latent_rmse_outer": [
+            0.02566019278275594,
+            0.4962963582283634
+          ]
+        }
+      ]
+    },
     "include_final_attention_interval_bounds": {
       "bias": [
         0.047404934269436275,
@@ -321,5 +372,5 @@
   },
   "welfare_input_replaced": false,
   "illustrative_welfare_rmse": 0.12,
-  "artifact_sha256": "6ae756c78470dd9df3091ce55761654aeaa2d0775a12802ad49a2d5952cdc951"
+  "artifact_sha256": "d6a2a3be5530643737612e1c69cc264906e4a6b28df109002ace024065091784"
 }
