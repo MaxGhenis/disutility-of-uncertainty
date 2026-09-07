@@ -62,3 +62,22 @@ launching new work at 21:00 America/New_York on September 7, 2026.
   for observed signed-error calibration.
 - Next: source-instrument adapters, mapping/selection audit, paper identification
   section and one bounded independent semantic review.
+
+## Instrument adapter checkpoint
+
+- Added `analysis/tax_forecasts.py` and canonical JSON examples for local liability
+  forecasts and MPL choices. No native archive field names are guessed.
+- Local slopes report income leverage, exclusion counts, conditional response-noise
+  diagnostics and the separate design-weighted pooled FE coefficient.
+- MPL inequalities retain intervals and explicitly record optional support; tests
+  reproduce the article's interior example and footnote-28 endpoint convention.
+- Added source/access manifest and `calibration/IDENTIFICATION.md`, separating
+  primary evidence, proposed estimands, assumptions and the incomplete native-data
+  mapping. No empirical microdata moments or national welfare totals are claimed.
+- Validation: 238 passed, 1 opt-in skip; fatal lint, Black, isort, mypy (19 source
+  files) and generated-results checks pass. Both canonical example CLIs executed.
+- One bounded semantic review requested. Claude could not start (enrolled
+  credential unavailable); the same review is being attempted on the authorized
+  pinned Axiom Codex lane. No reset or overflow.
+- Next: integrate the identification protocol into the rendered paper and close
+  actionable review findings, then package a draft-PR handoff.

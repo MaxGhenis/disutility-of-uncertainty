@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "instrument": "mpl",
+  "rate_support": [
+    0,
+    1
+  ],
+  "manifest": {
+    "data_status": "synthetic",
+    "study": "Constructed instrument example, not study microdata",
+    "tax_scope": "Artificial tax schedule",
+    "population": "Constructed records only",
+    "sample_selection": "All constructed records",
+    "measurement_error": "Not identified; software fixture",
+    "rate_unit": "fraction",
+    "rate_support_reason": "Explicit illustrative support matching article footnote 28; software example"
+  },
+  "records": [
+    {
+      "respondent_id": "0",
+      "observation_id": "mpl",
+      "selected": true,
+      "true_rate": 0.3,
+      "taxable_increment": 20,
+      "untaxed_amounts": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        19,
+        21
+      ],
+      "choose_taxable": [
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "respondent_id": "1",
+      "observation_id": "mpl",
+      "selected": true,
+      "true_rate": 0.3,
+      "taxable_increment": 20,
+      "untaxed_amounts": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        19,
+        21
+      ],
+      "choose_taxable": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "respondent_id": "2",
+      "observation_id": "mpl",
+      "selected": true,
+      "true_rate": 0.3,
+      "taxable_increment": 20,
+      "untaxed_amounts": [
+        0,
+        1,
+        3,
+        5,
+        7,
+        9,
+        11,
+        13,
+        15,
+        17,
+        19,
+        21
+      ],
+      "choose_taxable": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false
+      ]
+    }
+  ]
+}

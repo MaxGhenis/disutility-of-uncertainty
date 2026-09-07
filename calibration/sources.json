@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "checked_on": "2026-09-07",
+  "microdata_replication_completed": false,
+  "sources": [
+    {
+      "id": "rjt-2020",
+      "kind": "primary_article",
+      "url": "https://doi.org/10.1093/restud/rdz045",
+      "public_mirror": "https://alexreesjones.github.io/papers/Measuring%20Schmeduling.pdf",
+      "access": "Read using web tool; no local binary hash",
+      "sha256": null,
+      "locations": [
+        "Sections 2.2, 3.1-3.3; Table 1",
+        "Sections 4.1-4.2; footnote 28"
+      ],
+      "evidence": "Study designs, local fixed-effects estimand, measurement-error cautions, sample counts, MPL inequalities and endpoint convention"
+    },
+    {
+      "id": "rjt-author-links",
+      "kind": "author_publications_page",
+      "url": "https://www.dmitrytaubinsky.com/",
+      "access": "Read using web tool; replication link verified",
+      "sha256": null
+    },
+    {
+      "id": "rjt-replication",
+      "kind": "author_linked_replication_archive",
+      "url": "https://www.dropbox.com/s/2q47bj8arbcgr3i/Schmeduling%20Replication%20Code.zip?dl=0",
+      "resolved_url": "https://www.dropbox.com/scl/fi/i5dkqpz8c4zhb9qy7q2jb/Schmeduling-Replication-Code.zip?rlkey=qu78xg1q0yv5daka7312isga2&dl=0",
+      "access": "Web tool opened landing page with no archive contents; terminal curl failed DNS resolution for www.dropbox.com",
+      "sha256": null,
+      "microdata_included": null,
+      "license": "Unverified; do not redistribute before inspection",
+      "native_variable_mapping": "Unverified"
+    },
+    {
+      "id": "rjt-online-appendix",
+      "kind": "primary_appendix",
+      "url": "https://alexreesjones.github.io/papers/Measuring%20Schmeduling%20Online%20Appendix.pdf",
+      "access": "Public link located; detailed appendix analysis pending",
+      "sha256": null
+    },
+    {
+      "id": "claude-source-memo",
+      "kind": "independent_research_memo",
+      "path": "/Users/maxghenis/capacity-sprint-20260907/research-disutility/retry-result.md",
+      "access": "Read; selected source locations checked against primary article; derivation corrections documented in IDENTIFICATION.md"
+    }
+  ]
+}
