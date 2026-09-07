@@ -12,6 +12,7 @@ from dataclasses import asdict, dataclass
 from hashlib import sha256
 from math import isfinite
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import numpy as np
 
@@ -275,6 +276,9 @@ def main(argv=None):
         canonical_instrument_sha256=sha256(args.input.read_bytes()).hexdigest(),
         adapter_source_sha256=sha256(Path(__file__).read_bytes()).hexdigest(),
         native_archive_mapping_verified=False,
+        upstream_transformation=manifest.get(
+            "transformation", "See source selection and canonical input"
+        ),
         transformation=audit["method"],
         adapter_settings=(
             {"minimum_income_span": args.minimum_income_span}
@@ -282,20 +286,26 @@ def main(argv=None):
             else {"rate_support": payload.get("rate_support")}
         ),
     )
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-    with outputs[0].open("w", newline="") as target:
-        writer = csv.DictWriter(target, RATE_COLUMNS)
-        writer.writeheader()
-        writer.writerows(asdict(row) for row in sample.observations)
-    manifest["input_sha256"] = sha256(outputs[0].read_bytes()).hexdigest()
-    outputs[1].write_text(json.dumps(manifest, indent=2, allow_nan=False) + "\n")
-    # Use the same schema validator as downstream consumers.
-    sample, manifest = load_rate_sample(outputs[0], outputs[1])
-    outputs[2].write_text(json.dumps(audit, indent=2, allow_nan=False) + "\n")
-    outputs[3].write_text(
-        json.dumps(calibration_report(sample, manifest), indent=2, allow_nan=False)
-        + "\n"
-    )
+    # Finish validation and serialization before touching an output directory.
+    # An invalid input must not leave apparent calibration files or overwrite
+    # a previously valid run with a partially written result.
+    with TemporaryDirectory(prefix="tax-forecast-validation-") as temporary:
+        staged = [Path(temporary) / path.name for path in outputs]
+        with staged[0].open("w", newline="") as target:
+            writer = csv.DictWriter(target, RATE_COLUMNS)
+            writer.writeheader()
+            writer.writerows(asdict(row) for row in sample.observations)
+        manifest["input_sha256"] = sha256(staged[0].read_bytes()).hexdigest()
+        staged[1].write_text(json.dumps(manifest, indent=2, allow_nan=False) + "\n")
+        sample, manifest = load_rate_sample(staged[0], staged[1])
+        staged[2].write_text(json.dumps(audit, indent=2, allow_nan=False) + "\n")
+        staged[3].write_text(
+            json.dumps(calibration_report(sample, manifest), indent=2, allow_nan=False)
+            + "\n"
+        )
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        for source, destination in zip(staged, outputs):
+            destination.write_bytes(source.read_bytes())
     return 0
 
 

@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "calculation_source_sha256": "3a88e6f12bdd68fba19b1eae95b259a4a65b6296d9b888508b8ca74594db5403",
   "status": "synthetic study-sample errors; no national welfare estimate",
   "provenance": {
     "schema_version": 1,
@@ -66,7 +67,7 @@
         0.085
       ],
       "sd": [
-        0.01732050807568879,
+        0.017320508075688797,
         0.0812403840463596
       ],
       "rmse": [

@@ -94,6 +94,19 @@ def test_cluster_bootstrap_is_order_invariant_and_does_not_resample_rows():
     assert not report["population_inference"]
 
 
+def test_common_large_bias_does_not_erase_small_dispersion():
+    # A tiny income perturbation can produce very large local slope errors.
+    # SD must still be invariant to shifting all errors by the same amount.
+    baseline = RateSample([point("a", "1", -1), point("b", "1", 1)])
+    shifted = RateSample([point("a", "1", 1e8 - 1), point("b", "1", 1e8 + 1)])
+    assert shifted.moments().sd == 1
+    assert shifted.interval_bounds()["sd_outer"] == [1, 1]
+    assert (
+        shifted.bootstrap(100, 4)["intervals"]["sd"]
+        == baseline.bootstrap(100, 4)["intervals"]["sd"]
+    )
+
+
 @pytest.mark.parametrize(
     "kwargs",
     [

@@ -142,8 +142,18 @@ class RateSample:
         sq = np.array([_square_bounds(a, b) for a, b in intervals])
         bias = [float(weights @ lo), float(weights @ hi)]
         second = [float(weights @ sq[:, 0]), float(weights @ sq[:, 1])]
-        bias_sq = _square_bounds(*bias)
-        variance = [max(0.0, second[0] - bias_sq[1]), max(0.0, second[1] - bias_sq[0])]
+        # Variance is invariant to a common shift. Center first so that two
+        # nearly equal large squared moments do not erase small dispersion.
+        center = bias[0] + (bias[1] - bias[0]) / 2
+        centered = intervals - center
+        centered_sq = np.array([_square_bounds(a, b) for a, b in centered])
+        centered_bias_sq = _square_bounds(
+            float(weights @ centered[:, 0]), float(weights @ centered[:, 1])
+        )
+        variance = [
+            max(0.0, float(weights @ centered_sq[:, 0]) - centered_bias_sq[1]),
+            max(0.0, float(weights @ centered_sq[:, 1]) - centered_bias_sq[0]),
+        ]
         return {
             "bias": bias,
             "second_moment": second,
@@ -178,7 +188,7 @@ class RateSample:
         Conditions on the supplied selection/transformations. This does not
         resample source cleaning or validate a survey's population transport.
         """
-        self.moments()  # Refuse interval midpoint substitution.
+        center = self.moments().bias  # Refuse interval midpoint substitution.
         if len(self.groups) < 2:
             raise ValueError("bootstrap needs at least two respondents")
         if (
@@ -192,8 +202,9 @@ class RateSample:
         sufficient = []
         for rows in self.groups.values():
             errors = np.array([row.error_interval[0] for row in rows])
+            centered = errors - center
             sufficient.append(
-                [errors.mean(), (errors**2).mean(), np.abs(errors).mean()]
+                [centered.mean(), (centered**2).mean(), np.abs(errors).mean()]
             )
         cluster_moments = np.array(sufficient)
         rng = np.random.default_rng(seed)
@@ -202,9 +213,9 @@ class RateSample:
             first, second, absolute = cluster_moments[
                 rng.integers(len(cluster_moments), size=len(cluster_moments))
             ].mean(axis=0)
-            draws.append(
-                [first, sqrt(max(0.0, second - first**2)), sqrt(second), absolute]
-            )
+            variance = max(0.0, second - first**2)
+            bias = first + center
+            draws.append([bias, sqrt(variance), sqrt(variance + bias**2), absolute])
         alpha = (1 - confidence) / 2
         endpoints = np.quantile(draws, [alpha, 1 - alpha], axis=0)
         return {
@@ -338,6 +349,7 @@ def load_rate_sample(csv_path, manifest_path):
 def calibration_report(sample, manifest, replications=1000, seed=20260907):
     report = {
         "schema_version": 1,
+        "calculation_source_sha256": sha256(Path(__file__).read_bytes()).hexdigest(),
         "status": f"{manifest['data_status']} study-sample errors; no national welfare estimate",
         "provenance": manifest,
         "sign_convention": "perceived minus true",

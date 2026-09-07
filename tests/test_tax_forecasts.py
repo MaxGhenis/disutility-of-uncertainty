@@ -220,3 +220,15 @@ def test_instrument_cli_produces_scoped_hashed_report(tmp_path):
     assert len(report["provenance"]["canonical_instrument_sha256"]) == 64
     assert "synthetic" in report["status"]
     assert not report["latent_beliefs_identified"]
+    assert len(report["calculation_source_sha256"]) == 64
+    # Invalid metadata must preserve a prior valid run and leave a new path absent.
+    before = {path.name: path.read_bytes() for path in output.iterdir()}
+    payload["manifest"]["population"] = ""
+    source.write_text(json.dumps(payload))
+    with pytest.raises(ValueError, match="population"):
+        main(["--input", str(source), "--output-dir", str(output)])
+    assert before == {path.name: path.read_bytes() for path in output.iterdir()}
+    fresh = tmp_path / "fresh"
+    with pytest.raises(ValueError, match="population"):
+        main(["--input", str(source), "--output-dir", str(fresh)])
+    assert not fresh.exists()

@@ -98,3 +98,19 @@ launching new work at 21:00 America/New_York on September 7, 2026.
   Git bundle and patch; do not claim a remote PR exists.
 - Next: finish runtime-only smoke checks, harden numerical/provenance edge cases
   if concrete failures are found, and record final validation/preservation.
+
+## Numerical and output-integrity fixes
+
+Two concrete local checks found and reproduced defects in the new adapter:
+
+- Errors at `1e8 +/- 1` had true SD 1, but subtracting large raw squared moments
+  returned SD 0 in the interval and bootstrap paths. Centering before variance
+  calculations restores translation invariance; a regression test covers it.
+- Invalid manifest metadata raised after writing rates/manifest files, leaving a
+  misleading partial output. Instrument outputs now validate and serialize in
+  temporary staging before touching the requested directory. A regression test
+  verifies both preservation of existing results and absence of fresh output.
+
+Also retained upstream transformation descriptions and added the calibration
+calculation-source hash to reports. All 51 targeted adapter tests and mypy pass.
+These are local self-checks; no independent semantic reviewer completed.
