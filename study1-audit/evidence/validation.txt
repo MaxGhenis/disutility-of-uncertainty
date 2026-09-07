@@ -1,0 +1,6 @@
+Audit complete: pinned native checks, benchmarks, slope and repeated-measure diagnostics.
+Affine-belief falsification, correlated-error sensitivities and synthetic estimator demonstrations complete.
+Direct two-point arithmetic and stored-tax phaseout decomposition verified.
+Generated REPORT.md from checked results.
+............................                                             [100%]
+28 passed in 1.14s

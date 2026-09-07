@@ -79,6 +79,8 @@ def main():
                 for name in ["local", "mid_range", "full"]
             ],
         ),
+        "variance_top1": f"{100*load('independent_arithmetic')['own_pair_variance_share_largest_respondent']:.1f}",
+        "variance_top10": f"{100*load('independent_arithmetic')['own_pair_variance_share_largest_10_respondents']:.1f}",
         "gamma_se": f"{load('individual_benchmarks')[2]['iid_se_i']['median']:.3f}",
         "parsed_count": f"{native['native_text_forecasts_exactly_parsed']:,}",
         "float_only": str(native["processed_differences_only_float32"]),

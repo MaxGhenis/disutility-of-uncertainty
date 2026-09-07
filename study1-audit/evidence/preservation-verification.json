@@ -1,0 +1,56 @@
+{
+  "account_configuration": {
+    "matches_initial": true,
+    "sha256": "65fdcdb7af7d17cdb0e497ecc0b6017123306054a6bfbcc2e405cb331a5100a9"
+  },
+  "appendix_pdf": {
+    "matches_initial": true,
+    "sha256": "0fade17d06b4488d51a2f142bcd76d2d432b00d782de7679e585325518faf2b1"
+  },
+  "appendix_text": {
+    "matches_initial": true,
+    "sha256": "a97ba04ae1df92daddba00b65f7f1f8bbcae6f14dbc7462c7f3bd8bdfc9112e2"
+  },
+  "article_pdf": {
+    "matches_initial": true,
+    "sha256": "abcd0bbd03c6abf68b97a87bd5dcaa6eead7753ad04dba55a7eb91f349022c81"
+  },
+  "article_text": {
+    "matches_initial": true,
+    "sha256": "2160f554b828fb86fea8e477f27fe78eb02abab0a1f1fe2a650104ab88d13a31"
+  },
+  "completed_adapter": {
+    "matches_initial": true,
+    "sha256": "09b7d7caba127015d66671f8ac3e15b093a4cbc47672708621303b81672d414a"
+  },
+  "completed_aggregate": {
+    "matches_initial": true,
+    "sha256": "1475ef4c31e8df0b45b437d5ea340f76c260ccd13a1085c843b74cd988540628"
+  },
+  "completed_mapping": {
+    "matches_initial": true,
+    "sha256": "2323f8263c19cc9eba1f8966a2760687092ff0f572b7571b8f6fc29abbad9072"
+  },
+  "completed_project": {
+    "head": "8e052674594673d1090bfb9aedf1086566500c90",
+    "status": "",
+    "unchanged": true
+  },
+  "no_reset": {
+    "matches_initial": true,
+    "sha256": "8b7f37db5e084eed3eb960141c189483606f8286a1624b8f1b50ff92d06503c1"
+  },
+  "no_reset_policy": {
+    "auto_reset_enabled": false,
+    "automatic_expiry": false,
+    "persistent_block": true
+  },
+  "source_manifest": {
+    "matches_initial": true,
+    "sha256": "8b0708a55f42c658cdc20a4d17533677c40cbf0edb4c4b6edf5734d3585e7f08"
+  },
+  "survey_pdf": {
+    "matches_initial": true,
+    "sha256": "896973a81ec0297398f6dfeba81a58d2b04dfa9d4df35f1af59e9e3b05326f0f"
+  }
+}

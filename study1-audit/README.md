@@ -18,6 +18,8 @@ The pinned archive is rejected unless its SHA256 is `c578518776c9cd97cc0bcf34055
 - `scripts/audit.py`: processing checks, Table 1 and retained individual parameter/grid replication, local projections, leverage, selection, repeated-measure and finite-sample bounds.
 - `scripts/estimators.py`: independent numerical/statistical primitives with explicit singular-case handling.
 - `scripts/sensitivity.py`: exact affine-belief falsification, correlated-error moment sensitivities, explicitly synthetic counterexamples and prospective design arithmetic.
+- `scripts/verify_native_arithmetic.py`: direct two-point slope/variance validation and monetary decomposition of within-bracket phaseouts.
+- `scripts/verify_reproduction.py`: one complete pipeline rerun with generated-output hash comparison.
 - `scripts/report.py` and `report.template.md`: report generation from checked aggregates.
 - `tests/`: actual pinned-data benchmark checks, analytical cases, adversarial errors, sharp-bound attainment, affine feasibility, rank failure, leverage and observational equivalence.
 - `evidence/`: immutable-source hashes, native metadata, primary appendix grids, completed-adapter benchmark and environment.
@@ -28,3 +30,5 @@ No raw microdata are committed or published; the author archive gives no explici
 For Table 1, `tax` is the x-variable. For individual slopes, `ran` (income) is the x-variable. Confusing those is an estimand error. `taxguessmain` equals the source's `tgw1`; differences from `taxguessds` include 958 float32-only changes as well as 543 beyond storage conversion. The `individualestimates` rows repeat the same forecasts with model coefficients attached; they are not repeated waves.
 
 The only edited paths relative to base are the repository's `PROGRESS.md` and `study1-audit/`. Raw source, original checkouts and the completed PR3 remain unchanged. Branch and final handoff are recorded in the lane's output report and committed progress file.
+
+Validation and delivery evidence: [test output](evidence/validation.txt), [byte-exact reproduction](evidence/reproduction-verification.json), [source preservation](evidence/preservation-verification.json), and [independent review runtime limitation](evidence/REVIEW_STATUS.md).

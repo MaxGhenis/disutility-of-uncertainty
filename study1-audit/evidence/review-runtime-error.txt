@@ -1,0 +1,5 @@
+WARNING: proceeding, even though we could not create PATH aliases: Operation not permitted (os error 1)
+2026-09-07T22:44:07.398821Z  WARN codex_state::runtime: failed to open state db at /Users/maxghenis/.codex-3/state_5.sqlite: failed to open state DB at /Users/maxghenis/.codex-3/state_5.sqlite: error returned from database: (code: 8) attempt to write a readonly database
+2026-09-07T22:44:07.398979Z  WARN codex_rollout::state_db: failed to initialize state runtime: failed to initialize state runtime at /Users/maxghenis/.codex-3: failed to open state DB at /Users/maxghenis/.codex-3/state_5.sqlite: error returned from database: (code: 8) attempt to write a readonly database: error returned from database: (code: 8) attempt to write a readonly database: (code: 8) attempt to write a readonly database
+Reading additional input from stdin...
+Error: failed to initialize in-process app-server client: Operation not permitted (os error 1)
