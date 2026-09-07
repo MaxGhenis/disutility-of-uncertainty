@@ -1,5 +1,6 @@
 # Reproducible model and Quarto paper commands.
 UV ?= uv
+PYTHON ?= 3.13.9
 LOCKED_UV = env -u UV_FROZEN $(UV)
 RUN = $(UV) run --no-sync
 
@@ -17,7 +18,7 @@ help:
 	@echo "make clean            Remove this project's build artifacts"
 
 install:
-	$(LOCKED_UV) sync --locked --extra dev --extra paper
+	$(LOCKED_UV) sync --python $(PYTHON) --locked --extra dev --extra paper
 	@command -v quarto >/dev/null || echo "Install Quarto 1.9.36 separately to render the paper."
 
 test:
@@ -27,7 +28,7 @@ test-quick:
 	$(RUN) pytest tests/ -q --no-cov
 
 test-policyengine:
-	$(LOCKED_UV) sync --locked --extra dev --extra policyengine
+	$(LOCKED_UV) sync --python $(PYTHON) --locked --extra dev --extra policyengine
 	$(RUN) pytest tests/ -v --run-policyengine -m policyengine
 
 lint:

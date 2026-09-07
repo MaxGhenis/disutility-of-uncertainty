@@ -21,9 +21,15 @@ The 0.12 latent error RMSE remains illustrative.
 - Prior validation: 188 passing tests and one opt-in integration skip; this sprint
   will rerun the meaningful checks in the isolated worktree.
 
+- Locked Python 3.13.9 environment installed offline; pinned Makefile setup to
+  that tested interpreter (the machine default is 3.14).
+- Corrected the legacy LLM note's unsupported .12 attribution/lower-bound claim.
+- Disabled automated Netlify preview publication for draft PRs.
+
 ## Next
 
-1. Validate and commit the preserved rebuild.
+1. Preserved rebuild committed as `4f2d46a`; isolated default suite: 188 passed,
+   one opt-in PolicyEngine integration skip.
 2. Inspect public Rees-Jones/Taubinsky replication data and the independent source
    memo; implement reproducible signed moments with explicit sample/tax scope.
 3. Separate observed error from latent beliefs; test identification assumptions
