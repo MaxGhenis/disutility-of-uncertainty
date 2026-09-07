@@ -81,3 +81,20 @@ launching new work at 21:00 America/New_York on September 7, 2026.
   pinned Axiom Codex lane. No reset or overflow.
 - Next: integrate the identification protocol into the rendered paper and close
   actionable review findings, then package a draft-PR handoff.
+
+## Paper checkpoint
+
+- Integrated the signed-error identification protocol into the paper, abstract,
+  conclusion and reproduction guide. No illustrative belief values were replaced.
+- `make replicate check-results check-citations` passes. Quarto generated a 15-page
+  PDF and HTML; the new identification pages (7-8) were visually inspected and
+  show no clipping or equation/layout defects.
+- Built a wheel offline and installed it in a separate runtime-only environment.
+- Independent review is blocked, not approved: Claude had no accessible enrolled
+  credential; the pinned Codex attempt cannot resolve chatgpt.com. Attempted
+  cancellation failed with Operation not permitted for PID 12571. Exact host-side
+  termination handoff: lane artifact `REVIEW_STOP_BLOCKED.md`.
+- GitHub CLI also cannot connect to api.github.com. Prepare local draft-PR body,
+  Git bundle and patch; do not claim a remote PR exists.
+- Next: finish runtime-only smoke checks, harden numerical/provenance edge cases
+  if concrete failures are found, and record final validation/preservation.

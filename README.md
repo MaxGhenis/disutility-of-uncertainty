@@ -49,3 +49,16 @@ make test-policyengine
 ```
 
 This integration is household-level and does not establish a national welfare estimate or certify every cliff between sampled points. See [REPRODUCING.md](REPRODUCING.md) for numerical conventions, artifact validation, and migration details.
+
+## Signed-error calibration
+
+The [calibration protocol](calibration/IDENTIFICATION.md) distinguishes observed
+bias, dispersion, measurement error and tax/population coverage. The
+[adapter guide](calibration/README.md) provides executable canonical examples for
+local tax-liability slopes and interval-valued choices, checksum-validated CSVs,
+respondent-cluster bootstrap and conditional identification bounds.
+
+All bundled calibration examples are synthetic software fixtures. The
+Rees-Jones/Taubinsky replication archive's native data mapping is still
+unverified; the 0.12 latent RMSE remains illustrative. Source URLs and the exact
+access blocker are recorded in [the source manifest](calibration/sources.json).

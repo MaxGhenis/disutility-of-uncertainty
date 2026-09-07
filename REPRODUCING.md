@@ -75,3 +75,13 @@ A fresh artifact has a new generation timestamp; compare model outcomes and conf
 `Calibration`, `PopulationWelfare`, and the national `baseline/empirical` results schema are replaced by `Illustration`, explicit accounting, and scenario results. The year-only `EmpiricalMTR` cache path fails with a retirement explanation; it cannot silently generate a national estimate. Existing labor helper names containing `dwl` remain private-regret compatibility helpers, documented accordingly. Legacy planner `seed` and `n_mc` arguments remain accepted but do not affect deterministic expectations.
 
 The original working tree and review artifacts were preserved when the rebuild branch was created. Prior results remain accessible in Git history; they are not retained as current findings in the revised publication.
+
+## Observed signed-error adapters
+
+The independent calibration CLI is documented in [calibration/README.md](calibration/README.md).
+It does not overwrite the model's illustrative beliefs or compute national
+welfare. Run the synthetic canonical instrument examples to reproduce the
+adapter outputs, then inspect the manifest, selection diagnostics and report.
+`calibration/IDENTIFICATION.md` gives the proposed estimands, source locations,
+noise assumptions and remaining native-data mapping work. The default test suite
+checks these adapters without downloading source data or calling any API.
