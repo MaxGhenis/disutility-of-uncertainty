@@ -31,3 +31,15 @@ Only study1-audit/ and this progress file will change from the base. Raw source 
 - New observations: q2 is integer-truncated own income (19 fractional-income cases); 13 own-bracket respondents have stored-tax nonlinearity associated with exemption phaseout.
 
 Next: correlated measurement-error demonstrations, primary-source-linked interpretation, bounded independent review if an authorized subscription lane is accessible, final validated report and handoff.
+
+## Checkpoint: bounded-error and repeated-measure identification
+- Added sharp individual slope bounds under dollar box/RMS error caps and an exact affine-belief feasibility/minimax test.
+- Only 555/2,470 screened respondents can fit any affine belief schedule within $100 per forecast; median required cap is $693.29. This rejects a conjunction of assumptions, not a particular cause.
+- Local split covariance is compatible with zero stable variance when error correlation is 0.1003. Synthetic exact-factorial examples demonstrate the failure and the common-intercept negative control.
+- Added deterministic covariance jackknife diagnostics, a concrete independent-session/method pilot protocol, and a generated primary-source-linked report.
+- Distinguished 958 float32-only forecast differences from 543 beyond storage conversion; all 74,128 native forecast strings parse exactly to the retained numeric field.
+- Native/analytic test suite last passed 27 tests; new jackknife case and full regeneration now running.
+
+Next: one authorized bounded semantic review attempt, full regeneration/test and byte-equality checks, source preservation checks, committed final handoff and output report.
+
+Full regeneration and native/analytical verification completed successfully: 28 tests passed. Report figures are generated directly from aggregate output. Preparing the committed review target; review will be read-only and confined to this artifact.

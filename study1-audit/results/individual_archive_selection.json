@@ -1,0 +1,13 @@
+{
+  "generation_limit": "Archive contains retained gamma fields and Figure 6 usage, but no script creating individualestimates.dta.",
+  "native_missing_all": {
+    "1": 13,
+    "2": 13,
+    "3": 7,
+    "4": 7
+  },
+  "positive_own_tax_respondents": 3552,
+  "positive_tax_rank2_recovery": "OLS solves all 3552; source-missing positive-tax fits are retained as newly recovered calculations, not source output",
+  "retained_respondents": 4197,
+  "zero_own_tax_respondents": 645
+}
