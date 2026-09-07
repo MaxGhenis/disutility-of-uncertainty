@@ -275,3 +275,7 @@ These are local self-checks; no independent semantic reviewer completed.
 - Next: freeze the exact integration head and diff in STUDY1-REVIEW-READY.md,
   update the existing draft PR normally from the live verified base, and save
   rendered artifacts, test evidence and handoff. No nested reviewer was launched.
+
+- Artifact cleanup: excluded Quarto's transient `paper/index.tex`, which was
+  staged during rendering. The final review diff contains generated Markdown/JSON
+  inputs; the complete rendered PDF/HTML are preserved in the lane export.

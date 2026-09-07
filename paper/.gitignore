@@ -3,3 +3,6 @@ _build
 
 /.quarto/
 **/*.quarto_ipynb
+
+# Transient Quarto PDF compilation source (rendered artifacts are exported separately).
+/index.tex
