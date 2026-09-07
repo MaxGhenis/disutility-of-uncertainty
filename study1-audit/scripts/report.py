@@ -103,9 +103,9 @@ def main():
         "selected_sd_bounds": f"{100*selb.sd_lower:.2f}–{100*selb.sd_upper:.2f}",
         "broad_corr": f"{broad.correlation:.3f}",
         "naive_sd": f"{100*c.iloc[0].implied_common_target_sd:.2f}",
-        "half_rho": f"{c.iloc[2].assumed_error_correlation:.3f}",
+        "half_rho": f"{c.iloc[2].assumed_error_correlation:.5f}",
         "half_sd": f"{100*c.iloc[2].implied_common_target_sd:.2f}",
-        "zero_rho": f"{c.iloc[-1].assumed_error_correlation:.3f}",
+        "zero_rho": f"{c.iloc[-1].assumed_error_correlation:.7f}",
         "design_se": f"{100*design.loc['six_points_30000_span','one_session_slope_se']:.2f}",
         "pair_design_se": f"{100*design.loc['pair_500_span','one_session_slope_se']:.2f}",
     }

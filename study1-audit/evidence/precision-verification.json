@@ -1,0 +1,118 @@
+{
+  "consulted_source_checks": {
+    "account_configuration": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/chief-of-staff/subfleet/codex-accounts.json",
+      "sha256": "65fdcdb7af7d17cdb0e497ecc0b6017123306054a6bfbcc2e405cb331a5100a9"
+    },
+    "appendix_pdf": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/capacity-sprint-20260907/research-disutility/sources/mirror/arj_onlineapp.pdf",
+      "sha256": "0fade17d06b4488d51a2f142bcd76d2d432b00d782de7679e585325518faf2b1"
+    },
+    "appendix_text": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/capacity-sprint-20260907/disutility/source-evidence/appendix.txt",
+      "sha256": "a97ba04ae1df92daddba00b65f7f1f8bbcae6f14dbc7462c7f3bd8bdfc9112e2"
+    },
+    "article_pdf": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/capacity-sprint-20260907/research-disutility/sources/mirror/arj_paper.pdf",
+      "sha256": "abcd0bbd03c6abf68b97a87bd5dcaa6eead7753ad04dba55a7eb91f349022c81"
+    },
+    "article_text": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/capacity-sprint-20260907/disutility/source-evidence/article.txt",
+      "sha256": "2160f554b828fb86fea8e477f27fe78eb02abab0a1f1fe2a650104ab88d13a31"
+    },
+    "completed_adapter": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/disutility-of-uncertainty-calibration-20260907/src/taxuncertainty/analysis/rjt_replication.py",
+      "sha256": "09b7d7caba127015d66671f8ac3e15b093a4cbc47672708621303b81672d414a"
+    },
+    "completed_aggregate": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/disutility-of-uncertainty-calibration-20260907/src/taxuncertainty/data/rjt_replication.json",
+      "sha256": "1475ef4c31e8df0b45b437d5ea340f76c260ccd13a1085c843b74cd988540628"
+    },
+    "completed_mapping": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/disutility-of-uncertainty-calibration-20260907/calibration/NATIVE_MAPPING.md",
+      "sha256": "2323f8263c19cc9eba1f8966a2760687092ff0f572b7571b8f6fc29abbad9072"
+    },
+    "no_reset": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/capacity-sprint-20260907/no-reset.json",
+      "sha256": "8b7f37db5e084eed3eb960141c189483606f8286a1624b8f1b50ff92d06503c1"
+    },
+    "source_manifest": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/capacity-sprint-20260907/research-disutility/source-manifest.json",
+      "sha256": "8b0708a55f42c658cdc20a4d17533677c40cbf0edb4c4b6edf5734d3585e7f08"
+    },
+    "survey_pdf": {
+      "matches_original_audit": true,
+      "path": "/Users/maxghenis/capacity-sprint-20260907/research-disutility/sources/mirror/arj_surveyapp.pdf",
+      "sha256": "896973a81ec0297398f6dfeba81a58d2b04dfa9d4df35f1af59e9e3b05326f0f"
+    }
+  },
+  "display_from_existing_csv": {
+    "half_display": "0.05013",
+    "half_observed_correlation": 0.050130644612,
+    "observed_correlation": 0.100261289224,
+    "observed_display": "0.1002613"
+  },
+  "estimation_scripts_tests_methods_protocol_unchanged": true,
+  "formatter": {
+    "command": "python -m black --check study1-audit/scripts/report.py",
+    "exit_code": 0,
+    "output": "All done! \u2728 \ud83c\udf70 \u2728\n1 file would be left unchanged."
+  },
+  "generated_report": {
+    "baseline_sha256": "cc61da193b6e58fe5227d4dcbf89acea6910372aff76dd3d1f130c90bca02306",
+    "current_sha256": "a97c6afd995c8f644973f41aaf5acb081eb2c896e274d14df3f2f0512a7b311a",
+    "only_expected_sentence_changed": true,
+    "repeat_render_byte_exact": true
+  },
+  "no_reset_protections_intact": true,
+  "original_reproduction_note": "reproduction-verification.json remains the historical full-pipeline proof at a5191ea, including its original report hash; current report hash is above.",
+  "original_reproduction_verification_unchanged": true,
+  "python_compile_passed": true,
+  "review_report": {
+    "path": "/Users/maxghenis/capacity-sprint-20260907/disutility-study1/independent-review-host.md",
+    "sha256": "58ba502e1c09bc567a1eb19ba2d96d48bf0eccf09ef7d0545b969fa5f7579178"
+  },
+  "reviewed_baseline": "a5191ea9f81fd414d9fbf547995dcb31341aa875",
+  "scope": "Precision-only rendering check against independently reviewed head; no statistical estimators or full reproduction pipeline rerun.",
+  "script_diff_only_two_display_formats": true,
+  "source_archive": {
+    "matches_original_audit": true,
+    "path": "/Users/maxghenis/capacity-sprint-20260907/disutility/source-evidence/Schmeduling_Replication_Code.zip",
+    "sha256": "c578518776c9cd97cc0bcf340558a9574ed2088cfeb5d1b610274e5d7ab48b15"
+  },
+  "unchanged_results_count": 22,
+  "unchanged_results_sha256": {
+    "results/SYNTHETIC_correlated_error.csv": "c023f1530030b282de949a1b9907eb43a306ba42cdfc4519186636db2c56ca49",
+    "results/SYNTHETIC_observational_equivalence.json": "709e109ef0e97095f0dc3950f875b37167d68db00aea660664117e1ad8fc5079",
+    "results/affine_belief_falsification.csv": "0ccf71bd38b45ee9f7b4027de4ea9c8c4f8189acb41b2b81dced878890ead1f4",
+    "results/appendix_A5_grid.csv": "100ffdd74f7e78301227f9c915635dc51c469337ac5fcfc4024de4678e996af0",
+    "results/appendix_A6_grid.csv": "af38609c8c2517a344b13baf0ccd594d18e9ffad510dc6c415c3d0ab8b01d7c1",
+    "results/appendix_A7_grid.csv": "b674342241d039565d0264d3789f9d0f9c2a582e3b89e1587a88fb48ce9445b7",
+    "results/appendix_A8_grid.csv": "d6375ee9e9745d7ce79b004f0e006d50fffea3e7bcaac7a791f7b344f88dacee",
+    "results/correlated_error_sensitivity.csv": "b59eb71188b9ecff5ca64d0b8bda49c2237a7817cb67f1f0e5a1aa17e22b217b",
+    "results/finite_sample_bounds.csv": "5f9e28c36da8575cc6b796a513fc153416d22481d2424929d728dd6921828312",
+    "results/heaping.csv": "f86ecb1a02209c434a800288e8c437bfd0567842941c86e157ec253958b8cc83",
+    "results/independent_arithmetic.json": "9a77078e881f19135c8a15ff74217130ed81f107660cfa1b9a14f6b95a8922a1",
+    "results/individual_archive_selection.json": "66f5935f399c8d559f6953dc20f4a46083a0acef294acdc85f5fb05ee8988194",
+    "results/individual_benchmarks.json": "02510865d2083ebc6434c972914209065d2d8c1f242a1f8a3ce18fc31ee8cff7",
+    "results/native_checks.json": "16cef8f562d95649859e4c298675e2b1ca60b51b263146a57313996fbfed9b88",
+    "results/pair_repeats.json": "c2a2eefdae63b513052e5fc9efb0ee76848c0b4b89ad0ce694e6a1bd34402fbe",
+    "results/pooled_benchmarks.csv": "a1a6812f04e264e89bab33efdad0ff70f9e44e3fa2e8a759cb43494f3b343453",
+    "results/pooled_benchmarks.json": "6a843dab13599d4f9c6c31bfb900d1e3f9d087887220c08371c4c229dd68bbc5",
+    "results/processing_sensitivity.csv": "286f37a013430c5ba6c13b528dbe88f29a56e9b4ceee06b70d1874018ff6cf90",
+    "results/prospective_design.csv": "e5542a4fb3f2c339d440c350943cd14371a2d66d9e8532401e5cea136ed0f70f",
+    "results/repeated_measures.csv": "c0878a3d13fb954e766c09b6e84e48257e4555cbfe057ff05c990798bd87b02f",
+    "results/selection.csv": "8d2fb41c24483bd6f1ad3ab03413f38616931e51284931ad90e31a144f1e692b",
+    "results/slope_diagnostics.json": "8026a60dfe53300418d34b7d864a36434874e04d3a013e02485498597ab916be"
+  }
+}
