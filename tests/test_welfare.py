@@ -1,173 +1,141 @@
-"""Tests for population welfare calculations — TDD: written before implementation."""
+"""Fiscal closure and calibration regressions, independent of national totals."""
 
-import pytest
+from types import SimpleNamespace
+
 import numpy as np
-from taxuncertainty.models.preferences import QuasilinearIsoelastic
-from taxuncertainty.analysis.welfare import PopulationWelfare
-from taxuncertainty.analysis.calibration import Calibration
+import pytest
+
+from taxuncertainty.analysis.calibration import (
+    Illustration,
+    beliefs_with_rmse,
+    private_regret_approx,
+)
+from taxuncertainty.analysis.welfare import evaluate_population
+from taxuncertainty.models.beliefs import NormalBeliefs
+from taxuncertainty.models.labor import individual_dwl, optimal_hours
 
 
-@pytest.fixture
-def prefs():
-    return QuasilinearIsoelastic(psi=1.0, frisch_elasticity=0.33)
+def test_illustrative_normalization_and_evidence():
+    inputs = Illustration()
+    hours = optimal_hours(inputs.hourly_wage, inputs.tax_rate, inputs.preferences)
+    assert hours == pytest.approx(2000)
+    assert inputs.assumptions()["error_source"]["status"] == "assumed"
+    assert "total_workers" not in inputs.assumptions()
 
 
-@pytest.fixture
-def calc():
-    return PopulationWelfare()
+@pytest.mark.parametrize("mean", [-0.12, -0.06, 0, 0.06, 0.12])
+def test_rmse_decomposition(mean):
+    belief = beliefs_with_rmse(mean)
+    assert belief.mean_error**2 + belief.std_error**2 == pytest.approx(0.12**2)
 
 
-class TestPopulationDWL:
-    def test_zero_when_no_misperception(self, calc, prefs):
-        wages = np.array([15.0, 20.0, 30.0])
-        tax_rates = np.array([0.25, 0.30, 0.35])
-        total = calc.total_dwl(wages, tax_rates, 0.0, prefs)
-        assert total == pytest.approx(0.0)
+def test_impossible_rmse_rejected():
+    with pytest.raises(ValueError):
+        beliefs_with_rmse(-0.13, 0.12)
 
-    def test_positive_with_misperception(self, calc, prefs):
-        wages = np.array([15.0, 20.0, 30.0])
-        tax_rates = np.array([0.25, 0.30, 0.35])
-        total = calc.total_dwl(wages, tax_rates, 0.12, prefs)
-        assert total > 0
 
-    def test_analytical_aggregate_close_to_sum(self, calc, prefs):
-        """Analytical shortcut ≈ sum for homogeneous tax rates."""
-        n = 100
-        wages = np.random.default_rng(42).lognormal(3.0, 0.5, n)
-        tax_rates = np.full(n, 0.30)
-        sigma = 0.10
-        total_exact = calc.total_dwl(wages, tax_rates, sigma, prefs)
-        total_analytical = calc.total_dwl_analytical(
-            np.mean(wages), 0.30, sigma, prefs, n_workers=n
+def test_small_error_approximation_matches_exact_private_regret():
+    inputs = Illustration()
+    error = 0.0001
+    exact = individual_dwl(27.5, 0.3, 0.3 + error, inputs.preferences)
+    approx = private_regret_approx(55000, 0.33, 0.3, error**2)
+    assert approx == pytest.approx(exact, rel=0.001)
+
+
+def test_approximation_rejects_invalid_interior():
+    with pytest.raises(ValueError):
+        private_regret_approx(55000, 0.33, 1, 0.12**2)
+
+
+def test_population_matches_direct_realized_utility_and_budget():
+    inputs = Illustration()
+    wages = np.array([15.0, 27.5, 50.0])
+    taxes = np.array([0.1, 0.3, 0.4])
+    omega = np.array([2.0, 1.0, 0.5])
+    bias = -0.01
+    prefs = inputs.preferences
+    baseline_hours = np.array(
+        [optimal_hours(w, t, prefs) for w, t in zip(wages, taxes)]
+    )
+    mistaken_hours = np.array(
+        [optimal_hours(w, t + bias, prefs) for w, t in zip(wages, taxes)]
+    )
+    baseline_revenue = np.sum(taxes * wages * baseline_hours)
+    mistaken_revenue = np.sum(taxes * wages * mistaken_hours)
+    baseline_c = wages * (1 - taxes) * baseline_hours + baseline_revenue / 3
+    mistaken_c = wages * (1 - taxes) * mistaken_hours + mistaken_revenue / 3
+    direct_loss = sum(
+        o * (prefs.utility(c0, h0) - prefs.utility(c1, h1))
+        for o, c0, h0, c1, h1 in zip(
+            omega, baseline_c, baseline_hours, mistaken_c, mistaken_hours
         )
-        assert total_analytical == pytest.approx(total_exact, rel=0.10)
+    )
+    outcome = evaluate_population(wages, taxes, prefs, NormalBeliefs(bias, 0), omega)
+    assert outcome.social_loss == pytest.approx(direct_loss, abs=1e-8)
+    assert outcome.workers * outcome.per_capita_transfer_change == pytest.approx(
+        mistaken_revenue - baseline_revenue
+    )
 
 
-class TestGDPFraction:
-    def test_in_range(self, calc, prefs):
-        """DWL should be a small fraction of GDP."""
-        wages = np.full(100, 27.5)  # ~$55k annual at 2000 hrs
-        tax_rates = np.full(100, 0.30)
-        sigma = 0.12
-        dwl = calc.total_dwl(wages, tax_rates, sigma, prefs)
-        gdp_for_100 = 100 * 55_000  # rough
-        pct = dwl / gdp_for_100 * 100
-        assert 0.01 < pct < 1.0
+def test_population_no_error():
+    outcome = evaluate_population(
+        [20, 30], [0.2, 0.3], Illustration().preferences, NormalBeliefs()
+    )
+    assert outcome.private_regret == pytest.approx(0, abs=1e-8)
+    assert outcome.revenue_change == pytest.approx(0, abs=1e-8)
+    assert outcome.social_loss == pytest.approx(0, abs=1e-8)
 
 
-class TestCalibration:
-    @pytest.fixture
-    def cal(self):
-        return Calibration()
-
-    @pytest.fixture
-    def baseline(self, cal):
-        return cal.baseline_results()
-
-    @pytest.fixture
-    def table(self, cal):
-        return cal.sensitivity_table()
-
-    def test_baseline_dwl_positive(self, baseline):
-        assert baseline["total_dwl_billions"] > 0
-
-    def test_baseline_gdp_fraction_in_range(self, baseline):
-        """Central estimate should be 0.05-0.5% of GDP."""
-        assert 0.05 < baseline["gdp_fraction_pct"] < 0.5
-
-    def test_per_worker_dwl_reasonable(self, baseline):
-        """Per-worker DWL should be $50-$1000."""
-        assert 50 < baseline["per_worker_dwl"] < 1000
-
-    def test_sensitivity_table_covers_range(self, table):
-        assert len(table) > 1
-        for col in ["frisch_elasticity", "misperception_std", "gdp_fraction_pct"]:
-            assert col in table.columns
-
-    def test_sensitivity_monotonic_in_sigma(self, table):
-        """DWL increases monotonically with misperception."""
-        for eps in table["frisch_elasticity"].unique():
-            subset = table[table["frisch_elasticity"] == eps].sort_values(
-                "misperception_std"
-            )
-            dwls = subset["gdp_fraction_pct"].values
-            assert all(dwls[i] <= dwls[i + 1] for i in range(len(dwls) - 1))
-
-    def test_analytical_zero_when_no_misperception(self, cal):
-        """total_dwl_analytical returns 0 when sigma = 0."""
-        prefs = QuasilinearIsoelastic(psi=cal.PSI, frisch_elasticity=0.33)
-        result = cal.per_worker_dwl(0.33, 0.0)
-        assert result == pytest.approx(0.0)
-        # Also test the PopulationWelfare method directly
-        welfare = PopulationWelfare()
-        result2 = welfare.total_dwl_analytical(27.5, 0.30, 0.0, prefs, n_workers=100)
-        assert result2 == pytest.approx(0.0)
-
-    def test_sensitivity_monotonic_in_elasticity(self, table):
-        """DWL increases monotonically with Frisch elasticity."""
-        for sigma in table["misperception_std"].unique():
-            subset = table[table["misperception_std"] == sigma].sort_values(
-                "frisch_elasticity"
-            )
-            dwls = subset["gdp_fraction_pct"].values
-            assert all(dwls[i] <= dwls[i + 1] for i in range(len(dwls) - 1))
+@pytest.mark.parametrize(
+    "wages,rates,weights",
+    [
+        ([], [], None),
+        ([20], [0.2, 0.3], None),
+        ([20], [0.2], [-1]),
+        ([20], [0.2], [float("nan")]),
+    ],
+)
+def test_bad_population_rejected(wages, rates, weights):
+    with pytest.raises(ValueError):
+        evaluate_population(
+            wages, rates, Illustration().preferences, NormalBeliefs(), weights
+        )
 
 
-class TestWeightedDWL:
-    """Tests for weighted_total_dwl using annual earnings directly."""
+def test_overflowing_aggregate_social_weights_rejected():
+    with pytest.raises(ValueError):
+        evaluate_population(
+            [20, 30],
+            [0.3, 0.3],
+            Illustration().preferences,
+            NormalBeliefs(-0.01, 0),
+            [1e308, 1e308],
+        )
 
-    @pytest.fixture
-    def prefs(self):
-        return QuasilinearIsoelastic(psi=1.0, frisch_elasticity=0.33)
 
-    @pytest.fixture
-    def calc(self):
-        return PopulationWelfare()
+def test_assumption_description_tracks_custom_normalization():
+    assumptions = Illustration(hourly_wage=40, baseline_hours=1000).assumptions()
+    assert assumptions["baseline_earnings"] == 40000
+    assert assumptions["dollar_normalization"].startswith(
+        "40.00 dollars/hour and 1,000 hours"
+    )
 
-    def test_zero_when_no_misperception(self, calc, prefs):
-        earnings = np.array([40000.0, 55000.0, 80000.0])
-        tax_rates = np.array([0.25, 0.30, 0.35])
-        weights = np.array([1.0, 1.0, 1.0])
-        result = calc.weighted_total_dwl(earnings, tax_rates, weights, 0.0, prefs)
-        assert result == pytest.approx(0.0)
 
-    def test_positive_with_misperception(self, calc, prefs):
-        earnings = np.array([40000.0, 55000.0, 80000.0])
-        tax_rates = np.array([0.25, 0.30, 0.35])
-        weights = np.array([1.0, 1.0, 1.0])
-        result = calc.weighted_total_dwl(earnings, tax_rates, weights, 0.12, prefs)
-        assert result > 0
-
-    def test_weights_scale_result(self, calc, prefs):
-        """Doubling all weights should double the total DWL."""
-        earnings = np.array([40000.0, 55000.0, 80000.0])
-        tax_rates = np.array([0.25, 0.30, 0.35])
-        weights_1 = np.array([1.0, 1.0, 1.0])
-        weights_2 = np.array([2.0, 2.0, 2.0])
-        dwl_1 = calc.weighted_total_dwl(earnings, tax_rates, weights_1, 0.12, prefs)
-        dwl_2 = calc.weighted_total_dwl(earnings, tax_rates, weights_2, 0.12, prefs)
-        assert dwl_2 == pytest.approx(2.0 * dwl_1)
-
-    def test_unit_weights_match_unweighted(self, calc, prefs):
-        """Unit weights should give same result as total_dwl with equivalent hourly wages."""
-        earnings = np.array([55000.0, 55000.0, 55000.0])
-        tax_rates = np.array([0.30, 0.30, 0.30])
-        weights = np.array([1.0, 1.0, 1.0])
-        sigma = 0.12
-        weighted = calc.weighted_total_dwl(earnings, tax_rates, weights, sigma, prefs)
-        # Convert to hourly wages for the existing method
-        hourly_wages = earnings / 2000
-        unweighted = calc.total_dwl(hourly_wages, tax_rates, sigma, prefs)
-        assert weighted == pytest.approx(unweighted)
-
-    def test_formula_correctness(self, calc, prefs):
-        """Verify against hand-calculated result."""
-        earnings = np.array([50000.0])
-        tax_rates = np.array([0.30])
-        weights = np.array([1.0])
-        sigma = 0.10
-        eps = 0.33
-        # DWL = weight * 0.5 * eps * earnings * sigma^2 / (1 - tau)
-        expected = 1.0 * 0.5 * eps * 50000.0 * 0.01 / 0.70
-        result = calc.weighted_total_dwl(earnings, tax_rates, weights, sigma, prefs)
-        assert result == pytest.approx(expected)
+@pytest.mark.parametrize(
+    "field", ["private_regret", "earnings_change", "revenue_change"]
+)
+def test_overflowing_unweighted_totals_rejected(monkeypatch, field):
+    worker = dict(private_regret=0.0, earnings_change=0.0, revenue_change=0.0)
+    worker[field] = 1e308
+    monkeypatch.setattr(
+        "taxuncertainty.analysis.welfare.evaluate_worker",
+        lambda *args: SimpleNamespace(**worker),
+    )
+    with pytest.raises(ValueError, match="overflowed"):
+        evaluate_population(
+            [20, 30],
+            [0.3, 0.3],
+            Illustration().preferences,
+            NormalBeliefs(),
+            [1e-300, 1e-300],
+        )

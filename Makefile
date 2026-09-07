@@ -1,141 +1,100 @@
-# Makefile for Tax Uncertainty Analysis Project
+# Reproducible model and Quarto paper commands.
+UV ?= uv
+LOCKED_UV = env -u UV_FROZEN $(UV)
+RUN = $(UV) run --no-sync
 
-.PHONY: help install test serve clean pdf deploy lint format check-all
+.PHONY: help install test test-quick test-policyengine lint format generate figures check-results paper pdf latex serve deploy clean replicate check-all myst watch venv activate dev build-all paper-stats check-citations
 
-# Default target
 help:
-	@echo "Tax Uncertainty Analysis - Make Commands"
-	@echo ""
-	@echo "Development:"
-	@echo "  make install     Install all dependencies (package + paper)"
-	@echo "  make test        Run test suite with coverage"
-	@echo "  make lint        Run code quality checks"
-	@echo "  make format      Auto-format code with black"
-	@echo ""
-	@echo "Book/Paper:"
-	@echo "  make myst        Build with MyST (next-gen)"
-	@echo "  make serve       Start MyST dev server (port 3001)"
-	@echo "  make pdf         Generate PDF output"
-	@echo "  make figures     Generate analysis figures (blocks 1–4)"
-	@echo "  make deploy      Deploy to GitHub Pages"
-	@echo ""
-	@echo "Maintenance:"
-	@echo "  make clean       Remove build artifacts"
-	@echo "  make check-all   Run all checks (lint, test, build)"
+	@echo "make install          Install the locked development and paper environment"
+	@echo "make test             Run fast tests (live PolicyEngine is opt-in)"
+	@echo "make test-policyengine  Run optional live PolicyEngine validation"
+	@echo "make generate         Recompute results, paper includes, and figures"
+	@echo "make check-results    Check committed outputs against recomputed results"
+	@echo "make paper / pdf      Generate inputs and render HTML / PDF"
+	@echo "make serve            Generate inputs and preview the paper"
+	@echo "make replicate        Generate results and render HTML and PDF"
+	@echo "make clean            Remove this project's build artifacts"
 
-# Install dependencies
 install:
-	pip install -e ".[dev,research]"
-	pip install mystmd
+	$(LOCKED_UV) sync --locked --extra dev --extra paper
+	@command -v quarto >/dev/null || echo "Install Quarto 1.9.36 separately to render the paper."
 
-# Run tests
 test:
-	pytest tests/ -v --cov=src/taxuncertainty --cov-report=term-missing --cov-report=html
+	$(RUN) pytest tests/ -v
 
-# Quick test without coverage
 test-quick:
-	pytest tests/ -v
+	$(RUN) pytest tests/ -q --no-cov
 
-# Lint code
+test-policyengine:
+	$(LOCKED_UV) sync --locked --extra dev --extra policyengine
+	$(RUN) pytest tests/ -v --run-policyengine -m policyengine
+
 lint:
-	flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
-	mypy src
+	$(RUN) flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
+	$(RUN) black --check src tests
+	$(RUN) isort --check-only src tests
+	$(RUN) mypy src
 
-# Format code
 format:
-	black src tests
-	isort src tests
+	$(RUN) isort src tests
+	$(RUN) black src tests
 
-# Build with MyST (recommended)
-myst:
-	cd paper && myst build
-	@echo "MyST book available at: paper/_build/site/index.html"
+generate:
+	$(RUN) python -m taxuncertainty.pipeline
 
-# Generate results via pipeline
-figures:
-	PYTHONPATH=src python3 -c "from taxuncertainty.pipeline import generate_results; generate_results()"
+figures: generate
 
-# End-to-end replication (pipeline + book)
-replicate: clean figures myst
-	@echo "Replication artifacts in src/taxuncertainty/data/results.json and paper/_build/site"
+check-results:
+	$(RUN) python -m taxuncertainty.pipeline --check
 
-# Serve with MyST (development)
-serve:
-	cd paper && myst start
-	@echo "Server running at: http://localhost:3001"
+paper: generate
+	cd paper && quarto render index.qmd --to html
 
-# Generate PDF
-pdf:
-	cd paper && myst build --pdf
-	@echo "PDF generated at: paper/_build/exports/tax-uncertainty.pdf"
+pdf: generate
+	cd paper && quarto render index.qmd --to pdf
 
-# Build LaTeX
-latex:
-	cd paper && myst build --tex
-	@echo "LaTeX generated at: paper/_build/exports/tax-uncertainty.tex"
+latex: generate
+	cd paper && quarto render index.qmd --to latex
 
-# Deploy to GitHub Pages
-deploy:
-	cd paper && myst build --gh-pages
+serve: generate
+	cd paper && quarto preview index.qmd
 
-# Clean build artifacts
+deploy: generate
+	cd paper && quarto publish gh-pages
+
+# Backward-compatible name for the previous renderer.
+myst: paper
+
+replicate: paper pdf
+	@echo "Results and paper inputs regenerated; rendered artifacts are in paper/_build/."
+
+# Restrict recursive cleanup to project output/source paths, preserving .venv.
 clean:
-	rm -rf paper/_build
-	rm -rf build dist *.egg-info
-	rm -rf .pytest_cache .coverage htmlcov
-	rm -rf .mypy_cache
-	find . -type d -name __pycache__ -exec rm -rf {} +
-	find . -type f -name "*.pyc" -delete
-	find . -type f -name ".DS_Store" -delete
+	rm -rf paper/_build paper/.quarto build dist .pytest_cache .coverage htmlcov .mypy_cache
+	find src tests -type d \( -name __pycache__ -o -name '*.egg-info' \) -prune -exec rm -rf {} +
+	find src tests -type f -name '*.pyc' -delete
 
-# Run all checks
-check-all: lint test myst
-	@echo "All checks passed!"
+check-all: lint test check-results paper
 
-# Watch for changes and rebuild (requires fswatch on macOS)
 watch:
-	@echo "Watching for changes..."
-	@fswatch -o src paper | xargs -n1 -I{} make myst
+	@echo "Watching source and paper files (requires fswatch)..."
+	@fswatch -o --exclude='__pycache__' --exclude='data/results\.json' src paper/chapters paper/index.qmd paper/_quarto.yml paper/references.bib | xargs -n1 -I{} make paper
 
-# Create GitHub PR
-pr:
-	gh pr create --fill
-
-# Development workflow shortcuts
-dev: serve
-	@echo "Development server started"
-
-build-all: clean install test myst pdf
-	@echo "Full build completed"
-
-# Paper submission helpers
-paper-stats:
-	@echo "Paper Statistics:"
-	@echo "----------------"
-	@find paper/chapters -name "*.md" -o -name "*.ipynb" | xargs wc -w
-	@echo ""
-	@echo "Bibliography entries:"
-	@grep -c "@" paper/references.bib
-
-check-citations:
-	@echo "Checking citations..."
-	@for cite in $$(grep -oh "@\w\+" paper/chapters/*.md | sort -u); do \
-		grep -q "$$cite" paper/references.bib || echo "Missing citation: $$cite"; \
-	done
-
-# Docker support (optional)
-docker-build:
-	docker build -t tax-uncertainty .
-
-docker-run:
-	docker run -p 3001:3001 -v $$(pwd):/app tax-uncertainty
-
-# Virtual environment management
-venv:
-	python -m venv .venv
-	./.venv/bin/pip install -e ".[dev,research]"
+venv: install
 
 activate:
 	@echo "Run: source .venv/bin/activate"
+
+dev: serve
+
+build-all: check-all pdf
+
+paper-stats:
+	@find paper -path "paper/_build" -prune -o \( -name "*.md" -o -name "*.qmd" \) -print | xargs wc -w
+	@rg -c '^@' paper/references.bib
+
+check-citations:
+	@$(RUN) python -c 'import re; from pathlib import Path; paper_files=[Path("paper/index.qmd"), *sorted(Path("paper/chapters").glob("*.md"))]; bib_text=Path("paper/references.bib").read_text(); bib_keys=set(re.findall(r"@\w+\{([^,]+),", bib_text)); citation_keys=set(); [citation_keys.update(re.findall(r"@([A-Za-z0-9:_-]+)", path.read_text())) for path in paper_files]; ignore_prefixes=("tbl-", "fig-", "sec-", "eq-", "lem-", "thm-", "cor-"); missing=sorted(key for key in citation_keys if key not in bib_keys and not key.startswith(ignore_prefixes)); [print(f"Missing citation: @{key}") for key in missing]; raise SystemExit(1 if missing else 0)'
 
 .DEFAULT_GOAL := help

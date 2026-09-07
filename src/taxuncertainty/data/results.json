@@ -1,166 +1,1889 @@
 {
-  "baseline": {
-    "frisch_elasticity": 0.33,
-    "misperception_std": 0.12,
-    "per_worker_dwl": 186.6857142857143,
-    "total_dwl_billions": 29.86971428571429,
-    "gdp_fraction_pct": 0.10667755102040817
+  "schema_version": 2,
+  "status": "illustrative scenarios; not a national welfare estimate",
+  "provenance": {
+    "model_source_sha256": "82b3cf0cf72483113efb895b7009db9d402d5766267b7fd0780536f8af97e17d",
+    "method": "deterministic Gauss-Legendre quadrature with explicit censoring atoms",
+    "quadrature_order": 256,
+    "seed": 42,
+    "data_source": "synthetic wage sample; no survey weights"
+  },
+  "assumptions": {
+    "elasticity": 0.33,
+    "hourly_wage": 27.5,
+    "baseline_hours": 2000.0,
+    "tax_rate": 0.3,
+    "error_rmse": 0.12,
+    "wage_log_std": 0.5,
+    "synthetic_workers": 500,
+    "seed": 42,
+    "baseline_earnings": 55000.0,
+    "psi": 1.911214954171451e-09,
+    "status": "illustrative; no population calibration",
+    "elasticity_source": {
+      "url": "https://doi.org/10.3982/ECTA9043",
+      "location": "Chetty (2012), abstract and p. 972",
+      "concept": "Hicksian intensive-margin estimate, mapped to the common elasticity under quasilinearity"
+    },
+    "error_source": {
+      "status": "assumed",
+      "note": "No verified .12 RMSE estimate or behavioral error distribution is attributed to Rees-Jones and Taubinsky (2020)."
+    },
+    "dollar_normalization": "27.50 dollars/hour and 2,000 hours are illustrative, not estimated population means",
+    "perception_bounds": [
+      0.0,
+      1.0
+    ],
+    "fiscal_closure": "all incremental net tax revenue rebated equally; wages fixed"
+  },
+  "scenarios": [
+    {
+      "id": "informed",
+      "label": "No error",
+      "beliefs": {
+        "mean_error": 0.0,
+        "std_error": 0.0,
+        "lower_bound": 0.0,
+        "upper_bound": 1.0
+      },
+      "worker": {
+        "baseline_hours": 2000.0000000000007,
+        "expected_hours": 2000.0000000000007,
+        "baseline_earnings": 55000.00000000002,
+        "expected_earnings": 55000.00000000002,
+        "earnings_change": 0.0,
+        "baseline_revenue": 16500.000000000007,
+        "expected_revenue": 16500.000000000007,
+        "revenue_change": 0.0,
+        "transfer_change": 0.0,
+        "private_regret": 0.0,
+        "social_loss": 0.0,
+        "latent_rmse": 0.0,
+        "realized_mean_error": 0.0,
+        "realized_std_error": 0.0,
+        "realized_rmse": 0.0
+      },
+      "local_private_approximation": 0.0
+    },
+    {
+      "id": "unbiased",
+      "label": "Unbiased",
+      "beliefs": {
+        "mean_error": 0,
+        "std_error": 0.12,
+        "lower_bound": 0.0,
+        "upper_bound": 1.0
+      },
+      "worker": {
+        "baseline_hours": 2000.0000000000007,
+        "expected_hours": 1993.0940028220452,
+        "baseline_earnings": 55000.00000000002,
+        "expected_earnings": 54810.08507760624,
+        "earnings_change": -189.9149223937784,
+        "baseline_revenue": 16500.000000000007,
+        "expected_revenue": 16443.02552328187,
+        "revenue_change": -56.974476718133516,
+        "transfer_change": -56.974476718133516,
+        "private_regret": 190.1131189157643,
+        "social_loss": 247.08759563389782,
+        "latent_rmse": 0.12,
+        "realized_mean_error": 0.00024049640849678608,
+        "realized_std_error": 0.1193246578294726,
+        "realized_rmse": 0.1193249001870239
+      },
+      "local_private_approximation": 184.5910980387674
+    },
+    {
+      "id": "bias_minus_3",
+      "label": "Bias -3 pp",
+      "beliefs": {
+        "mean_error": -0.03,
+        "std_error": 0.1161895003862225,
+        "lower_bound": 0.0,
+        "upper_bound": 1.0
+      },
+      "worker": {
+        "baseline_hours": 2000.0000000000007,
+        "expected_hours": 2021.7483599833638,
+        "baseline_earnings": 55000.00000000002,
+        "expected_earnings": 55598.07989954251,
+        "earnings_change": 598.0798995424848,
+        "baseline_revenue": 16500.000000000007,
+        "expected_revenue": 16679.42396986275,
+        "revenue_change": 179.42396986274542,
+        "transfer_change": 179.42396986274542,
+        "private_regret": 178.0342698022269,
+        "social_loss": -1.3897000605185212,
+        "latent_rmse": 0.12,
+        "realized_mean_error": -0.029603290765619406,
+        "realized_std_error": 0.11513821281554146,
+        "realized_rmse": 0.11888297975114319
+      },
+      "local_private_approximation": 183.22636155169258
+    },
+    {
+      "id": "bias_minus_6",
+      "label": "Bias -6 pp",
+      "beliefs": {
+        "mean_error": -0.06,
+        "std_error": 0.10392304845413264,
+        "lower_bound": 0.0,
+        "upper_bound": 1.0
+      },
+      "worker": {
+        "baseline_hours": 2000.0000000000007,
+        "expected_hours": 2050.4096197649037,
+        "baseline_earnings": 55000.00000000002,
+        "expected_earnings": 56386.26454353485,
+        "earnings_change": 1386.2645435348313,
+        "baseline_revenue": 16500.000000000007,
+        "expected_revenue": 16915.879363060456,
+        "revenue_change": 415.8793630604494,
+        "transfer_change": 415.8793630604494,
+        "private_regret": 170.05793231614578,
+        "social_loss": -245.82143074430363,
+        "latent_rmse": 0.12,
+        "realized_mean_error": -0.05962982513463123,
+        "realized_std_error": 0.10294681049966184,
+        "realized_rmse": 0.1189695836659101
+      },
+      "local_private_approximation": 183.49341239511836
+    },
+    {
+      "id": "bias_plus_3",
+      "label": "Bias +3 pp",
+      "beliefs": {
+        "mean_error": 0.03,
+        "std_error": 0.1161895003862225,
+        "lower_bound": 0.0,
+        "upper_bound": 1.0
+      },
+      "worker": {
+        "baseline_hours": 2000.0000000000007,
+        "expected_hours": 1964.4462046209846,
+        "baseline_earnings": 55000.00000000002,
+        "expected_earnings": 54022.27062707708,
+        "earnings_change": -977.7293729229423,
+        "baseline_revenue": 16500.000000000007,
+        "expected_revenue": 16206.681188123122,
+        "revenue_change": -293.31881187688265,
+        "transfer_change": -293.31881187688265,
+        "private_regret": 202.2094726099272,
+        "social_loss": 495.52828448680987,
+        "latent_rmse": 0.12,
+        "realized_mean_error": 0.03007721477289044,
+        "realized_std_error": 0.11594860636050193,
+        "realized_rmse": 0.11978613511353144
+      },
+      "local_private_approximation": 186.02088193048954
+    },
+    {
+      "id": "underestimate_1",
+      "label": "Certain -1 pp",
+      "beliefs": {
+        "mean_error": -0.01,
+        "std_error": 0,
+        "lower_bound": 0.0,
+        "upper_bound": 1.0
+      },
+      "worker": {
+        "baseline_hours": 2000.0000000000007,
+        "expected_hours": 2009.3838044242718,
+        "baseline_earnings": 55000.00000000002,
+        "expected_earnings": 55258.05462166748,
+        "earnings_change": 258.05462166745565,
+        "baseline_revenue": 16500.000000000007,
+        "expected_revenue": 16577.41638650024,
+        "revenue_change": 77.4163865002367,
+        "transfer_change": 77.4163865002367,
+        "private_regret": 1.2882293866823602,
+        "social_loss": -76.12815711355434,
+        "latent_rmse": 0.01,
+        "realized_mean_error": -0.010000000000000009,
+        "realized_std_error": 0.0,
+        "realized_rmse": 0.010000000000000009
+      },
+      "local_private_approximation": 1.296428571428574
+    }
+  ],
+  "planner": {
+    "equal": [
+      {
+        "id": "informed",
+        "label": "No error",
+        "optimum": {
+          "tax_rate": 0.0,
+          "welfare": 48036.61640519628,
+          "at_boundary": true,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "equal",
+          "grid_resolution": 0.000125
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "equal",
+          "baseline_social_welfare": 46930.20536529826,
+          "expected_social_welfare": 46930.20536529826,
+          "social_welfare_loss": 0.0,
+          "mean_private_regret": 0.0,
+          "weighted_mean_private_regret": 0.0,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8519177.407076435,
+          "revenue_change": 0.0,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 17038.35481415287,
+          "demogrant_change": 0.0,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 28397258.023588117,
+          "earnings_change": 0.0
+        }
+      },
+      {
+        "id": "unbiased",
+        "label": "Unbiased",
+        "optimum": {
+          "tax_rate": 0.0,
+          "welfare": 47953.092532542294,
+          "at_boundary": true,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "equal",
+          "grid_resolution": 0.000125
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "equal",
+          "baseline_social_welfare": 46930.20536529826,
+          "expected_social_welfare": 46675.055903202134,
+          "social_welfare_loss": 255.1494620961239,
+          "mean_private_regret": 196.3160469643583,
+          "weighted_mean_private_regret": 196.3160469643583,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8489760.69951055,
+          "revenue_change": -29416.707565885037,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 16979.5213990211,
+          "demogrant_change": -58.83341513176856,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 28299202.331701834,
+          "earnings_change": -98055.69188628346
+        }
+      },
+      {
+        "id": "bias_minus_3",
+        "label": "Bias -3 pp",
+        "optimum": {
+          "tax_rate": 0.0,
+          "welfare": 47986.24519149615,
+          "at_boundary": true,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "equal",
+          "grid_resolution": 0.000125
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "equal",
+          "baseline_social_welfare": 46930.20536529826,
+          "expected_social_welfare": 46931.64040788715,
+          "social_welfare_loss": -1.4350425888915197,
+          "mean_private_regret": 183.84309442235318,
+          "weighted_mean_private_regret": 183.84309442235318,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8611816.475582052,
+          "revenue_change": 92639.06850561686,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 17223.632951164105,
+          "demogrant_change": 185.27813701123523,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 28706054.91860684,
+          "earnings_change": 308796.89501872286
+        }
+      },
+      {
+        "id": "bias_minus_6",
+        "label": "Bias -6 pp",
+        "optimum": {
+          "tax_rate": 0.0,
+          "welfare": 48014.57021617569,
+          "at_boundary": true,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "equal",
+          "grid_resolution": 0.000125
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "equal",
+          "baseline_social_welfare": 46930.20536529826,
+          "expected_social_welfare": 47184.04735062822,
+          "social_welfare_loss": -253.8419853299638,
+          "mean_private_regret": 175.60650847051753,
+          "weighted_mean_private_regret": 175.60650847051753,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8733901.653976675,
+          "revenue_change": 214724.24690023996,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 17467.80330795335,
+          "demogrant_change": 429.4484938004789,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 29113005.513255585,
+          "earnings_change": 715747.4896674678
+        }
+      },
+      {
+        "id": "bias_plus_3",
+        "label": "Bias +3 pp",
+        "optimum": {
+          "tax_rate": 0.0,
+          "welfare": 47919.959997886646,
+          "at_boundary": true,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "equal",
+          "grid_resolution": 0.000125
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "equal",
+          "baseline_social_welfare": 46930.20536529826,
+          "expected_social_welfare": 46418.509199750704,
+          "social_welfare_loss": 511.6961655475534,
+          "mean_private_regret": 208.80707521882724,
+          "weighted_mean_private_regret": 208.80707521882724,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8367732.861912071,
+          "revenue_change": -151444.5451643644,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 16735.46572382414,
+          "demogrant_change": -302.88909032872834,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 27892442.873040237,
+          "earnings_change": -504815.1505478807
+        }
+      },
+      {
+        "id": "underestimate_1",
+        "label": "Certain -1 pp",
+        "optimum": {
+          "tax_rate": 0.0095,
+          "welfare": 48036.616405196284,
+          "at_boundary": false,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "equal",
+          "grid_resolution": 0.000125
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "equal",
+          "baseline_social_welfare": 46930.20536529826,
+          "expected_social_welfare": 47008.817398767875,
+          "social_welfare_loss": -78.61203346961702,
+          "mean_private_regret": 1.3302611740699959,
+          "weighted_mean_private_regret": 1.3302611740699959,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8559148.554398276,
+          "revenue_change": 39971.14732184075,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 17118.297108796552,
+          "demogrant_change": 79.94229464368254,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 28530495.181327585,
+          "earnings_change": 133237.15773946792
+        }
+      }
+    ],
+    "inverse_wage": [
+      {
+        "id": "informed",
+        "label": "No error",
+        "optimum": {
+          "tax_rate": 0.44525000000000003,
+          "welfare": 49760.14892264164,
+          "at_boundary": false,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "inverse_wage",
+          "grid_resolution": 0.0002500000000000002
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "inverse_wage",
+          "baseline_social_welfare": 49087.86604659043,
+          "expected_social_welfare": 49087.86604659043,
+          "social_welfare_loss": 0.0,
+          "mean_private_regret": 0.0,
+          "weighted_mean_private_regret": 0.0,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8519177.407076435,
+          "revenue_change": 0.0,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 17038.35481415287,
+          "demogrant_change": 0.0,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 28397258.023588117,
+          "earnings_change": 0.0
+        }
+      },
+      {
+        "id": "unbiased",
+        "label": "Unbiased",
+        "optimum": {
+          "tax_rate": 0.42925,
+          "welfare": 49389.8228104758,
+          "at_boundary": false,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "inverse_wage",
+          "grid_resolution": 0.0002500000000000002
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "inverse_wage",
+          "baseline_social_welfare": 49087.86604659043,
+          "expected_social_welfare": 48832.2458248185,
+          "social_welfare_loss": 255.62022177193285,
+          "mean_private_regret": 196.3160469643583,
+          "weighted_mean_private_regret": 181.5983005930167,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8489760.69951055,
+          "revenue_change": -29416.707565885037,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 16979.5213990211,
+          "demogrant_change": -58.83341513176856,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 28299202.331701834,
+          "earnings_change": -98055.69188628346
+        }
+      },
+      {
+        "id": "bias_minus_3",
+        "label": "Bias -3 pp",
+        "optimum": {
+          "tax_rate": 0.45625000000000004,
+          "welfare": 49941.99899563559,
+          "at_boundary": false,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "inverse_wage",
+          "grid_resolution": 0.0002500000000000002
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "inverse_wage",
+          "baseline_social_welfare": 49087.86604659043,
+          "expected_social_welfare": 49150.91537192117,
+          "social_welfare_loss": -63.04932533073588,
+          "mean_private_regret": 183.84309442235318,
+          "weighted_mean_private_regret": 170.06044100369462,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8611816.475582052,
+          "revenue_change": 92639.06850561686,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 17223.632951164105,
+          "demogrant_change": 185.27813701123523,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 28706054.91860684,
+          "earnings_change": 308796.89501872286
+        }
+      },
+      {
+        "id": "bias_minus_6",
+        "label": "Bias -6 pp",
+        "optimum": {
+          "tax_rate": 0.485,
+          "welfare": 50541.649123581214,
+          "at_boundary": false,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "inverse_wage",
+          "grid_resolution": 0.0002500000000000002
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "inverse_wage",
+          "baseline_social_welfare": 49087.86604659043,
+          "expected_social_welfare": 49465.74013710195,
+          "social_welfare_loss": -377.87409051151917,
+          "mean_private_regret": 175.60650847051753,
+          "weighted_mean_private_regret": 162.44134906154093,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8733901.653976675,
+          "revenue_change": 214724.24690023996,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 17467.80330795335,
+          "demogrant_change": 429.4484938004789,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 29113005.513255585,
+          "earnings_change": 715747.4896674678
+        }
+      },
+      {
+        "id": "bias_plus_3",
+        "label": "Bias +3 pp",
+        "optimum": {
+          "tax_rate": 0.40475000000000005,
+          "welfare": 48886.617514571604,
+          "at_boundary": false,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "inverse_wage",
+          "grid_resolution": 0.0002500000000000002
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "inverse_wage",
+          "baseline_social_welfare": 49087.86604659043,
+          "expected_social_welfare": 48513.62985933973,
+          "social_welfare_loss": 574.2361872507026,
+          "mean_private_regret": 208.80707521882724,
+          "weighted_mean_private_regret": 193.15288076486956,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8367732.861912071,
+          "revenue_change": -151444.5451643644,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 16735.46572382414,
+          "demogrant_change": -302.88909032872834,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 27892442.873040237,
+          "earnings_change": -504815.1505478807
+        }
+      },
+      {
+        "id": "underestimate_1",
+        "label": "Certain -1 pp",
+        "optimum": {
+          "tax_rate": 0.45375,
+          "welfare": 49935.45696463979,
+          "at_boundary": false,
+          "search_range": [
+            0.0,
+            0.8
+          ],
+          "social_weights": "inverse_wage",
+          "grid_resolution": 0.0002500000000000002
+        },
+        "at_reference_tax": {
+          "tax_rate": 0.3,
+          "social_weights": "inverse_wage",
+          "baseline_social_welfare": 49087.86604659043,
+          "expected_social_welfare": 49187.21580935191,
+          "social_welfare_loss": -99.3497627614779,
+          "mean_private_regret": 1.3302611740699959,
+          "weighted_mean_private_regret": 1.230531952387178,
+          "baseline_revenue": 8519177.407076435,
+          "expected_revenue": 8559148.554398276,
+          "revenue_change": 39971.14732184075,
+          "baseline_demogrant": 17038.35481415287,
+          "expected_demogrant": 17118.297108796552,
+          "demogrant_change": 79.94229464368254,
+          "baseline_earnings": 28397258.023588117,
+          "expected_earnings": 28530495.181327585,
+          "earnings_change": 133237.15773946792
+        }
+      }
+    ]
   },
   "sensitivity": [
     {
-      "frisch_elasticity": 0.25,
-      "misperception_std": 0.08,
-      "per_worker_dwl": 62.85714285714286,
-      "total_dwl_billions": 10.057142857142859,
-      "gdp_fraction_pct": 0.035918367346938776
+      "elasticity": 0.25,
+      "std_error": 0.08,
+      "private_regret": 63.689683961764594,
+      "revenue_change": -20.542230803416167,
+      "social_loss": 84.23191476518076
     },
     {
-      "frisch_elasticity": 0.25,
-      "misperception_std": 0.12,
-      "per_worker_dwl": 141.42857142857144,
-      "total_dwl_billions": 22.62857142857143,
-      "gdp_fraction_pct": 0.08081632653061226
+      "elasticity": 0.25,
+      "std_error": 0.12,
+      "private_regret": 144.74536617549612,
+      "revenue_change": -48.28924202228954,
+      "social_loss": 193.03460819778564
     },
     {
-      "frisch_elasticity": 0.25,
-      "misperception_std": 0.15,
-      "per_worker_dwl": 220.98214285714286,
-      "total_dwl_billions": 35.35714285714286,
-      "gdp_fraction_pct": 0.12627551020408165
+      "elasticity": 0.25,
+      "std_error": 0.15,
+      "private_regret": 226.30609746314133,
+      "revenue_change": -81.22677925628959,
+      "social_loss": 307.53287671943093
     },
     {
-      "frisch_elasticity": 0.33,
-      "misperception_std": 0.08,
-      "per_worker_dwl": 82.97142857142859,
-      "total_dwl_billions": 13.275428571428574,
-      "gdp_fraction_pct": 0.04741224489795919
+      "elasticity": 0.33,
+      "std_error": 0.08,
+      "private_regret": 83.90453424583987,
+      "revenue_change": -24.195535000037488,
+      "social_loss": 108.10006924587736
     },
     {
-      "frisch_elasticity": 0.33,
-      "misperception_std": 0.12,
-      "per_worker_dwl": 186.6857142857143,
-      "total_dwl_billions": 29.86971428571429,
-      "gdp_fraction_pct": 0.10667755102040817
+      "elasticity": 0.33,
+      "std_error": 0.12,
+      "private_regret": 190.1131189157643,
+      "revenue_change": -56.974476718133516,
+      "social_loss": 247.08759563389782
     },
     {
-      "frisch_elasticity": 0.33,
-      "misperception_std": 0.15,
-      "per_worker_dwl": 291.6964285714286,
-      "total_dwl_billions": 46.67142857142858,
-      "gdp_fraction_pct": 0.16668367346938778
+      "elasticity": 0.33,
+      "std_error": 0.15,
+      "private_regret": 296.01656216762433,
+      "revenue_change": -96.35816484745374,
+      "social_loss": 392.37472701507807
     },
     {
-      "frisch_elasticity": 0.5,
-      "misperception_std": 0.08,
-      "per_worker_dwl": 125.71428571428572,
-      "total_dwl_billions": 20.114285714285717,
-      "gdp_fraction_pct": 0.07183673469387755
+      "elasticity": 0.5,
+      "std_error": 0.08,
+      "private_regret": 126.65160238052148,
+      "revenue_change": -27.297112944278343,
+      "social_loss": 153.94871532479982
     },
     {
-      "frisch_elasticity": 0.5,
-      "misperception_std": 0.12,
-      "per_worker_dwl": 282.8571428571429,
-      "total_dwl_billions": 45.25714285714286,
-      "gdp_fraction_pct": 0.1616326530612245
+      "elasticity": 0.5,
+      "std_error": 0.12,
+      "private_regret": 285.3143611210515,
+      "revenue_change": -64.76312397420334,
+      "social_loss": 350.0774850952548
     },
     {
-      "frisch_elasticity": 0.5,
-      "misperception_std": 0.15,
-      "per_worker_dwl": 441.9642857142857,
-      "total_dwl_billions": 70.71428571428572,
-      "gdp_fraction_pct": 0.2525510204081633
+      "elasticity": 0.5,
+      "std_error": 0.15,
+      "private_regret": 440.73987238258576,
+      "revenue_change": -111.68914198020502,
+      "social_loss": 552.4290143627908
     }
   ],
-  "optimal_tax": {
-    "certain": 0.44525000000000003,
-    "uncertain": 0.42925
-  },
-  "parameters": {
-    "frisch_elasticity_central": 0.33,
-    "frisch_elasticity_low": 0.25,
-    "frisch_elasticity_high": 0.5,
-    "misperception_std_central": 0.12,
-    "misperception_std_low": 0.08,
-    "misperception_std_high": 0.15,
-    "mean_marginal_rate": 0.3,
-    "mean_hourly_wage": 27.5,
-    "mean_annual_earnings": 55000,
-    "total_workers": 160000000,
-    "gdp": 28000000000000,
-    "psi": 1.0,
-    "seed": 42
-  },
-  "empirical": {
-    "mtr_distribution": {
-      "weighted_mean": 0.251248300075531,
-      "weighted_std": 0.15615548016784184,
-      "p10": 0.0,
-      "p25": 0.17650002241134644,
-      "p50": 0.25159376859664917,
-      "p75": 0.34934377670288086,
-      "p90": 0.406499981880188,
-      "n_observations": 19399,
-      "total_weighted_workers": 148732304.0,
-      "mean_earnings": 62008.8671875
+  "approximation_accuracy": [
+    {
+      "tax_rate": 0.0,
+      "exact_private_regret": 71.90337272459644,
+      "latent_moment_approximation": 130.68,
+      "realized_moment_approximation": 65.33999999999806,
+      "latent_ratio": 1.8174390859317435,
+      "realized_ratio": 0.9087195429658447
     },
-    "aggregate_dwl": 36642800010.2039,
-    "aggregate_dwl_billions": 36.642800010203906,
-    "quintiles": [
-      {
-        "quantile": 1,
-        "mean_earnings": 7354.87451171875,
-        "mean_mtr": 0.11414661258459091,
-        "n_observations": 2627,
-        "weighted_workers": 29740664.0,
-        "per_worker_dwl": 19.726945889804448,
-        "quintile_total_dwl": 586692469.4548551,
-        "share_of_total_dwl": 0.018466950018766796
-      },
-      {
-        "quantile": 2,
-        "mean_earnings": 23550.498046875,
-        "mean_mtr": 0.23364600539207458,
-        "n_observations": 3900,
-        "weighted_workers": 29751958.0,
-        "per_worker_dwl": 73.01584353064234,
-        "quintile_total_dwl": 2172364310.058243,
-        "share_of_total_dwl": 0.06837814566407233
-      },
-      {
-        "quantile": 3,
-        "mean_earnings": 40742.5,
-        "mean_mtr": 0.26600465178489685,
-        "n_observations": 3459,
-        "weighted_workers": 29733026.0,
-        "per_worker_dwl": 131.88663965705513,
-        "quintile_total_dwl": 3921388885.975851,
-        "share_of_total_dwl": 0.12343109266214287
-      },
-      {
-        "quantile": 4,
-        "mean_earnings": 64301.06640625,
-        "mean_mtr": 0.3054446280002594,
-        "n_observations": 4232,
-        "weighted_workers": 29055942.0,
-        "per_worker_dwl": 219.96710405013906,
-        "quintile_total_dwl": 6391351417.188806,
-        "share_of_total_dwl": 0.2011765504392282
-      },
-      {
-        "quantile": 5,
-        "mean_earnings": 171542.234375,
-        "mean_mtr": 0.33622896671295166,
-        "n_observations": 5181,
-        "weighted_workers": 30450714.0,
-        "per_worker_dwl": 614.0435909904188,
-        "quintile_total_dwl": 18698065772.78222,
-        "share_of_total_dwl": 0.5885472612157898
-      }
-    ],
-    "comparison": {
-      "empirical_dwl_billions": 36.642800010203906,
-      "stylized_dwl_billions": 27.766196409600003,
-      "ratio": 1.31969101815958
+    {
+      "tax_rate": 0.01,
+      "exact_private_regret": 73.14528121334206,
+      "latent_moment_approximation": 132.0,
+      "realized_moment_approximation": 66.43803092650404,
+      "latent_ratio": 1.804627691771353,
+      "realized_ratio": 0.9083023514903845
+    },
+    {
+      "tax_rate": 0.02,
+      "exact_private_regret": 75.206741831776,
+      "latent_moment_approximation": 133.3469387755102,
+      "realized_moment_approximation": 68.36177440460501,
+      "latent_ratio": 1.773071609374907,
+      "realized_ratio": 0.9089846566883332
+    },
+    {
+      "tax_rate": 0.03,
+      "exact_private_regret": 77.98184147459081,
+      "latent_moment_approximation": 134.7216494845361,
+      "realized_moment_approximation": 71.01449623636893,
+      "latent_ratio": 1.727602823132012,
+      "realized_ratio": 0.9106542612167977
+    },
+    {
+      "tax_rate": 0.04,
+      "exact_private_regret": 81.36594779496244,
+      "latent_moment_approximation": 136.125,
+      "realized_moment_approximation": 74.29883388143462,
+      "latent_ratio": 1.6729971651412119,
+      "realized_ratio": 0.9131440841648334
+    },
+    {
+      "tax_rate": 0.05,
+      "exact_private_regret": 85.25725954134242,
+      "latent_moment_approximation": 137.55789473684212,
+      "realized_moment_approximation": 78.11834968420743,
+      "latent_ratio": 1.613444948581046,
+      "realized_ratio": 0.9162662523339349
+    },
+    {
+      "tax_rate": 0.06,
+      "exact_private_regret": 89.55825148014522,
+      "latent_moment_approximation": 139.0212765957447,
+      "realized_moment_approximation": 82.37902912625971,
+      "latent_ratio": 1.5523000315226707,
+      "realized_ratio": 0.9198373992878018
+    },
+    {
+      "tax_rate": 0.07,
+      "exact_private_regret": 94.17697225868028,
+      "latent_moment_approximation": 140.51612903225808,
+      "realized_moment_approximation": 86.99067914952649,
+      "latent_ratio": 1.4920433908864248,
+      "realized_ratio": 0.9236937338629355
+    },
+    {
+      "tax_rate": 0.08,
+      "exact_private_regret": 99.02816036964056,
+      "latent_moment_approximation": 142.04347826086956,
+      "realized_moment_approximation": 91.86818644889371,
+      "latent_ratio": 1.4343746034528615,
+      "realized_ratio": 0.9276975973902681
+    },
+    {
+      "tax_rate": 0.09,
+      "exact_private_regret": 104.03415154887527,
+      "latent_moment_approximation": 143.60439560439562,
+      "realized_moment_approximation": 96.93260216564337,
+      "latent_ratio": 1.3803582137826176,
+      "realized_ratio": 0.9317382871153076
+    },
+    {
+      "tax_rate": 0.1,
+      "exact_private_regret": 109.12555999999226,
+      "latent_moment_approximation": 145.20000000000002,
+      "realized_moment_approximation": 102.11202723992285,
+      "latent_ratio": 1.3305773642766214,
+      "realized_ratio": 0.9357296974231344
+    },
+    {
+      "tax_rate": 0.11,
+      "exact_private_regret": 114.24172528556181,
+      "latent_moment_approximation": 146.8314606741573,
+      "realized_moment_approximation": 107.34228135122714,
+      "latent_ratio": 1.2852699861380181,
+      "realized_ratio": 0.9396066199360292
+    },
+    {
+      "tax_rate": 0.12,
+      "exact_private_regret": 119.33092604940515,
+      "latent_moment_approximation": 148.5,
+      "realized_moment_approximation": 112.56734740887403,
+      "latent_ratio": 1.2444385115935355,
+      "realized_ratio": 0.9433208233234452
+    },
+    {
+      "tax_rate": 0.13,
+      "exact_private_regret": 124.35037046255444,
+      "latent_moment_approximation": 150.20689655172416,
+      "realized_moment_approximation": 117.73959246812504,
+      "latent_ratio": 1.207932843247587,
+      "realized_ratio": 0.9468374885427454
+    },
+    {
+      "tax_rate": 0.14,
+      "exact_private_regret": 129.26598100423428,
+      "latent_moment_approximation": 151.95348837209303,
+      "realized_moment_approximation": 122.81977429208717,
+      "latent_ratio": 1.1755102710829666,
+      "realized_ratio": 0.9501322261118651
+    },
+    {
+      "tax_rate": 0.15,
+      "exact_private_regret": 134.051997571917,
+      "latent_moment_approximation": 153.74117647058824,
+      "realized_moment_approximation": 127.77685016392914,
+      "latent_ratio": 1.1468771764337808,
+      "realized_ratio": 0.9531887064598098
+    },
+    {
+      "tax_rate": 0.16,
+      "exact_private_regret": 138.6904277333922,
+      "latent_moment_approximation": 155.57142857142858,
+      "realized_moment_approximation": 132.58761066793434,
+      "latent_ratio": 1.1217171301143227,
+      "realized_ratio": 0.9559968401194245
+    },
+    {
+      "tax_rate": 0.17,
+      "exact_private_regret": 143.1703760691353,
+      "latent_moment_approximation": 157.44578313253012,
+      "realized_moment_approximation": 137.23616578625516,
+      "latent_ratio": 1.0997092237607966,
+      "realized_ratio": 0.958551409545683
+    },
+    {
+      "tax_rate": 0.18,
+      "exact_private_regret": 147.48728599473998,
+      "latent_moment_approximation": 159.3658536585366,
+      "realized_moment_approximation": 141.71331368753457,
+      "latent_ratio": 1.080539604371188,
+      "realized_ratio": 0.9608510505277632
+    },
+    {
+      "tax_rate": 0.19,
+      "exact_private_regret": 151.6421272838491,
+      "latent_moment_approximation": 161.33333333333334,
+      "realized_moment_approximation": 146.01582400137454,
+      "latent_ratio": 1.0639084021245884,
+      "realized_ratio": 0.9628974917244266
+    },
+    {
+      "tax_rate": 0.2,
+      "exact_private_regret": 155.6405609059717,
+      "latent_moment_approximation": 163.35,
+      "realized_moment_approximation": 150.14566725951445,
+      "latent_ratio": 1.0495336116058194,
+      "realized_ratio": 0.9646949765891879
+    },
+    {
+      "tax_rate": 0.21,
+      "exact_private_regret": 159.492109982749,
+      "latent_moment_approximation": 165.41772151898735,
+      "realized_moment_approximation": 154.1092207003711,
+      "latent_ratio": 1.0371530073611746,
+      "realized_ratio": 0.9662498083261917
+    },
+    {
+      "tax_rate": 0.22,
+      "exact_private_regret": 163.2093619308925,
+      "latent_moment_approximation": 167.53846153846155,
+      "realized_moment_approximation": 157.9164779994373,
+      "latent_ratio": 1.026524824044114,
+      "realized_ratio": 0.967569973506199
+    },
+    {
+      "tax_rate": 0.23,
+      "exact_private_regret": 166.80722249850044,
+      "latent_moment_approximation": 169.71428571428572,
+      "realized_moment_approximation": 161.58028696602824,
+      "latent_ratio": 1.017427681920736,
+      "realized_ratio": 0.9686648128649274
+    },
+    {
+      "tax_rate": 0.24,
+      "exact_private_regret": 170.30223771286413,
+      "latent_moment_approximation": 171.94736842105263,
+      "realized_moment_approximation": 165.1156351189812,
+      "latent_ratio": 1.0096600651305725,
+      "realized_ratio": 0.969544718474999
+    },
+    {
+      "tax_rate": 0.25,
+      "exact_private_regret": 173.71199502041407,
+      "latent_moment_approximation": 174.24,
+      "realized_moment_approximation": 168.53899860201926,
+      "latent_ratio": 1.003039542430699,
+      "realized_ratio": 0.9702208450384391
+    },
+    {
+      "tax_rate": 0.26,
+      "exact_private_regret": 177.05461035986525,
+      "latent_moment_approximation": 176.5945945945946,
+      "realized_moment_approximation": 171.8677653877373,
+      "latent_ratio": 0.9974018424917845,
+      "realized_ratio": 0.9707048296478379
+    },
+    {
+      "tax_rate": 0.27,
+      "exact_private_regret": 180.34830376636,
+      "latent_moment_approximation": 179.013698630137,
+      "realized_moment_approximation": 175.11973937983342,
+      "latent_ratio": 0.9925998464729007,
+      "realized_ratio": 0.9710085191968306
+    },
+    {
+      "tax_rate": 0.28,
+      "exact_private_regret": 183.6110625083349,
+      "latent_moment_approximation": 181.50000000000003,
+      "realized_moment_approximation": 178.3127280465856,
+      "latent_ratio": 0.9885025309505029,
+      "realized_ratio": 0.9711437078497991
+    },
+    {
+      "tax_rate": 0.29,
+      "exact_private_regret": 186.86038780584443,
+      "latent_moment_approximation": 184.05633802816902,
+      "realized_moment_approximation": 181.464212747133,
+      "latent_ratio": 0.9849938779930772,
+      "realized_ratio": 0.9711218887958304
+    },
+    {
+      "tax_rate": 0.3,
+      "exact_private_regret": 190.1131189157643,
+      "latent_moment_approximation": 186.6857142857143,
+      "realized_moment_approximation": 184.5910980387674,
+      "latent_ratio": 0.9819717616038449,
+      "realized_ratio": 0.9709540251167853
+    },
+    {
+      "tax_rate": 0.31,
+      "exact_private_regret": 193.38532679786226,
+      "latent_moment_approximation": 189.39130434782612,
+      "realized_moment_approximation": 187.70953402338588,
+      "latent_ratio": 0.9793468174852225,
+      "realized_ratio": 0.9706503442197089
+    },
+    {
+      "tax_rate": 0.32,
+      "exact_private_regret": 196.69226865959473,
+      "latent_moment_approximation": 192.17647058823533,
+      "realized_moment_approximation": 190.83480420685353,
+      "latent_ratio": 0.977041303645876,
+      "realized_ratio": 0.9702201591722021
+    },
+    {
+      "tax_rate": 0.33,
+      "exact_private_regret": 200.04839435281767,
+      "latent_moment_approximation": 195.04477611940302,
+      "realized_moment_approximation": 193.98127037267037,
+      "latent_ratio": 0.9749879610401173,
+      "realized_ratio": 0.9696717186869945
+    },
+    {
+      "tax_rate": 0.34,
+      "exact_private_regret": 203.46739577951337,
+      "latent_moment_approximation": 198.00000000000003,
+      "realized_moment_approximation": 197.16236554967452,
+      "latent_ratio": 0.9731288850551857,
+      "realized_ratio": 0.9690120856676651
+    },
+    {
+      "tax_rate": 0.35000000000000003,
+      "exact_private_regret": 206.96229106140504,
+      "latent_moment_approximation": 201.04615384615389,
+      "realized_moment_approximation": 200.39062620205107,
+      "latent_ratio": 0.9714144195789954,
+      "realized_ratio": 0.9682470423686788
+    },
+    {
+      "tax_rate": 0.36,
+      "exact_private_regret": 210.5455361458886,
+      "latent_moment_approximation": 204.1875,
+      "realized_moment_approximation": 203.67775519735355,
+      "latent_ratio": 0.969802085276778,
+      "realized_ratio": 0.9673810184995976
+    },
+    {
+      "tax_rate": 0.37,
+      "exact_private_regret": 214.22915766558773,
+      "latent_moment_approximation": 207.42857142857144,
+      "realized_moment_approximation": 207.03470782003038,
+      "latent_ratio": 0.9682555525535324,
+      "realized_ratio": 0.9664170371393239
+    },
+    {
+      "tax_rate": 0.38,
+      "exact_private_regret": 218.02490215950937,
+      "latent_moment_approximation": 210.7741935483871,
+      "realized_moment_approximation": 210.47179400251957,
+      "latent_ratio": 0.9667436676301427,
+      "realized_ratio": 0.96535667218663
+    },
+    {
+      "tax_rate": 0.39,
+      "exact_private_regret": 221.94439813139107,
+      "latent_moment_approximation": 214.22950819672133,
+      "realized_moment_approximation": 213.99879095962106,
+      "latent_ratio": 0.9652395374714413,
+      "realized_ratio": 0.9642000102788528
+    },
+    {
+      "tax_rate": 0.4,
+      "exact_private_regret": 225.99932880881067,
+      "latent_moment_approximation": 217.8,
+      "realized_moment_approximation": 217.62506146200363,
+      "latent_ratio": 0.9637196762838749,
+      "realized_ratio": 0.962945609657578
+    },
+    {
+      "tax_rate": 0.41000000000000003,
+      "exact_private_regret": 230.20161483395862,
+      "latent_moment_approximation": 221.49152542372883,
+      "realized_moment_approximation": 221.35967401179155,
+      "latent_ratio": 0.9621632132489069,
+      "realized_ratio": 0.9615904483183376
+    },
+    {
+      "tax_rate": 0.42,
+      "exact_private_regret": 234.5636074334867,
+      "latent_moment_approximation": 225.3103448275862,
+      "realized_moment_approximation": 225.21152214118982,
+      "latent_ratio": 0.9605511583525403,
+      "realized_ratio": 0.9601298539248089
+    },
+    {
+      "tax_rate": 0.43,
+      "exact_private_regret": 239.09829385947242,
+      "latent_moment_approximation": 229.26315789473682,
+      "realized_moment_approximation": 229.1894409111006,
+      "latent_ratio": 0.9588657208465231,
+      "realized_ratio": 0.9585574083845381
+    },
+    {
+      "tax_rate": 0.44,
+      "exact_private_regret": 243.81951805200677,
+      "latent_moment_approximation": 233.35714285714286,
+      "realized_moment_approximation": 233.30231941948625,
+      "latent_ratio": 0.9570896732203683,
+      "realized_ratio": 0.9568648206815125
+    },
+    {
+      "tax_rate": 0.45,
+      "exact_private_regret": 248.7422205303297,
+      "latent_moment_approximation": 237.6,
+      "realized_moment_approximation": 237.5592087276021,
+      "latent_ratio": 0.9552057527404315,
+      "realized_ratio": 0.9550417625970979
+    },
+    {
+      "tax_rate": 0.46,
+      "exact_private_regret": 253.88270245724755,
+      "latent_moment_approximation": 242.0,
+      "realized_moment_approximation": 241.96942507284191,
+      "latent_ratio": 0.9531960927537058,
+      "realized_ratio": 0.9530756634103036
+    },
+    {
+      "tax_rate": 0.47000000000000003,
+      "exact_private_regret": 259.2589196112244,
+      "latent_moment_approximation": 246.56603773584905,
+      "realized_moment_approximation": 246.54264856218975,
+      "latent_ratio": 0.9510416771989594,
+      "realized_ratio": 0.9509514616966562
+    },
+    {
+      "tax_rate": 0.48,
+      "exact_private_regret": 264.8908126014346,
+      "latent_moment_approximation": 251.30769230769232,
+      "realized_moment_approximation": 251.2890177364029,
+      "latent_ratio": 0.9487218142435917,
+      "realized_ratio": 0.9486513151156454
+    },
+    {
+      "tax_rate": 0.49,
+      "exact_private_regret": 270.8006800106451,
+      "latent_moment_approximation": 256.2352941176471,
+      "realized_moment_approximation": 256.2192204703516,
+      "latent_ratio": 0.946213628812064,
+      "realized_ratio": 0.9461542728041883
+    },
+    {
+      "tax_rate": 0.5,
+      "exact_private_regret": 277.0136011650996,
+      "latent_moment_approximation": 261.36,
+      "realized_moment_approximation": 261.344581638602,
+      "latent_ratio": 0.9434915791164706,
+      "realized_ratio": 0.9434359198949264
+    },
+    {
+      "tax_rate": 0.51,
+      "exact_private_regret": 283.5579147976671,
+      "latent_moment_approximation": 266.6938775510204,
+      "realized_moment_approximation": 266.6771478364885,
+      "latent_ratio": 0.9405270092401405,
+      "realized_ratio": 0.9404680099540728
+    },
+    {
+      "tax_rate": 0.52,
+      "exact_private_regret": 290.465758852422,
+      "latent_moment_approximation": 272.25,
+      "realized_moment_approximation": 272.2297692144367,
+      "latent_ratio": 0.9372877583767903,
+      "realized_ratio": 0.9372181089088352
+    },
+    {
+      "tax_rate": 0.53,
+      "exact_private_regret": 297.7736749101872,
+      "latent_moment_approximation": 278.0425531914894,
+      "realized_moment_approximation": 278.0161781658739,
+      "latent_ratio": 0.9337378573688591,
+      "realized_ratio": 0.933649283301244
+    },
+    {
+      "tax_rate": 0.54,
+      "exact_private_regret": 305.5232780097158,
+      "latent_moment_approximation": 284.0869565217392,
+      "realized_moment_approximation": 284.0510642159451,
+      "latent_ratio": 0.9298373543658597,
+      "realized_ratio": 0.9297198762279322
+    },
+    {
+      "tax_rate": 0.55,
+      "exact_private_regret": 313.7619887981264,
+      "latent_moment_approximation": 290.40000000000003,
+      "realized_moment_approximation": 290.35014400040296,
+      "latent_ratio": 0.9255423230595423,
+      "realized_ratio": 0.9253834255468512
+    },
+    {
+      "tax_rate": 0.56,
+      "exact_private_regret": 322.5438197687329,
+      "latent_moment_approximation": 297.00000000000006,
+      "realized_moment_approximation": 296.9302247157102,
+      "latent_ratio": 0.920805117930804,
+      "realized_ratio": 0.9205887898537698
+    },
+    {
+      "tax_rate": 0.5700000000000001,
+      "exact_private_regret": 331.9302006541653,
+      "latent_moment_approximation": 303.9069767441861,
+      "realized_moment_approximation": 303.80925888215717,
+      "latent_ratio": 0.9155749496287134,
+      "realized_ratio": 0.9152805568261412
+    },
+    {
+      "tax_rate": 0.58,
+      "exact_private_regret": 341.9908197018435,
+      "latent_moment_approximation": 311.1428571428571,
+      "realized_moment_approximation": 311.0063877187861,
+      "latent_ratio": 0.9097988578000998,
+      "realized_ratio": 0.9093998136848513
+    },
+    {
+      "tax_rate": 0.59,
+      "exact_private_regret": 352.8044475032424,
+      "latent_moment_approximation": 318.7317073170732,
+      "realized_moment_approximation": 318.54196991940756,
+      "latent_ratio": 0.9034231557246566,
+      "realized_ratio": 0.9028853580891438
+    },
+    {
+      "tax_rate": 0.6,
+      "exact_private_regret": 364.45969832223403,
+      "latent_moment_approximation": 326.7,
+      "realized_moment_approximation": 326.43759219300534,
+      "latent_ratio": 0.8963954080627891,
+      "realized_ratio": 0.8956754167765025
+    },
+    {
+      "tax_rate": 0.61,
+      "exact_private_regret": 377.05567065820986,
+      "latent_moment_approximation": 335.0769230769231,
+      "realized_moment_approximation": 334.71605765479154,
+      "latent_ratio": 0.888666977191972,
+      "realized_ratio": 0.8877099158076369
+    },
+    {
+      "tax_rate": 0.62,
+      "exact_private_regret": 390.70239445569496,
+      "latent_moment_approximation": 343.89473684210526,
+      "realized_moment_approximation": 343.40134810937354,
+      "latent_ratio": 0.8801961332261617,
+      "realized_ratio": 0.8789333082736321
+    },
+    {
+      "tax_rate": 0.63,
+      "exact_private_regret": 405.520997516928,
+      "latent_moment_approximation": 353.1891891891892,
+      "realized_moment_approximation": 352.51855655842917,
+      "latent_ratio": 0.8709516679822374,
+      "realized_ratio": 0.8692979123570875
+    },
+    {
+      "tax_rate": 0.64,
+      "exact_private_regret": 421.643489113257,
+      "latent_moment_approximation": 363.00000000000006,
+      "realized_moment_approximation": 362.093787017516,
+      "latent_ratio": 0.8609168868311285,
+      "realized_ratio": 0.8587676469972825
+    },
+    {
+      "tax_rate": 0.65,
+      "exact_private_regret": 439.2120456038498,
+      "latent_moment_approximation": 373.3714285714286,
+      "realized_moment_approximation": 372.1540200895214,
+      "latent_ratio": 0.8500937811441389,
+      "realized_ratio": 0.8473219799285473
+    },
+    {
+      "tax_rate": 0.66,
+      "exact_private_regret": 458.3776723869799,
+      "latent_moment_approximation": 384.35294117647067,
+      "realized_moment_approximation": 382.72694489054214,
+      "latent_ratio": 0.8385071183222582,
+      "realized_ratio": 0.834959833225536
+    },
+    {
+      "tax_rate": 0.67,
+      "exact_private_regret": 479.29811028133884,
+      "latent_moment_approximation": 396.00000000000006,
+      "realized_moment_approximation": 393.8407610596609,
+      "latent_ratio": 0.8262081395805121,
+      "realized_ratio": 0.8217031375910994
+    },
+    {
+      "tax_rate": 0.68,
+      "exact_private_regret": 502.134854181491,
+      "latent_moment_approximation": 408.37500000000006,
+      "realized_moment_approximation": 405.52395893956,
+      "latent_ratio": 0.8132775420771678,
+      "realized_ratio": 0.8075997026746682
+    },
+    {
+      "tax_rate": 0.6900000000000001,
+      "exact_private_regret": 527.0491593513804,
+      "latent_moment_approximation": 421.5483870967743,
+      "realized_moment_approximation": 417.8050918584994,
+      "latent_ratio": 0.7998274536962703,
+      "realized_ratio": 0.7927250891978965
+    },
+    {
+      "tax_rate": 0.7000000000000001,
+      "exact_private_regret": 554.1969277759177,
+      "latent_moment_approximation": 435.60000000000014,
+      "realized_moment_approximation": 430.7125620904519,
+      "latent_ratio": 0.7860021919430944,
+      "realized_ratio": 0.7771832366862288
+    },
+    {
+      "tax_rate": 0.71,
+      "exact_private_regret": 583.7223951650049,
+      "latent_moment_approximation": 450.6206896551724,
+      "realized_moment_approximation": 444.274451898147,
+      "latent_ratio": 0.7719777301465234,
+      "realized_ratio": 0.7611057166524523
+    },
+    {
+      "tax_rate": 0.72,
+      "exact_private_regret": 615.7505797347168,
+      "latent_moment_approximation": 466.7142857142857,
+      "realized_moment_approximation": 458.51844354835595,
+      "latent_ratio": 0.7579599615080506,
+      "realized_ratio": 0.7446496335348949
+    },
+    {
+      "tax_rate": 0.73,
+      "exact_private_regret": 650.3785074950597,
+      "latent_moment_approximation": 484.0,
+      "realized_moment_approximation": 473.47188795287514,
+      "latent_ratio": 0.7441820331119667,
+      "realized_ratio": 0.7279943640457271
+    },
+    {
+      "tax_rate": 0.74,
+      "exact_private_regret": 687.6652954874127,
+      "latent_moment_approximation": 502.61538461538464,
+      "realized_moment_approximation": 489.16210148816674,
+      "latent_ratio": 0.7309011926494475,
+      "realized_ratio": 0.7113374845264684
+    },
+    {
+      "tax_rate": 0.75,
+      "exact_private_regret": 727.6212534497256,
+      "latent_moment_approximation": 522.72,
+      "realized_moment_approximation": 505.6169958060486,
+      "latent_ratio": 0.7183957278896568,
+      "realized_ratio": 0.6948903614467933
+    },
+    {
+      "tax_rate": 0.76,
+      "exact_private_regret": 770.1962540506024,
+      "latent_moment_approximation": 544.5,
+      "realized_moment_approximation": 522.8661778767641,
+      "latent_ratio": 0.7069626697564099,
+      "realized_ratio": 0.6788739559909772
+    },
+    {
+      "tax_rate": 0.77,
+      "exact_private_regret": 815.2677195254032,
+      "latent_moment_approximation": 568.1739130434784,
+      "realized_moment_approximation": 540.9426998427801,
+      "latent_ratio": 0.6969169751676577,
+      "realized_ratio": 0.6635154157185108
+    },
+    {
+      "tax_rate": 0.78,
+      "exact_private_regret": 862.6286748769385,
+      "latent_moment_approximation": 594.0000000000001,
+      "realized_moment_approximation": 559.8856947252676,
+      "latent_ratio": 0.6885929221918566,
+      "realized_ratio": 0.6490460044179962
+    },
+    {
+      "tax_rate": 0.79,
+      "exact_private_regret": 911.9764208568819,
+      "latent_moment_approximation": 622.2857142857144,
+      "realized_moment_approximation": 579.7442112061478,
+      "latent_ratio": 0.6823484687257839,
+      "realized_ratio": 0.6357008777282063
+    },
+    {
+      "tax_rate": 0.8,
+      "exact_private_regret": 962.9024797541512,
+      "latent_moment_approximation": 653.4000000000002,
+      "realized_moment_approximation": 600.5826690380477,
+      "latent_ratio": 0.6785733900766635,
+      "realized_ratio": 0.6237211780692359
+    },
+    {
+      "tax_rate": 0.81,
+      "exact_private_regret": 1014.8845603009195,
+      "latent_moment_approximation": 687.7894736842107,
+      "realized_moment_approximation": 622.4885128479555,
+      "latent_ratio": 0.6777021747973749,
+      "realized_ratio": 0.6133589347968638
+    },
+    {
+      "tax_rate": 0.8200000000000001,
+      "exact_private_regret": 1067.2813732772865,
+      "latent_moment_approximation": 726.0000000000003,
+      "realized_moment_approximation": 645.5828734654265,
+      "latent_ratio": 0.6802329902663643,
+      "realized_ratio": 0.6048853560360037
+    },
+    {
+      "tax_rate": 0.8300000000000001,
+      "exact_private_regret": 1119.3312086355284,
+      "latent_moment_approximation": 768.7058823529416,
+      "realized_moment_approximation": 670.0353976622969,
+      "latent_ratio": 0.6867546231378635,
+      "realized_ratio": 0.5986033378619668
+    },
+    {
+      "tax_rate": 0.84,
+      "exact_private_regret": 1170.1552662282807,
+      "latent_moment_approximation": 816.7499999999999,
+      "realized_moment_approximation": 696.0849560066488,
+      "latent_ratio": 0.6979842962486514,
+      "realized_ratio": 0.5948654645210583
+    },
+    {
+      "tax_rate": 0.85,
+      "exact_private_regret": 1218.7668338852332,
+      "latent_moment_approximation": 871.1999999999999,
+      "realized_moment_approximation": 724.0688175955937,
+      "latent_ratio": 0.7148208958252943,
+      "realized_ratio": 0.5940995418191505
+    },
+    {
+      "tax_rate": 0.86,
+      "exact_private_regret": 1264.0875646818838,
+      "latent_moment_approximation": 933.4285714285714,
+      "realized_moment_approximation": 754.4643277942471,
+      "latent_ratio": 0.7384208163328266,
+      "realized_ratio": 0.59684498833284
+    },
+    {
+      "tax_rate": 0.87,
+      "exact_private_regret": 1304.9723870295193,
+      "latent_moment_approximation": 1005.2307692307693,
+      "realized_moment_approximation": 787.9495803636057,
+      "latent_ratio": 0.7703080764175819,
+      "realized_ratio": 0.6038055580296212
+    },
+    {
+      "tax_rate": 0.88,
+      "exact_private_regret": 1340.2451115319789,
+      "latent_moment_approximation": 1089.0,
+      "realized_moment_approximation": 825.4938809984125,
+      "latent_ratio": 0.8125379384933619,
+      "realized_ratio": 0.6159275448166526
+    },
+    {
+      "tax_rate": 0.89,
+      "exact_private_regret": 1368.747814234571,
+      "latent_moment_approximation": 1188.0000000000002,
+      "realized_moment_approximation": 868.4966400235718,
+      "latent_ratio": 0.8679465915087884,
+      "realized_ratio": 0.6345191064354329
+    },
+    {
+      "tax_rate": 0.9,
+      "exact_private_regret": 1389.4090442000165,
+      "latent_moment_approximation": 1306.8000000000004,
+      "realized_moment_approximation": 919.0082451593157,
+      "latent_ratio": 0.9405437552426613,
+      "realized_ratio": 0.6614382200804338
+    },
+    {
+      "tax_rate": 0.91,
+      "exact_private_regret": 1401.3397956846088,
+      "latent_moment_approximation": 1452.0000000000007,
+      "realized_moment_approximation": 980.0963107859646,
+      "latent_ratio": 1.0361512635774697,
+      "realized_ratio": 0.6993994702813314
+    },
+    {
+      "tax_rate": 0.92,
+      "exact_private_regret": 1403.9741533676943,
+      "latent_moment_approximation": 1633.500000000001,
+      "realized_moment_approximation": 1056.4841441622973,
+      "latent_ratio": 1.1634829573477161,
+      "realized_ratio": 0.7524954370620874
+    },
+    {
+      "tax_rate": 0.93,
+      "exact_private_regret": 1397.2887034246678,
+      "latent_moment_approximation": 1866.8571428571443,
+      "realized_moment_approximation": 1155.7333087008776,
+      "latent_ratio": 1.3360568494410592,
+      "realized_ratio": 0.8271256368624802
+    },
+    {
+      "tax_rate": 0.9400000000000001,
+      "exact_private_regret": 1382.1746501068728,
+      "latent_moment_approximation": 2178.0000000000023,
+      "realized_moment_approximation": 1290.604789644768,
+      "latent_ratio": 1.5757777064075038,
+      "realized_ratio": 0.9337494285146783
+    },
+    {
+      "tax_rate": 0.95,
+      "exact_private_regret": 1361.1384471620918,
+      "latent_moment_approximation": 2613.5999999999976,
+      "realized_moment_approximation": 1484.2486439999798,
+      "latent_ratio": 1.9201573546388524,
+      "realized_ratio": 1.0904464913870935
+    },
+    {
+      "tax_rate": 0.9500000000000001,
+      "exact_private_regret": 1361.1384471620913,
+      "latent_moment_approximation": 2613.6000000000035,
+      "realized_moment_approximation": 1484.2486439999827,
+      "latent_ratio": 1.9201573546388575,
+      "realized_ratio": 1.0904464913870962
+    },
+    {
+      "tax_rate": 0.96,
+      "exact_private_regret": 1339.8038522237928,
+      "latent_moment_approximation": 3266.9999999999973,
+      "realized_moment_approximation": 1783.1720131544819,
+      "latent_ratio": 2.438416634328573,
+      "realized_ratio": 1.3309202016360762
+    },
+    {
+      "tax_rate": 0.97,
+      "exact_private_regret": 1330.7302233098294,
+      "latent_moment_approximation": 4355.999999999996,
+      "realized_moment_approximation": 2296.135378309331,
+      "latent_ratio": 3.273390747198656,
+      "realized_ratio": 1.7254702253611696
+    },
+    {
+      "tax_rate": 0.98,
+      "exact_private_regret": 1365.8967268403026,
+      "latent_moment_approximation": 6533.9999999999945,
+      "realized_moment_approximation": 3349.726945825744,
+      "latent_ratio": 4.783670589148381,
+      "realized_ratio": 2.45240132727647
+    },
+    {
+      "tax_rate": 0.99,
+      "exact_private_regret": 1561.5556891908564,
+      "latent_moment_approximation": 13067.999999999989,
+      "realized_moment_approximation": 6577.365061724093,
+      "latent_ratio": 8.368577624517107,
+      "realized_ratio": 4.212059235064651
     }
+  ],
+  "bias_curve": [
+    {
+      "mean_error": -0.1,
+      "std_error": 0.06633249580710798,
+      "optimal_tax": 0.526,
+      "at_boundary": false
+    },
+    {
+      "mean_error": -0.09000000000000001,
+      "std_error": 0.0793725393319377,
+      "optimal_tax": 0.5155000000000001,
+      "at_boundary": false
+    },
+    {
+      "mean_error": -0.08,
+      "std_error": 0.08944271909999159,
+      "optimal_tax": 0.505,
+      "at_boundary": false
+    },
+    {
+      "mean_error": -0.07,
+      "std_error": 0.09746794344808962,
+      "optimal_tax": 0.495,
+      "at_boundary": false
+    },
+    {
+      "mean_error": -0.060000000000000005,
+      "std_error": 0.10392304845413264,
+      "optimal_tax": 0.485,
+      "at_boundary": false
+    },
+    {
+      "mean_error": -0.05,
+      "std_error": 0.10908712114635714,
+      "optimal_tax": 0.47524999999999995,
+      "at_boundary": false
+    },
+    {
+      "mean_error": -0.04000000000000001,
+      "std_error": 0.1131370849898476,
+      "optimal_tax": 0.4655,
+      "at_boundary": false
+    },
+    {
+      "mean_error": -0.03,
+      "std_error": 0.1161895003862225,
+      "optimal_tax": 0.45625000000000004,
+      "at_boundary": false
+    },
+    {
+      "mean_error": -0.020000000000000004,
+      "std_error": 0.11832159566199231,
+      "optimal_tax": 0.447,
+      "at_boundary": false
+    },
+    {
+      "mean_error": -0.010000000000000009,
+      "std_error": 0.11958260743101398,
+      "optimal_tax": 0.438,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.0,
+      "std_error": 0.12,
+      "optimal_tax": 0.42925,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.009999999999999995,
+      "std_error": 0.11958260743101398,
+      "optimal_tax": 0.421,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.01999999999999999,
+      "std_error": 0.11832159566199232,
+      "optimal_tax": 0.41275000000000006,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.03,
+      "std_error": 0.1161895003862225,
+      "optimal_tax": 0.40475000000000005,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.04000000000000001,
+      "std_error": 0.1131370849898476,
+      "optimal_tax": 0.397,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.04999999999999999,
+      "std_error": 0.10908712114635714,
+      "optimal_tax": 0.3895,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.06,
+      "std_error": 0.10392304845413264,
+      "optimal_tax": 0.38225,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.07,
+      "std_error": 0.09746794344808962,
+      "optimal_tax": 0.375,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.07999999999999999,
+      "std_error": 0.0894427190999916,
+      "optimal_tax": 0.36824999999999997,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.09,
+      "std_error": 0.07937253933193772,
+      "optimal_tax": 0.3615,
+      "at_boundary": false
+    },
+    {
+      "mean_error": 0.1,
+      "std_error": 0.06633249580710798,
+      "optimal_tax": 0.355,
+      "at_boundary": false
+    }
+  ],
+  "nonlinear_examples": [
+    {
+      "label": "Progressive",
+      "status": "synthetic schedule and assumed perceived budget",
+      "true_budget": {
+        "segments": [
+          {
+            "lower": 0,
+            "upper": 30000,
+            "slope": 0.9,
+            "intercept": 0.0,
+            "lower_closed": true,
+            "upper_closed": false
+          },
+          {
+            "lower": 30000,
+            "upper": 100000,
+            "slope": 0.65,
+            "intercept": 7500,
+            "lower_closed": true,
+            "upper_closed": true
+          }
+        ]
+      },
+      "perceived_budget": {
+        "segments": [
+          {
+            "lower": 0,
+            "upper": 100000,
+            "slope": 0.75,
+            "intercept": 0.0,
+            "lower_closed": true,
+            "upper_closed": true
+          }
+        ]
+      },
+      "outcome": {
+        "informed_choice": {
+          "earnings": 53671.25418771942,
+          "hours": 1951.6819704625245,
+          "net_income": 42386.31522201763,
+          "utility": 33730.312197005725,
+          "net_revenue": 11284.938965701796,
+          "at_domain_boundary": false
+        },
+        "perceived_choice": {
+          "earnings": 56266.58447966195,
+          "hours": 2046.0576174422526,
+          "net_income": 42199.93835974646,
+          "utility": 31729.27696221538,
+          "net_revenue": 14066.646119915487,
+          "at_domain_boundary": false
+        },
+        "realized_choice": {
+          "earnings": 56266.58447966195,
+          "hours": 2046.0576174422526,
+          "net_income": 44073.27991178027,
+          "utility": 33602.61851424919,
+          "net_revenue": 12193.304567881678,
+          "at_domain_boundary": false
+        },
+        "private_regret": 127.69368275653687,
+        "revenue_change": 908.3656021798815,
+        "social_loss": -780.6719194233447
+      }
+    },
+    {
+      "label": "Earnings subsidy",
+      "status": "synthetic schedule and assumed perceived budget",
+      "true_budget": {
+        "segments": [
+          {
+            "lower": 0,
+            "upper": 15000,
+            "slope": 1.2,
+            "intercept": 0.0,
+            "lower_closed": true,
+            "upper_closed": false
+          },
+          {
+            "lower": 15000,
+            "upper": 100000,
+            "slope": 0.7,
+            "intercept": 7500,
+            "lower_closed": true,
+            "upper_closed": true
+          }
+        ]
+      },
+      "perceived_budget": {
+        "segments": [
+          {
+            "lower": 0,
+            "upper": 100000,
+            "slope": 0.8,
+            "intercept": 0.0,
+            "lower_closed": true,
+            "upper_closed": true
+          }
+        ]
+      },
+      "outcome": {
+        "informed_choice": {
+          "earnings": 55000.00000000002,
+          "hours": 2000.0000000000007,
+          "net_income": 46000.000000000015,
+          "utility": 36447.36842105263,
+          "net_revenue": 9000.000000000007,
+          "at_domain_boundary": false
+        },
+        "perceived_choice": {
+          "earnings": 57477.78611925891,
+          "hours": 2090.101313427597,
+          "net_income": 45982.228895407134,
+          "utility": 34573.10443263693,
+          "net_revenue": 11495.557223851778,
+          "at_domain_boundary": false
+        },
+        "realized_choice": {
+          "earnings": 57477.78611925891,
+          "hours": 2090.101313427597,
+          "net_income": 47734.45028348124,
+          "utility": 36325.325820711034,
+          "net_revenue": 9743.335835777674,
+          "at_domain_boundary": false
+        },
+        "private_regret": 122.04260034159961,
+        "revenue_change": 743.335835777667,
+        "social_loss": -621.2932354360673
+      }
+    },
+    {
+      "label": "Benefit cliff",
+      "status": "synthetic schedule and assumed perceived budget",
+      "true_budget": {
+        "segments": [
+          {
+            "lower": 0,
+            "upper": 45000,
+            "slope": 0.7,
+            "intercept": 8000,
+            "lower_closed": true,
+            "upper_closed": true
+          },
+          {
+            "lower": 45000,
+            "upper": 100000,
+            "slope": 0.7,
+            "intercept": 0.0,
+            "lower_closed": false,
+            "upper_closed": true
+          }
+        ]
+      },
+      "perceived_budget": {
+        "segments": [
+          {
+            "lower": 0,
+            "upper": 100000,
+            "slope": 0.7,
+            "intercept": 0.0,
+            "lower_closed": true,
+            "upper_closed": true
+          }
+        ]
+      },
+      "outcome": {
+        "informed_choice": {
+          "earnings": 45000,
+          "hours": 1636.3636363636363,
+          "net_income": 39500.0,
+          "utility": 35245.17785315963,
+          "net_revenue": 5500.0,
+          "at_domain_boundary": false
+        },
+        "perceived_choice": {
+          "earnings": 55000.00000000002,
+          "hours": 2000.0000000000007,
+          "net_income": 38500.000000000015,
+          "utility": 28947.368421052633,
+          "net_revenue": 16500.000000000007,
+          "at_domain_boundary": false
+        },
+        "realized_choice": {
+          "earnings": 55000.00000000002,
+          "hours": 2000.0000000000007,
+          "net_income": 38500.000000000015,
+          "utility": 28947.368421052633,
+          "net_revenue": 16500.000000000007,
+          "at_domain_boundary": false
+        },
+        "private_regret": 6297.809432106995,
+        "revenue_change": 11000.000000000007,
+        "social_loss": -4702.1905678930125
+      }
+    }
+  ],
+  "household_fixture": {
+    "status": "executed household model; finite grid, no population estimate",
+    "artifact_sha256": "eb821d6af832a4585a9ed8d246b479349a374719260c0c6d8112dccf27f37da3",
+    "package_versions": {
+      "policyengine": "5.3.0",
+      "policyengine-us": "1.764.6",
+      "policyengine-core": "3.30.1",
+      "numpy": "2.5.2"
+    },
+    "configuration": {
+      "axes": [
+        [
+          {
+            "count": 401,
+            "index": 0,
+            "max": 100000.0,
+            "min": 0,
+            "name": "employment_income",
+            "period": 2024
+          }
+        ]
+      ],
+      "extra_variables": [
+        "household_health_benefits",
+        "household_health_costs"
+      ],
+      "household": {
+        "state_code": "TX"
+      },
+      "people": [
+        {
+          "age": 40,
+          "employment_income": 0,
+          "is_tax_unit_head": true
+        }
+      ],
+      "reform": {
+        "gov.simulation.include_health_benefits_in_net_income": false
+      },
+      "spm_unit": {},
+      "tax_unit": {
+        "filing_status": "SINGLE"
+      },
+      "year": 2024
+    },
+    "measure": "household_net_income",
+    "discretization": {
+      "choice_set": "supplied earnings grid only",
+      "minimum_earnings": 0.0,
+      "maximum_earnings": 100000.0,
+      "number_of_points": 401,
+      "maximum_grid_gap": 250.0,
+      "continuous_utility_error_bound": null,
+      "limitation": "No finite continuous-choice error bound is certified: unobserved cliffs and outcomes between grid points are unknown."
+    },
+    "selected_outcomes": [
+      {
+        "earnings": 0,
+        "net_income": 3495.0
+      },
+      {
+        "earnings": 25000,
+        "net_income": 22047.5
+      },
+      {
+        "earnings": 50000,
+        "net_income": 42159.0
+      },
+      {
+        "earnings": 100000,
+        "net_income": 78509.0
+      }
+    ]
+  },
+  "validation": {
+    "baseline_private_quadrature_difference": 1.7621459846850485e-12,
+    "baseline_social_quadrature_difference": 4.774847184307873e-12
   }
 }

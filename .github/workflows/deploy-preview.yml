@@ -4,38 +4,48 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   deploy-preview:
     runs-on: ubuntu-latest
     if: github.event.pull_request.head.repo.full_name == github.repository
-    
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
+
+    - name: Set up locked Python environment
+      uses: astral-sh/setup-uv@v6
       with:
-        node-version: '22'
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
+        version: '0.11.7'
+        python-version: '3.13.9'
+        enable-cache: true
+
+    - name: Install paper dependencies
+      run: uv sync --locked --extra paper
+
+    - name: Setup Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
       with:
-        python-version: '3.13'
-    
-    - name: Install dependencies
+        version: '1.9.36'
+
+    - name: Generate paper inputs from the model
       run: |
-        python -m pip install --upgrade pip
-        pip install -e ".[research]"
-        npm install -g mystmd
-    
-    - name: Build MyST Book
-      run: |
-        cd paper && myst build --html
-    
+        uv run --no-sync python -m taxuncertainty.pipeline --check
+        uv run --no-sync python -m taxuncertainty.pipeline
+
+    - name: Build Quarto HTML paper
+      run: cd paper && quarto render index.qmd --to html
+
     - name: Deploy Preview to Netlify
       uses: nwtgck/actions-netlify@v3.0
       with:
-        publish-dir: 'paper/_build/html'
+        publish-dir: 'paper/_build'
         production-deploy: false
         github-token: ${{ secrets.GITHUB_TOKEN }}
         deploy-message: "Deploy PR Preview ${{ github.event.pull_request.number }}"
@@ -46,4 +56,4 @@ jobs:
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      if: env.NETLIFY_AUTH_TOKEN != ''
+      if: env.NETLIFY_AUTH_TOKEN != '' && env.NETLIFY_SITE_ID != ''

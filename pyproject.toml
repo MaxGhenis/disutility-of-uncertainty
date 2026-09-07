@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "taxuncertainty"
-version = "0.1.0"
-description = "Analyzing welfare effects of tax rate uncertainty using economic models"
+version = "0.2.0"
+description = "Exact private and social welfare accounting for tax misperception"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [
@@ -29,11 +29,11 @@ dependencies = [
 
 [project.optional-dependencies]
 policyengine = [
-    "policyengine-us>=0.700.0",
+    "policyengine[us]==5.3.0",
 ]
 paper = [
-    "jupyter-book>=0.15.0",
-    "sphinx>=4.0.0",
+    # Quarto is an external CLI dependency rather than a Python package.
+    "matplotlib>=3.9",
 ]
 dev = [
     "pytest>=7.0.0",
@@ -43,6 +43,7 @@ dev = [
     "mypy>=0.950",
     "pre-commit>=2.19.0",
     "isort>=5.10.0",
+    "matplotlib>=3.9",
 ]
 research = [
     "jupyterlab>=3.4.0",
@@ -57,8 +58,15 @@ python_classes = "Test*"
 python_functions = "test_*"
 addopts = "--cov=src/taxuncertainty --cov-report=term-missing --cov-report=html"
 markers = [
-    "slow: marks tests that run PolicyEngine microsimulation (deselect with '-m \"not slow\"')",
+    "policyengine: optional live PolicyEngine validation (enable with --run-policyengine)",
+    "slow: optional integration tests (enable with --run-policyengine)",
 ]
+
+[tool.setuptools.package-data]
+"taxuncertainty.data" = ["*.json", "parameters.yaml"]
+
+[tool.isort]
+profile = "black"
 
 [tool.black]
 line-length = 88

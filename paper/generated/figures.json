@@ -1,0 +1,8 @@
+{
+  "model_source_sha256": "82b3cf0cf72483113efb895b7009db9d402d5766267b7fd0780536f8af97e17d",
+  "seed": 42,
+  "files": {
+    "welfare.png": "9b1ced04b36b9cb5b74450c4d16c3864c91d80bfbf992c59c3a317528b104270",
+    "robustness.png": "038c9009fb7800a1c8cb8a1fd61e66eb89de7d8f494663e44a8cb402ae859ff3"
+  }
+}

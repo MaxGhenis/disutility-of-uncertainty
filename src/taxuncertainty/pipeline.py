@@ -1,186 +1,606 @@
-"""Results pipeline: generate all paper results and write to JSON.
+"""Reproduce exact illustrative results and the paper's numerical artifacts.
 
-This module orchestrates the calibration, optimal tax computation,
-sensitivity analysis, and empirical microsimulation results, then
-serializes everything to a single JSON file that the paper can reference.
+The default pipeline never downloads survey data or reports national welfare
+estimates. Run ``python -m taxuncertainty.pipeline --check`` to detect drift.
 """
 
+import argparse
 import json
+import sys
+from dataclasses import asdict, replace
+from hashlib import sha256
 from pathlib import Path
 
 import numpy as np
 
-from taxuncertainty.analysis.calibration import Calibration
-from taxuncertainty.analysis.welfare import PopulationWelfare
+from taxuncertainty.analysis.calibration import (
+    Illustration,
+    beliefs_with_rmse,
+    private_regret_approx,
+)
+from taxuncertainty.analysis.policyengine_budgets import load_household_budget
+from taxuncertainty.models.accounting import evaluate_worker
+from taxuncertainty.models.beliefs import NormalBeliefs
 from taxuncertainty.models.planner import SocialPlanner
-from taxuncertainty.models.preferences import QuasilinearIsoelastic
+from taxuncertainty.models.schedules import (
+    BudgetSegment,
+    PiecewiseLinearBudget,
+    compare_budgets,
+)
+
+DATA_DIR = Path(__file__).parent / "data"
+RESULTS_PATH = DATA_DIR / "results.json"
 
 
-def _generate_empirical_section(cal, prefs):
-    """Generate empirical results from PolicyEngine-US microsimulation.
+def model_source_hash():
+    root = Path(__file__).parent
+    digest = sha256()
+    for path in sorted(root.rglob("*.py")):
+        digest.update(str(path.relative_to(root)).encode())
+        digest.update(path.read_bytes())
+    return digest.hexdigest()
 
-    Parameters
-    ----------
-    cal : Calibration
-        Calibration instance for baseline comparison.
-    prefs : QuasilinearIsoelastic
-        Preference parameters.
 
-    Returns
-    -------
-    dict
-        Empirical results section for results.json.
-    """
-    from taxuncertainty.analysis.empirical import EmpiricalMTR
+def _scenarios(inputs):
+    return [
+        ("informed", "No error", NormalBeliefs()),
+        ("unbiased", "Unbiased", beliefs_with_rmse(0, inputs.error_rmse)),
+        ("bias_minus_3", "Bias -3 pp", beliefs_with_rmse(-0.03, inputs.error_rmse)),
+        ("bias_minus_6", "Bias -6 pp", beliefs_with_rmse(-0.06, inputs.error_rmse)),
+        ("bias_plus_3", "Bias +3 pp", beliefs_with_rmse(0.03, inputs.error_rmse)),
+        ("underestimate_1", "Certain -1 pp", NormalBeliefs(-0.01, 0)),
+    ]
 
-    emp = EmpiricalMTR(year=2024, cache=True)
-    stats = emp.summary_stats()
-    quintiles_raw = emp.quintile_results()
 
-    welfare = PopulationWelfare()
-    sigma = cal.MISPERCEPTION_STD_CENTRAL
-
-    quintiles_with_dwl = []
-    for q in quintiles_raw:
-        per_worker_dwl = cal.per_worker_dwl(
-            prefs.frisch_elasticity, sigma,
-            tau=q["mean_mtr"], earnings=q["mean_earnings"],
-        )
-        quintile_total_dwl = per_worker_dwl * q["weighted_workers"]
-        quintiles_with_dwl.append({
-            **q,
-            "per_worker_dwl": per_worker_dwl,
-            "quintile_total_dwl": quintile_total_dwl,
-        })
-
-    quintile_dwl_sum = sum(q["quintile_total_dwl"] for q in quintiles_with_dwl)
-    for q in quintiles_with_dwl:
-        q["share_of_total_dwl"] = (
-            q["quintile_total_dwl"] / quintile_dwl_sum if quintile_dwl_sum > 0 else 0.0
+def _budget_examples(inputs):
+    def linear(slope):
+        return PiecewiseLinearBudget(
+            (BudgetSegment(0, 100000, slope, upper_closed=True),)
         )
 
-    # Aggregate DWL from microsimulation
-    aggregate_dwl = welfare.weighted_total_dwl(
-        emp.earnings, emp.mtr, emp.weights, sigma, prefs
-    )
+    examples = [
+        (
+            "Progressive",
+            PiecewiseLinearBudget(
+                (
+                    BudgetSegment(0, 30000, 0.9),
+                    BudgetSegment(30000, 100000, 0.65, 7500, upper_closed=True),
+                )
+            ),
+            linear(0.75),
+        ),
+        (
+            "Earnings subsidy",
+            PiecewiseLinearBudget(
+                (
+                    BudgetSegment(0, 15000, 1.2),
+                    BudgetSegment(15000, 100000, 0.7, 7500, upper_closed=True),
+                )
+            ),
+            linear(0.8),
+        ),
+        (
+            "Benefit cliff",
+            PiecewiseLinearBudget(
+                (
+                    BudgetSegment(0, 45000, 0.7, 8000, upper_closed=True),
+                    BudgetSegment(
+                        45000, 100000, 0.7, lower_closed=False, upper_closed=True
+                    ),
+                )
+            ),
+            linear(0.7),
+        ),
+    ]
+    return [
+        {
+            "label": label,
+            "status": "synthetic schedule and assumed perceived budget",
+            "true_budget": asdict(true),
+            "perceived_budget": asdict(perceived),
+            "outcome": asdict(
+                compare_budgets(true, perceived, inputs.hourly_wage, inputs.preferences)
+            ),
+        }
+        for label, true, perceived in examples
+    ]
 
-    # Stylized baseline comparison
-    stylized_dwl = cal.per_worker_dwl(
-        prefs.frisch_elasticity, sigma
-    ) * stats["total_weighted_workers"]
 
+def _household_fixture():
+    path = DATA_DIR / "household_budget.json"
+    sample = load_household_budget(path)
     return {
-        "mtr_distribution": stats,
-        "aggregate_dwl": aggregate_dwl,
-        "aggregate_dwl_billions": aggregate_dwl / 1e9,
-        "quintiles": quintiles_with_dwl,
-        "comparison": {
-            "empirical_dwl_billions": aggregate_dwl / 1e9,
-            "stylized_dwl_billions": stylized_dwl / 1e9,
-            "ratio": aggregate_dwl / stylized_dwl if stylized_dwl > 0 else None,
+        "status": "executed household model; finite grid, no population estimate",
+        "artifact_sha256": json.loads(path.read_text())["artifact_sha256"],
+        "package_versions": sample.provenance["package_versions"],
+        "configuration": sample.provenance["configuration"],
+        "measure": sample.provenance["net_income_measure"],
+        "discretization": sample.budget.discretization(),
+        "selected_outcomes": [
+            {"earnings": y, "net_income": sample.budget.net_income(y)}
+            for y in (0, 25000, 50000, 100000)
+        ],
+    }
+
+
+def compute_results(seed=42):
+    """Compute scenario results; no file writes and no PolicyEngine import."""
+    inputs = Illustration(seed=seed)
+    prefs = inputs.preferences
+    wages = np.random.default_rng(seed).lognormal(
+        np.log(inputs.hourly_wage) - 0.5 * inputs.wage_log_std**2,
+        inputs.wage_log_std,
+        inputs.synthetic_workers,
+    )
+    scenarios = []
+    for key, label, beliefs in _scenarios(inputs):
+        outcome = evaluate_worker(inputs.hourly_wage, inputs.tax_rate, prefs, beliefs)
+        scenarios.append(
+            {
+                "id": key,
+                "label": label,
+                "beliefs": asdict(beliefs),
+                "worker": asdict(outcome),
+                "local_private_approximation": private_regret_approx(
+                    inputs.earnings,
+                    inputs.elasticity,
+                    inputs.tax_rate,
+                    outcome.realized_rmse**2,
+                ),
+            }
+        )
+
+    planner_results = {}
+    for weighting in ("equal", "inverse_wage"):
+        planner = SocialPlanner(social_weights=weighting)
+        rows = []
+        for key, label, beliefs in _scenarios(inputs):
+            optimum = planner.optimal_tax_result(wages, prefs, beliefs=beliefs)
+            evaluation = asdict(
+                planner.evaluate(inputs.tax_rate, wages, prefs, beliefs)
+            )
+            # Per-worker arrays are not needed for the paper; retain aggregate accounting.
+            evaluation.pop("baseline_hours")
+            evaluation.pop("expected_hours")
+            rows.append(
+                {
+                    "id": key,
+                    "label": label,
+                    "optimum": asdict(optimum),
+                    "at_reference_tax": evaluation,
+                }
+            )
+        planner_results[weighting] = rows
+
+    sensitivity = []
+    for eps in (0.25, 0.33, 0.50):
+        altered = replace(inputs, elasticity=eps)
+        for sd in (0.08, 0.12, 0.15):
+            outcome = evaluate_worker(
+                inputs.hourly_wage,
+                inputs.tax_rate,
+                altered.preferences,
+                NormalBeliefs(0, sd),
+            )
+            sensitivity.append(
+                {
+                    "elasticity": eps,
+                    "std_error": sd,
+                    "private_regret": outcome.private_regret,
+                    "revenue_change": outcome.revenue_change,
+                    "social_loss": outcome.social_loss,
+                }
+            )
+
+    accuracy = []
+    for tax in sorted(
+        set(np.linspace(0, 0.99, 100).tolist() + [0, 0.3, 0.8, 0.95, 0.99])
+    ):
+        # Normalize informed earnings to $55k at EACH rate to compare like scales.
+        altered = replace(inputs, tax_rate=tax)
+        outcome = evaluate_worker(
+            inputs.hourly_wage,
+            tax,
+            altered.preferences,
+            NormalBeliefs(0, inputs.error_rmse),
+        )
+        latent = private_regret_approx(
+            inputs.earnings, inputs.elasticity, tax, inputs.error_rmse**2
+        )
+        realized = private_regret_approx(
+            inputs.earnings, inputs.elasticity, tax, outcome.realized_rmse**2
+        )
+        accuracy.append(
+            {
+                "tax_rate": tax,
+                "exact_private_regret": outcome.private_regret,
+                "latent_moment_approximation": latent,
+                "realized_moment_approximation": realized,
+                "latent_ratio": latent / outcome.private_regret,
+                "realized_ratio": realized / outcome.private_regret,
+            }
+        )
+
+    bias_curve = []
+    planner = SocialPlanner()
+    for mean in np.linspace(-0.10, 0.10, 21):
+        beliefs = beliefs_with_rmse(float(mean), inputs.error_rmse)
+        optimum = planner.optimal_tax_result(wages, prefs, beliefs=beliefs)
+        bias_curve.append(
+            {
+                "mean_error": float(mean),
+                "std_error": beliefs.std_error,
+                "optimal_tax": optimum.tax_rate,
+                "at_boundary": optimum.at_boundary,
+            }
+        )
+
+    unbiased = next(row for row in scenarios if row["id"] == "unbiased")
+    high_order = evaluate_worker(
+        inputs.hourly_wage,
+        inputs.tax_rate,
+        prefs,
+        NormalBeliefs(0, inputs.error_rmse),
+        quadrature_order=512,
+    )
+    results = {
+        "schema_version": 2,
+        "status": "illustrative scenarios; not a national welfare estimate",
+        "provenance": {
+            "model_source_sha256": model_source_hash(),
+            "method": "deterministic Gauss-Legendre quadrature with explicit censoring atoms",
+            "quadrature_order": 256,
+            "seed": seed,
+            "data_source": "synthetic wage sample; no survey weights",
+        },
+        "assumptions": inputs.assumptions(),
+        "scenarios": scenarios,
+        "planner": planner_results,
+        "sensitivity": sensitivity,
+        "approximation_accuracy": accuracy,
+        "bias_curve": bias_curve,
+        "nonlinear_examples": _budget_examples(inputs),
+        "household_fixture": _household_fixture(),
+        "validation": {
+            "baseline_private_quadrature_difference": abs(
+                high_order.private_regret - unbiased["worker"]["private_regret"]
+            ),
+            "baseline_social_quadrature_difference": abs(
+                high_order.social_loss - unbiased["worker"]["social_loss"]
+            ),
         },
     }
+
+    # A single JSON-compatible structure is shared by callers and stored files.
+    return json.loads(json.dumps(results, allow_nan=False))
+
+
+def _json(data):
+    return json.dumps(data, indent=2, allow_nan=False) + "\n"
 
 
 def generate_results(output_path=None, seed=42):
-    """Generate all results for the paper and write to JSON.
-
-    Parameters
-    ----------
-    output_path : str or Path or None
-        Where to write results.json. If None, writes to
-        src/taxuncertainty/data/results.json.
-    seed : int
-        Random seed for reproducibility.
-
-    Output structure
-    ----------------
-    {
-        "baseline": { ...from Calibration.baseline_results() },
-        "sensitivity": [ ...rows from sensitivity_table() as dicts ],
-        "optimal_tax": {
-            "certain": float,
-            "uncertain": float,
-        },
-        "parameters": {
-            "frisch_elasticity_central": 0.33,
-            "misperception_std_central": 0.12,
-            ...
-        },
-        "empirical": {
-            "mtr_distribution": { ...weighted stats },
-            "aggregate_dwl": float,
-            "aggregate_dwl_billions": float,
-            "quintiles": [ ...per-quintile breakdown ],
-            "comparison": { ...empirical vs stylized }
-        }
-    }
-    """
-    output_path = (
-        Path(output_path)
-        if output_path
-        else Path(__file__).parent / "data" / "results.json"
-    )
-
-    # Calibration
-    cal = Calibration()
-    baseline = cal.baseline_results()
-    sensitivity = cal.sensitivity_table()
-
-    # Optimal tax computation using a representative wage distribution
-    prefs = QuasilinearIsoelastic(
-        psi=cal.PSI,
-        frisch_elasticity=cal.FRISCH_ELASTICITY_CENTRAL,
-    )
-
-    # Create a small representative wage distribution
-    rng = np.random.default_rng(seed)
-    wages = rng.lognormal(
-        mean=np.log(cal.MEAN_HOURLY_WAGE) - 0.5 * 0.5**2,
-        sigma=0.5,
-        size=500,
-    )
-
-    planner = SocialPlanner()
-    tau_certain = planner.optimal_tax(wages, prefs, misperception_std=0, seed=seed)
-    tau_uncertain = planner.optimal_tax(
-        wages,
-        prefs,
-        misperception_std=cal.MISPERCEPTION_STD_CENTRAL,
-        seed=seed,
-    )
-
-    results = {
-        "baseline": baseline,
-        "sensitivity": sensitivity.to_dict(orient="records"),
-        "optimal_tax": {
-            "certain": tau_certain,
-            "uncertain": tau_uncertain,
-        },
-        "parameters": {
-            "frisch_elasticity_central": cal.FRISCH_ELASTICITY_CENTRAL,
-            "frisch_elasticity_low": cal.FRISCH_ELASTICITY_LOW,
-            "frisch_elasticity_high": cal.FRISCH_ELASTICITY_HIGH,
-            "misperception_std_central": cal.MISPERCEPTION_STD_CENTRAL,
-            "misperception_std_low": cal.MISPERCEPTION_STD_LOW,
-            "misperception_std_high": cal.MISPERCEPTION_STD_HIGH,
-            "mean_marginal_rate": cal.MEAN_MARGINAL_RATE,
-            "mean_hourly_wage": cal.MEAN_HOURLY_WAGE,
-            "mean_annual_earnings": cal.MEAN_ANNUAL_EARNINGS,
-            "total_workers": cal.TOTAL_WORKERS,
-            "gdp": cal.GDP,
-            "psi": cal.PSI,
-            "seed": seed,
-        },
-    }
-
-    # Empirical microsimulation results
-    results["empirical"] = _generate_empirical_section(cal, prefs)
-
-    # Ensure output directory exists
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-
-    with open(output_path, "w") as f:
-        json.dump(results, f, indent=2)
-
+    """Generate the version-2 JSON; national estimates from version 1 are retired."""
+    results = compute_results(seed)
+    path = Path(output_path) if output_path is not None else RESULTS_PATH
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(_json(results))
     return results
+
+
+def _table(headers, rows, caption, label):
+    lines = [
+        "<!-- Generated by taxuncertainty.pipeline; do not edit. -->",
+        "",
+        "| " + " | ".join(headers) + " |",
+        "|" + "|".join(["---"] + ["---:"] * (len(headers) - 1)) + "|",
+    ]
+    lines.extend("| " + " | ".join(str(value) for value in row) + " |" for row in rows)
+    return "\n".join(lines) + f"\n\n: {caption} {{#{label}}}\n"
+
+
+def paper_artifacts(results):
+    """Return generated text files, used identically by render and --check."""
+    scenarios = results["scenarios"]
+    lookup = {row["id"]: row for row in scenarios}
+    inverse = {row["id"]: row for row in results["planner"]["inverse_wage"]}
+    numbers = {
+        "unbiased_private": f'{lookup["unbiased"]["worker"]["private_regret"]:.2f}',
+        "unbiased_revenue_loss": f'{-lookup["unbiased"]["worker"]["revenue_change"]:.2f}',
+        "unbiased_social": f'{lookup["unbiased"]["worker"]["social_loss"]:.2f}',
+        "small_bias_private": f'{lookup["underestimate_1"]["worker"]["private_regret"]:.2f}',
+        "small_bias_revenue": f'{lookup["underestimate_1"]["worker"]["revenue_change"]:.2f}',
+        "small_bias_social_gain": f'{-lookup["underestimate_1"]["worker"]["social_loss"]:.2f}',
+        "optimal_informed": f'{100*inverse["informed"]["optimum"]["tax_rate"]:.2f}',
+        "optimal_unbiased": f'{100*inverse["unbiased"]["optimum"]["tax_rate"]:.2f}',
+        "optimal_bias_minus_3": f'{100*inverse["bias_minus_3"]["optimum"]["tax_rate"]:.2f}',
+        "model_hash": results["provenance"]["model_source_sha256"][:12],
+    }
+    money = lambda value: f"{value:,.2f}"
+    selected_accuracy = [
+        row
+        for row in results["approximation_accuracy"]
+        if row["tax_rate"] in (0, 0.3, 0.8, 0.95, 0.99)
+    ]
+    artifacts = {
+        "_variables.yml": _json(numbers),
+        "generated/scenarios.md": _table(
+            ["Scenario", "Private loss", "Revenue change", "Social loss"],
+            [
+                [
+                    row["label"],
+                    money(row["worker"]["private_regret"]),
+                    money(row["worker"]["revenue_change"]),
+                    money(row["worker"]["social_loss"]),
+                ]
+                for row in scenarios
+            ],
+            "Illustrative annual dollar effects per worker at a true rate of 30%. Negative social loss means a gain; revenue is rebated and valued equally.",
+            "tbl-scenarios",
+        ),
+        "generated/beliefs.md": _table(
+            ["Scenario", "Latent mean (pp)", "Latent SD (pp)", "Latent RMSE (pp)"],
+            [
+                [
+                    row["label"],
+                    f'{100*row["beliefs"]["mean_error"]:.2f}',
+                    f'{100*row["beliefs"]["std_error"]:.2f}',
+                    f'{100*row["worker"]["latent_rmse"]:.2f}',
+                ]
+                for row in scenarios
+            ],
+            "Assumed belief distributions before censoring. Realized moments after censoring are recorded separately in the results JSON.",
+            "tbl-beliefs",
+        ),
+        "generated/planner.md": _table(
+            ["Scenario", "Equal weights (%)", "Inverse-wage weights (%)"],
+            [
+                [
+                    row["label"],
+                    f'{100*row["optimum"]["tax_rate"]:.2f}',
+                    f'{100*inverse[row["id"]]["optimum"]["tax_rate"]:.2f}',
+                ]
+                for row in results["planner"]["equal"]
+            ],
+            "Best linear tax rates on the specified grid over 0% to 80%. Zero is a search boundary, not a claim about an unconstrained optimum.",
+            "tbl-planner",
+        ),
+        "generated/accuracy.md": _table(
+            [
+                "True rate (%)",
+                "Exact private loss",
+                "Latent approximation",
+                "Approx./exact",
+            ],
+            [
+                [
+                    f'{100*row["tax_rate"]:.0f}',
+                    money(row["exact_private_regret"]),
+                    money(row["latent_moment_approximation"]),
+                    f'{row["latent_ratio"]:.2f}',
+                ]
+                for row in selected_accuracy
+            ],
+            "Approximation diagnostic in dollars, with informed earnings normalized to $55,000 separately at each true rate. The approximation uses the latent second moment; the exact model censors perceived rates.",
+            "tbl-accuracy",
+        ),
+        "generated/sensitivity.md": _table(
+            ["Elasticity", "SD 8 pp", "SD 12 pp", "SD 15 pp"],
+            [
+                [f"{eps:.2f}"]
+                + [
+                    money(
+                        next(
+                            row["social_loss"]
+                            for row in results["sensitivity"]
+                            if row["elasticity"] == eps and row["std_error"] == sd
+                        )
+                    )
+                    for sd in (0.08, 0.12, 0.15)
+                ]
+                for eps in (0.25, 0.33, 0.5)
+            ],
+            "Illustrative social losses per worker in dollars under mean-zero latent errors and equal valuation of rebated revenue. These are scenario variations, not confidence bounds.",
+            "tbl-sensitivity",
+        ),
+        "generated/nonlinear.md": _table(
+            ["True budget", "Private loss", "Revenue change", "Social loss"],
+            [
+                [
+                    row["label"],
+                    money(row["outcome"]["private_regret"]),
+                    money(row["outcome"]["revenue_change"]),
+                    money(row["outcome"]["social_loss"]),
+                ]
+                for row in results["nonlinear_examples"]
+            ],
+            "Synthetic nonlinear examples, dollars. True and perceived budgets and exact choices are stored in the results; these are not statutory schedules.",
+            "tbl-nonlinear",
+        ),
+        "generated/household.md": _table(
+            ["Earnings", "Household net income"],
+            [
+                [money(row["earnings"]), money(row["net_income"])]
+                for row in results["household_fixture"]["selected_outcomes"]
+            ],
+            "Selected actual PolicyEngine outcomes for the specified 2024 Texas household, in dollars. Health benefits are excluded; some other noncash benefits are included.",
+            "tbl-household",
+        ),
+    }
+    return artifacts
+
+
+def generate_figures(results, paper_dir):
+    """Export publication figures with Matplotlib; no interactive runtime needed."""
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    plt.rcParams.update(
+        {
+            "font.family": "DejaVu Sans",
+            "font.size": 10,
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "svg.hashsalt": "taxuncertainty-v2",
+        }
+    )
+    folder = Path(paper_dir) / "generated"
+    folder.mkdir(parents=True, exist_ok=True)
+    selected = [
+        row
+        for row in results["scenarios"]
+        if row["id"] in ("unbiased", "bias_minus_3", "bias_plus_3")
+    ]
+    fig, ax = plt.subplots(figsize=(7.1, 3.7), layout="constrained")
+    positions = np.arange(len(selected))
+    for offset, key, label, color in [
+        (-0.25, "private_regret", "Private loss", "#346888"),
+        (0, "revenue_change", "Revenue change", "#649178"),
+        (0.25, "social_loss", "Social loss", "#a45345"),
+    ]:
+        ax.bar(
+            positions + offset,
+            [row["worker"][key] for row in selected],
+            0.23,
+            label=label,
+            color=color,
+        )
+    ax.axhline(0, color="#444444", linewidth=0.8)
+    ax.set_xticks(positions, [row["label"] for row in selected])
+    ax.set_ylabel("Annual dollars per worker")
+    ax.legend(frameon=False, ncol=3, loc="upper center", bbox_to_anchor=(0.5, 1.16))
+    fig.savefig(folder / "welfare.png", dpi=190)
+    plt.close(fig)
+
+    fig, axes = plt.subplots(1, 2, figsize=(7.1, 3.4), layout="constrained")
+    curve = results["bias_curve"]
+    informed = results["planner"]["inverse_wage"][0]["optimum"]["tax_rate"]
+    axes[0].plot(
+        [row["mean_error"] * 100 for row in curve],
+        [row["optimal_tax"] * 100 for row in curve],
+        color="#346888",
+        lw=2,
+    )
+    axes[0].axhline(informed * 100, color="#777777", ls="--", label="Informed optimum")
+    axes[0].set_xlabel("Latent mean error (percentage points)")
+    axes[0].set_ylabel("Optimal linear tax (%)")
+    axes[0].legend(frameon=False, fontsize=8)
+    accuracy = results["approximation_accuracy"]
+    for key, label, color, style in [
+        ("latent_ratio", "Latent moment", "#a45345", "-"),
+        ("realized_ratio", "Realized moment", "#346888", "--"),
+    ]:
+        axes[1].plot(
+            [row["tax_rate"] * 100 for row in accuracy],
+            [row[key] for row in accuracy],
+            label=label,
+            color=color,
+            ls=style,
+        )
+    axes[1].axhline(1, color="#777777", lw=0.8)
+    axes[1].set_xlabel("True tax rate (%)")
+    axes[1].set_ylabel("Approximate / exact private loss")
+    axes[1].legend(frameon=False, fontsize=8)
+    fig.savefig(folder / "robustness.png", dpi=190)
+    plt.close(fig)
+    (folder / "figures.json").write_text(
+        _json(
+            {
+                "model_source_sha256": results["provenance"]["model_source_sha256"],
+                "seed": results["provenance"]["seed"],
+                "files": {
+                    name: sha256((folder / name).read_bytes()).hexdigest()
+                    for name in ("welfare.png", "robustness.png")
+                },
+            }
+        )
+    )
+
+
+def _equivalent(left, right):
+    if isinstance(left, dict) and isinstance(right, dict):
+        return left.keys() == right.keys() and all(
+            _equivalent(left[key], right[key]) for key in left
+        )
+    if isinstance(left, (list, tuple)) and isinstance(right, (list, tuple)):
+        return len(left) == len(right) and all(
+            _equivalent(a, b) for a, b in zip(left, right)
+        )
+    if isinstance(left, (int, float)) and isinstance(right, (int, float)):
+        return bool(np.isclose(left, right, rtol=1e-9, atol=1e-7))
+    return left == right
+
+
+def check_artifacts(results, output_path, paper_dir):
+    """Check numerical and rendered-text provenance, returning stale paths."""
+    output_path = Path(output_path)
+    stale = []
+    if not output_path.exists() or not _equivalent(
+        json.loads(output_path.read_text()), results
+    ):
+        stale.append(str(output_path))
+    parameter_path = output_path.with_name("parameters.yaml")
+    if not parameter_path.exists() or not _equivalent(
+        json.loads(parameter_path.read_text()), results["assumptions"]
+    ):
+        stale.append(str(parameter_path))
+    if paper_dir is not None:
+        paper_dir = Path(paper_dir)
+        for name, text in paper_artifacts(results).items():
+            path = paper_dir / name
+            if not path.exists() or path.read_text() != text:
+                stale.append(str(path))
+        manifest = paper_dir / "generated/figures.json"
+        expected = {
+            "model_source_sha256": results["provenance"]["model_source_sha256"],
+            "seed": results["provenance"]["seed"],
+        }
+        recorded = json.loads(manifest.read_text()) if manifest.exists() else {}
+        if any(recorded.get(key) != value for key, value in expected.items()):
+            stale.append(str(manifest))
+        for name in ("welfare.png", "robustness.png"):
+            path = paper_dir / "generated" / name
+            if not path.exists() or sha256(
+                path.read_bytes()
+            ).hexdigest() != recorded.get("files", {}).get(name):
+                stale.append(str(path))
+    return stale
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="fail if committed numerical/text artifacts differ",
+    )
+    parser.add_argument("--output", type=Path, default=RESULTS_PATH)
+    parser.add_argument("--paper-dir", type=Path, default=Path("paper"))
+    parser.add_argument("--seed", type=int, default=42)
+    args = parser.parse_args(argv)
+    results = compute_results(args.seed)
+    if args.check:
+        stale = check_artifacts(results, args.output, args.paper_dir)
+        if stale:
+            print("Stale generated artifacts:\n" + "\n".join(stale), file=sys.stderr)
+            return 1
+        print("Numerical results, generated paper text, and figure provenance agree.")
+        return 0
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(_json(results))
+    args.output.with_name("parameters.yaml").write_text(_json(results["assumptions"]))
+    for name, text in paper_artifacts(results).items():
+        path = args.paper_dir / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text)
+    generate_figures(results, args.paper_dir)
+    print(
+        f"Generated illustrative results in {args.output} and {args.paper_dir}/generated"
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

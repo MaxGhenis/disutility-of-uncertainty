@@ -1,2 +1,5 @@
-# MyST build outputs
+# Quarto build outputs
 _build
+
+/.quarto/
+**/*.quarto_ipynb

@@ -30,7 +30,10 @@ class _DotDict:
 
 
 class Results:
-    """Load and access paper results with dot notation.
+    """Load versioned paper results with dot notation.
+
+    Version 2 distinguishes private regret, fiscal changes, and social losses.
+    The former national DWL fields are intentionally absent.
 
     Parameters
     ----------
@@ -41,10 +44,10 @@ class Results:
     Examples
     --------
     >>> r = Results("results.json")
-    >>> r.baseline.total_dwl_billions
-    29.87
-    >>> r.baseline.total_dwl_billions_fmt
-    '29.87'
+    >>> r.schema_version
+    2
+    >>> r.scenarios[1].worker.private_regret_fmt
+    '190.11'
     """
 
     def __init__(self, path=None):

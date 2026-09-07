@@ -2,117 +2,121 @@ name: CI
 
 on:
   push:
-    branches: [ main, feature/* ]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
-# Allow only one concurrent deployment
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.13'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e ".[dev]"
-    
-    - name: Lint with flake8
-      run: |
-        flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 src tests --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    
-    - name: Format with black
-      run: |
-        black --check src tests
-    
-    - name: Test with pytest
-      run: |
-        pytest tests/ -v --cov=src/taxuncertainty --cov-report=term
 
-  build-book:
+    - name: Set up locked Python environment
+      uses: astral-sh/setup-uv@v6
+      with:
+        version: '0.11.7'
+        python-version: '3.13.9'
+        enable-cache: true
+
+    - name: Install fast-test dependencies
+      run: uv sync --locked --extra dev
+
+    - name: Lint and check formatting
+      run: |
+        uv run --no-sync flake8 src tests --count --select=E9,F63,F7,F82 --show-source --statistics
+        uv run --no-sync black --check src tests
+        uv run --no-sync isort --check-only src tests
+
+    - name: Test without optional PolicyEngine
+      run: uv run --no-sync pytest tests/ -v --cov=src/taxuncertainty --cov-report=term
+
+    - name: Verify committed numerical results and paper inputs
+      run: uv run --no-sync python -m taxuncertainty.pipeline --check
+
+    - name: Build and test an installed wheel outside the checkout
+      run: |
+        uv build --wheel --out-dir dist
+        uv export --locked --no-dev --no-emit-project --format requirements-txt --output-file "${RUNNER_TEMP}/runtime-requirements.txt"
+        uv venv --python 3.13.9 "${RUNNER_TEMP}/wheel-smoke"
+        uv pip sync --python "${RUNNER_TEMP}/wheel-smoke/bin/python" "${RUNNER_TEMP}/runtime-requirements.txt"
+        uv pip install --python "${RUNNER_TEMP}/wheel-smoke/bin/python" --no-deps dist/*.whl
+        cd "${RUNNER_TEMP}"
+        "${RUNNER_TEMP}/wheel-smoke/bin/python" - <<'PY'
+        import json
+        from importlib.resources import files
+        from pathlib import Path
+        import taxuncertainty
+
+        assert "wheel-smoke" in Path(taxuncertainty.__file__).parts
+        data = files("taxuncertainty.data")
+        assert isinstance(json.loads(data.joinpath("results.json").read_text()), dict)
+        assert data.joinpath("parameters.yaml").read_text().strip()
+        print("Installed wheel imports and packaged result resources verified.")
+        PY
+
+  build-paper:
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22'
-    
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.13'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e ".[dev,research]"
-        npm install -g mystmd
-    
-    - name: Install LaTeX
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-xetex latexmk
 
-    - name: Build MyST Book
+    - name: Set up locked Python environment
+      uses: astral-sh/setup-uv@v6
+      with:
+        version: '0.11.7'
+        python-version: '3.13.9'
+        enable-cache: true
+
+    - name: Install paper dependencies
+      run: uv sync --locked --extra paper
+
+    - name: Setup Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
+      with:
+        version: '1.9.36'
+        tinytex: true
+
+    - name: Generate paper inputs from the model
+      run: |
+        uv run --no-sync python -m taxuncertainty.pipeline --check
+        uv run --no-sync python -m taxuncertainty.pipeline
+
+    - name: Build Quarto HTML and PDF
       run: |
         cd paper
-        # Build with base URL for GitHub Pages subpath
-        export BASE_URL="/disutility-of-uncertainty"
-        myst build --html
-        touch _build/html/.nojekyll
+        quarto render index.qmd --to html
+        quarto render index.qmd --to pdf
+        touch _build/.nojekyll
 
-    - name: Build PDF
-      run: |
-        cd paper
-        myst build --pdf
-        cp exports/*.pdf _build/html/ 2>/dev/null || true
-    
-    - name: Upload book artifact
+    - name: Upload paper artifact
       uses: actions/upload-artifact@v4
       with:
-        name: myst-book
-        path: paper/_build/html/
-    
-    - name: Setup Pages
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      uses: actions/configure-pages@v5
-      
+        name: paper
+        path: paper/_build/
+
     - name: Upload Pages artifact
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/upload-pages-artifact@v3
       with:
-        path: paper/_build/html
+        path: paper/_build
 
-  # Deployment job
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [test, build-paper]
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build-book
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4

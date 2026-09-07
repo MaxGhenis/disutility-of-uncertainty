@@ -1,0 +1,12 @@
+{
+  "unbiased_private": "190.11",
+  "unbiased_revenue_loss": "56.97",
+  "unbiased_social": "247.09",
+  "small_bias_private": "1.29",
+  "small_bias_revenue": "77.42",
+  "small_bias_social_gain": "76.13",
+  "optimal_informed": "44.53",
+  "optimal_unbiased": "42.93",
+  "optimal_bias_minus_3": "45.63",
+  "model_hash": "82b3cf0cf724"
+}
