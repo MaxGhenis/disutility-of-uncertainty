@@ -7,11 +7,30 @@ Study 1 appendix integration is implemented and validated at
 The exact inherited/new review scopes are in `STUDY1-REVIEW-READY.md`.
 The isolated continuation is `sprint/study1-evidence-integration-20260907`, based
 on verified draft PR #3 head 8e05267. Main remains 5d134c1 after a fresh fetch.
-The existing draft receives a normal fast-forward update; all Study 2 findings
+The existing draft has received a normal fast-forward update; all Study 2 findings
 and welfare inputs remain unchanged. Latent RMSE 0.12 stays illustrative.
 The previous continuation and both dirty originals remain untouched.
 
 ## Done
+
+- Committed a reproducible, qualified Study 1 appendix and frozen aggregate/code
+  package. Exact integration review target: 09a5685; review-ready file committed.
+- 267 tests passed; ten native aggregates reproduce exactly; lint/type/generated
+  checks pass; 26 installed-wheel files match; affected PDF pages inspected.
+- Draft PR #3 updated normally. Remote test and paper-build jobs pass at 81bb5e5;
+  preview/Pages deployment skipped. No publication or merge.
+- Preserved both dirty originals (50 and 72 file states/status/head/branch) and
+  the clean prior continuation at 8e05267. Reset configuration hashes unchanged.
+- Durable exact diff, logs, paper, wheel and final report saved in the lane.
+
+## Next
+
+1. Focused host review of exact 09a5685, using STUDY1-REVIEW-READY.md. No new
+   integration approval is claimed; later commits contain handoff metadata only.
+2. Any later latent calibration requires independent measurement, noise/covariance
+   assumptions and population/tax-component coverage. Keep 0.12 illustrative.
+
+## Initial preservation (historical)
 
 - Read global/project instructions, REBUILD_VALIDATION.md and REVIEW.md.
 - Inspected status, branches and remotes of both dirty checkouts.
@@ -30,7 +49,7 @@ The previous continuation and both dirty originals remain untouched.
 - Corrected the legacy LLM note's unsupported .12 attribution/lower-bound claim.
 - Disabled automated Netlify preview publication for draft PRs.
 
-## Next
+## Initial next steps (historical)
 
 1. Preserved rebuild committed as `4f2d46a`; isolated default suite: 188 passed,
    one opt-in PolicyEngine integration skip.
@@ -290,3 +309,13 @@ These are local self-checks; no independent semantic reviewer completed.
 - Updated draft description and handoff to the actual final scientific scope.
   Next: normal fast-forward draft update, verify remote checks, preserve final
   artifacts/configuration and report the outstanding host-review step.
+
+## Verified remote delivery
+
+- PR #3 is draft at 81bb5e5 after the authorized fast-forward update; its body was
+  read back and verified exactly. Both push and PR CI runs succeed, including
+  test and paper-build jobs. This checkpoint changes delivery documentation only;
+  implementation review target remains 09a5685.
+- Final preservation checks match all 50 original and 72 rebuild file states,
+  Git statuses, heads and branches. The prior continuation remains clean at
+  8e05267. Both no-reset protection files match their original hashes.

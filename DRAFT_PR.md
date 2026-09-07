@@ -43,6 +43,8 @@ Validation:
   Tables and inline numbers come from the checked aggregate cache.
 - A fresh runtime-only wheel matches all 26 packaged source/data files and
   reproduces complete results without PolicyEngine or Matplotlib.
+- Remote push and PR test/paper-build jobs pass at 81bb5e5; preview and Pages
+  deployment remain skipped. Subsequent handoff updates change documentation only.
 
 Review scope:
 

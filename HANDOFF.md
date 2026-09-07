@@ -11,6 +11,9 @@ Local continuation: `sprint/study1-evidence-integration-20260907` at
 `/Users/maxghenis/disutility-of-uncertainty-study1-integration-20260907`.
 It starts at verified PR head 8e05267; fetched main is 5d134c1.
 The previous continuation and both original dirty checkouts remain intact.
+The draft was updated normally at 81bb5e5; both push and PR test/paper CI runs
+succeeded and deployment stayed skipped. Later delivery-documentation commits
+do not change the exact implementation review target.
 
 ## Done
 
