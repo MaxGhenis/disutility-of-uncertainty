@@ -2,8 +2,9 @@
 
 ## State
 
-Validated offline milestone complete; native-data ingestion, remote draft PR and
-independent semantic review remain blocked. See `HANDOFF.md` for the exact
+Continuation active with host network access: integrating real replication
+microdata and initial host review findings. The earlier offline checkpoint is
+retained below as history. See `HANDOFF.md` for the exact
 remaining actions. The validated September 5 rebuild is preserved byte-for-byte on isolated branch
 `sprint/signed-error-calibration-20260907`. Both preexisting dirty checkouts remain
 intact. This is a conditional modeling note, not a national welfare estimate.
@@ -132,3 +133,19 @@ These are local self-checks; no independent semantic reviewer completed.
   records the archive/base/review blockers and exact continuation sequence.
 - Final lane export: Git bundle, patch, wheel, rendered paper, validation logs,
   artifact hashes, `REPORT.md` and requested output `result.md`.
+
+## Host-enabled empirical continuation
+
+- Resumed from clean `b9786339f636f5c1f9c510b18610fe6c4dcb7036`; saved exact
+  reviewed commit/source fingerprints in lane `review-evidence/`.
+- Fresh `git fetch origin main` succeeds and confirms base remains
+  `5d134c14630613ff32819abe99ad5109b65b07a5`; no base integration is needed.
+- Read coordinator corrections and source-lane progress. Real Study 1/2 archive
+  data are now available. Source-lane numerical claims remain preliminary until
+  independently reproduced here. Source-lane files will be read only.
+- Root terminated failed reviewer PID 12571; do not relaunch it. The host review
+  of b978633 is pending separately; empirical changes will need a bounded review
+  of their own exact commit.
+- Next: inspect native source code/data, reproduce filters and regressions,
+  implement provenance-checked archive mapping, and integrate only identified
+  observed interval/error quantities into the paper.
