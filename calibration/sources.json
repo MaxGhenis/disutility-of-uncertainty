@@ -57,5 +57,11 @@
     }
   ],
   "licence": "No explicit redistribution licence in archive; raw and canonical microdata kept local",
-  "source_lane_status": "Research source manifest and coordinator corrections consulted. Preliminary identification-unreviewed.md is not validated evidence."
+  "source_lane_status": "Research source manifest and coordinator corrections consulted. Preliminary identification-unreviewed.md is not validated evidence.",
+  "independent_archive_retrieval": {
+    "checked_on": "2026-09-07",
+    "method": "fresh HTTPS download from author-linked Dropbox URL by implementation lane",
+    "sha256": "c578518776c9cd97cc0bcf340558a9574ed2088cfeb5d1b610274e5d7ab48b15",
+    "matches_research_lane_archive": true
+  }
 }

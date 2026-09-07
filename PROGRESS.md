@@ -2,13 +2,13 @@
 
 ## State
 
-Continuation active with host network access: integrating real replication
-microdata and initial host review findings. The earlier offline checkpoint is
-retained below as history. See `HANDOFF.md` for the exact
-remaining actions. The validated September 5 rebuild is preserved byte-for-byte on isolated branch
-`sprint/signed-error-calibration-20260907`. Both preexisting dirty checkouts remain
-intact. This is a conditional modeling note, not a national welfare estimate.
-The 0.12 latent error RMSE remains illustrative.
+Validated draft PR [#3](https://github.com/MaxGhenis/disutility-of-uncertainty/pull/3)
+on isolated branch `sprint/signed-error-calibration-20260907`. Native empirical
+integration is complete and independently reviewed at exact 10e9321; subsequent
+CI-only formatting/setup fixes pass local and remote checks. Both original
+dirty checkouts remain intact. The model's 0.12 latent RMSE remains illustrative,
+and no national welfare estimate is claimed. Earlier checkpoints below are
+historical; `HANDOFF.md` gives current status and scientific next steps.
 
 ## Done
 
@@ -210,3 +210,26 @@ These are local self-checks; no independent semantic reviewer completed.
   GH_TOKEN setup for authenticated release lookup.
 - Both publication/deployment jobs are skipped on the draft. Next: confirm the
   corrected CI run and integrate pending exact-scope empirical review findings.
+
+## Reviewed delivery checkpoint
+
+- Exact empirical review 10e9321: no actionable findings; independent fresh
+  archive reproduction, raw flags, benchmark coefficients/SEs and bounds agree.
+  Reviewer executed 23 focused tests, deselecting five temporary-file tests in
+  its read-only sandbox. Both scoped reports are committed in calibration/reviews.
+- Final implementation validation: 258 passed, one optional live PE skip, 93%
+  coverage. Lint/types/citations/generated outputs pass. Fresh installed wheel
+  reproduces all results and matches 24 packaged source/data files.
+- Remote test/paper jobs pass at 9611794; draft preview and Pages deployment skip.
+  PR remains draft and no merge or publication occurred.
+- Direct public ZIP download matches the pinned hash. Separate independent audit
+  reconciles all 45,820 experimental tax-table entries and assigned ATR/MTR
+  amounts, with only native float32 quantization differences in rates.
+- Final PDF is 16 pages; empirical pages 7-9, abstract and coverage/results
+  transition visually checked. Both dirty originals and reset controls preserved.
+- Source lane final identification.md remains pending; consulted source manifest,
+  native code, primary texts and coordinator corrections without adopting
+  identification-unreviewed.md.
+- Next scientific step: independently validated behavioral measurements and
+  population/component transport; audit Study 1 slope processing and spans before
+  treating any descriptive dispersion as a welfare input.

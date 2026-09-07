@@ -26,7 +26,7 @@ licence. The committed aggregate artifact carries source and calculation hashes.
 
 Validation completed locally:
 
-- 257 tests pass with the actual pinned archive; one optional live PolicyEngine
+- 258 tests pass with the actual pinned archive; one optional live PolicyEngine
   integration test skipped; 93% coverage. No new PolicyEngine computation.
 - The native integration test regenerates the complete aggregate cache and
   round-trips both canonical CSV variants. Tests also cover source-flag mismatch,
@@ -41,14 +41,22 @@ Review scope and status:
 
 - Initial independent host review of `b978633` found no actionable issues in the
   earlier offline adapters. It does not approve empirical ingestion.
-- A separate bounded review of empirical commit `10e9321` is pending. Claude
-  subscription attempts exhausted available lanes; the same scope was submitted
-  on the authorized pinned Axiom Codex subscription lane. No resets or overflow.
+- Independent semantic review of exact empirical commit `10e9321` found no
+  actionable findings and independently reproduced the archive results, native
+  flags and source-label discrepancy. It ran 23 focused tests; five requiring
+  temporary-file writes were unavailable in its read-only sandbox. Exact reports
+  are preserved in `calibration/reviews/`. Later CI formatting/setup fixes are
+  outside that review scope and have regression tests plus passing remote CI.
+- A fresh direct archive download matches the pinned checksum. A separate local
+  monetary audit reconciles all 45,820 experimental tax-table entries and native
+  ATR/MTR amounts (differences only at float32 rate precision).
 - Both original dirty checkouts remain preserved; the rebuilt state was copied
   exactly to this isolated continuation and committed before new work.
 - Live `origin/main` was fetched and remains `5d134c1`; no incoming base changes.
-- This PR remains draft. Draft previews are disabled; publication and merge are
-  outside this change's authorization. Remote CI status is reported separately.
+- Remote test and paper-build jobs pass on `9611794`. Draft preview and Pages
+  deployment jobs are skipped. This PR remains draft; no publication or merge.
+- A fresh runtime-only wheel matches all 24 packaged source/data files and
+  reproduces model and calibration results without PolicyEngine or Matplotlib.
 
 Next scientific step: obtain independent repeated or otherwise validated
 measurements linking choice-rationalizing errors to stable, decision-relevant
