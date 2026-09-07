@@ -149,3 +149,24 @@ These are local self-checks; no independent semantic reviewer completed.
 - Next: inspect native source code/data, reproduce filters and regressions,
   implement provenance-checked archive mapping, and integrate only identified
   observed interval/error quantities into the paper.
+
+## Native empirical checkpoint
+
+- Initial host review of exact b978633 completed with no actionable findings;
+  its report and reviewed fingerprints are preserved in lane `review-evidence`.
+- Independently verified the author-linked 48 MB ZIP and native README/DO files.
+  Added a strict native adapter, canonical interval exports, aggregate cache,
+  benchmark gates and `calibration/NATIVE_MAPPING.md`. Raw microdata stay local.
+- All 4,582 Study 2 raw choice rows reproduce monotonicity, first-switch and
+  endpoint flags. Published selection waterfall and primary/subgroup counts,
+  Table 4/A9 primary coefficients/SEs and three pooled Study 1 panels reproduce.
+- Documented the apparent A9 reintroduced-group label reversal and the 89
+  Study 1 local-flagged draws outside own bracket. No latent heterogeneity
+  parameter is inferred from pooled coefficients.
+- Retained Study 2 author-convention observed bias bounds: +4.65 to +14.37 pp;
+  RMSE: 22.57 to 29.63 pp. Payoff-only endpoint sensitivity remains separate;
+  SD bounds are explicitly conservative, not claimed sharp. .12 stays illustrative.
+- Native adapter tests: 16 passed with actual pinned archive, including complete
+  regenerated-cache equality and both canonical CSV round-trips. Lint/types pass.
+- Next: wire scoped aggregate tables into the paper, finish empirical sensitivity
+  and independent review of the new exact commit, then create an authorized draft PR.

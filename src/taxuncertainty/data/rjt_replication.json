@@ -1,0 +1,325 @@
+{
+  "schema_version": 1,
+  "status": "observed retained study-sample calibration; no national welfare estimate",
+  "provenance": {
+    "archive_url": "https://www.dropbox.com/s/2q47bj8arbcgr3i/Schmeduling%20Replication%20Code.zip?dl=1",
+    "archive_sha256": "c578518776c9cd97cc0bcf340558a9574ed2088cfeb5d1b610274e5d7ab48b15",
+    "archive_members": {
+      "Replication Code/README.txt": "b7ca568355ec9a2ac958f46fe8afc206be397fe901ffa780854ff1f3ff57b507",
+      "Replication Code/Study 1/Table 1.do": "c744801b986785c8dda03b84c28a85f0f55583f31cb34cc3c9ad305b13fd7b9f",
+      "Replication Code/Study 1/RJT_study_1_data.dta": "bcce8a42c02febba3e5906d9bfba1357d2bad904f2bd2e1bbea2b73611304e83",
+      "Replication Code/Study 2/Table 4.do": "0c6622410f47209b2cbdf7bd1c32adcc6e9d6f05729dec1722cee40ba9de2754",
+      "Replication Code/Study 2/RJT_study_2_data.dta": "d326b9a3e64480d06ebbe98f8d1eddcf238abc2b5e74af3699a9865bf598434b"
+    },
+    "calculation_sources": {
+      "rjt_replication.py": "c548471a46dbb0b40c157e01c65535ba1635148f160d2e81112cb28592b91081",
+      "signed_errors.py": "3a88e6f12bdd68fba19b1eae95b259a4a65b6296d9b888508b8ca74594db5403",
+      "tax_forecasts.py": "7c740e65f56d490d25b5edecb42c81c1fadaeba7ddad7e1a841a678f8ba42dfd"
+    },
+    "versions": {
+      "python": "3.13.9",
+      "numpy": "2.5.2",
+      "pandas": "3.0.5"
+    },
+    "native_archive_mapping_verified": true,
+    "licence": "no explicit redistribution licence in archive; microdata not vendored"
+  },
+  "study1": {
+    "archive_respondents": 4633,
+    "archive_forecasts": 74128,
+    "retained_respondents": 4197,
+    "retained_forecasts": 67152,
+    "source_preprocessing": "archive already excludes 195 survey completers; cleaning from original 4828 is not reproducible from this archive",
+    "processed_equals_tgw1": true,
+    "forecasts_changed_from_taxguessds": 1501,
+    "local_flag_outside_own_bracket": 89,
+    "table1_pooled_panels": {
+      "full": {
+        "forecasts": 58758,
+        "respondents": 4197,
+        "coefficient": 0.6174117585350004,
+        "clustered_standard_error": 0.009608385519515717,
+        "respondents_with_positive_tax_variation": 4197,
+        "estimand": "within-person true-tax-variation weighted scale; not mean signed rate error"
+      },
+      "mid_range": {
+        "forecasts": 41970,
+        "respondents": 4197,
+        "coefficient": 0.8192877896337636,
+        "clustered_standard_error": 0.013339724837056071,
+        "respondents_with_positive_tax_variation": 4197,
+        "estimand": "within-person true-tax-variation weighted scale; not mean signed rate error"
+      },
+      "local": {
+        "forecasts": 17937,
+        "respondents": 4197,
+        "coefficient": 0.8058436932109119,
+        "clustered_standard_error": 0.04297978260502916,
+        "respondents_with_positive_tax_variation": 3596,
+        "estimand": "within-person true-tax-variation weighted scale; not mean signed rate error"
+      }
+    },
+    "latent_dispersion_identified": false
+  },
+  "study2": {
+    "native_checks": {
+      "raw_choice_rows_checked": 4582,
+      "irrational_mismatches": 0,
+      "endpoint_flag_mismatches": 0,
+      "switchingpoint_mismatches": 0,
+      "final_attention_flag": "native flag only; underlying answer not in archive"
+    },
+    "selection_order": [
+      "archive",
+      "pass final attention",
+      "also monotone",
+      "also pass MPL endpoints"
+    ],
+    "selection_counts": [
+      4582,
+      3868,
+      3689,
+      3130
+    ],
+    "retained_switch_counts": {
+      "2": 103,
+      "3": 62,
+      "4": 167,
+      "5": 326,
+      "6": 469,
+      "7": 752,
+      "8": 466,
+      "9": 391,
+      "10": 240,
+      "11": 82,
+      "12": 72
+    },
+    "table4_primary": {
+      "n": 3130,
+      "coefficients": {
+        "constant": 0.28091446803453474,
+        "ATR": 0.34999470015552026,
+        "MTR": 0.09341743900435247
+      },
+      "standard_errors": {
+        "constant": 0.012586862224283827,
+        "ATR": 0.02364326799846088,
+        "MTR": 0.02377965955390509
+      },
+      "r_squared": 0.09243763042878295,
+      "ATR_fraction_of_total_coefficient": 0.7893214218687172,
+      "ATR_fraction_delta_se": 0.047566511316391995,
+      "interpretation": "midpoint conditional-mean regression; ratio is not an identified latent population type share"
+    },
+    "table4_subgroups": {
+      "simple": {
+        "n": 1571,
+        "coefficients": {
+          "constant": 0.3017413160471391,
+          "ATR": 0.34063047571858335,
+          "MTR": 0.06908164918723948
+        },
+        "standard_errors": {
+          "constant": 0.017539999923609013,
+          "ATR": 0.03289098710988698,
+          "MTR": 0.03281141875142778
+        },
+        "r_squared": 0.08517874058048158,
+        "ATR_fraction_of_total_coefficient": 0.8313897856864287,
+        "ATR_fraction_delta_se": 0.07253525159589612,
+        "interpretation": "midpoint conditional-mean regression; ratio is not an identified latent population type share"
+      },
+      "complex": {
+        "n": 1559,
+        "coefficients": {
+          "constant": 0.2606895042248276,
+          "ATR": 0.3574606174541267,
+          "MTR": 0.11849170863673228
+        },
+        "standard_errors": {
+          "constant": 0.018041490759917733,
+          "ATR": 0.03395054637390999,
+          "MTR": 0.03441699188463934
+        },
+        "r_squared": 0.09978793438507083,
+        "ATR_fraction_of_total_coefficient": 0.7510429046330319,
+        "ATR_fraction_delta_se": 0.06302485053716797,
+        "interpretation": "midpoint conditional-mean regression; ratio is not an identified latent population type share"
+      },
+      "table_reopened": {
+        "n": 1431,
+        "coefficients": {
+          "constant": 0.2481879071545735,
+          "ATR": 0.3995020493010411,
+          "MTR": 0.08572850614742945
+        },
+        "standard_errors": {
+          "constant": 0.018484518886147844,
+          "ATR": 0.03448376702324435,
+          "MTR": 0.034917965466836884
+        },
+        "r_squared": 0.11381932281277407,
+        "ATR_fraction_of_total_coefficient": 0.8233241802586081,
+        "ATR_fraction_delta_se": 0.06476851496271828,
+        "interpretation": "midpoint conditional-mean regression; ratio is not an identified latent population type share"
+      },
+      "table_not_reopened": {
+        "n": 1699,
+        "coefficients": {
+          "constant": 0.3091998731005568,
+          "ATR": 0.3085608597874098,
+          "MTR": 0.09740953358889227
+        },
+        "standard_errors": {
+          "constant": 0.017140066495832267,
+          "ATR": 0.03239807497095446,
+          "MTR": 0.03241126044141732
+        },
+        "r_squared": 0.07627238897777378,
+        "ATR_fraction_of_total_coefficient": 0.7600575431652195,
+        "ATR_fraction_delta_se": 0.07005578581028157,
+        "interpretation": "midpoint conditional-mean regression; ratio is not an identified latent population type share"
+      }
+    },
+    "attention_sensitivity_regressions": {
+      "include_final_attention_failures": {
+        "n": 3603,
+        "coefficients": {
+          "constant": 0.2902662464024845,
+          "ATR": 0.33644018406640397,
+          "MTR": 0.08546080943868908
+        },
+        "standard_errors": {
+          "constant": 0.011943389691780333,
+          "ATR": 0.022499702609870394,
+          "MTR": 0.02263808150828604
+        },
+        "r_squared": 0.08218712910362747,
+        "ATR_fraction_of_total_coefficient": 0.7974387101374356,
+        "ATR_fraction_delta_se": 0.04781145926608217,
+        "interpretation": "midpoint conditional-mean regression; ratio is not an identified latent population type share"
+      },
+      "include_endpoint_failures": {
+        "n": 3689,
+        "coefficients": {
+          "constant": 0.3476299539240727,
+          "ATR": 0.33321949072023643,
+          "MTR": 0.08503825219990525
+        },
+        "standard_errors": {
+          "constant": 0.0154010484870113,
+          "ATR": 0.028799141390705257,
+          "MTR": 0.028838455916694736
+        },
+        "r_squared": 0.049522524298493575,
+        "ATR_fraction_of_total_coefficient": 0.7966845715605995,
+        "ATR_fraction_delta_se": 0.0613775796117821,
+        "interpretation": "midpoint conditional-mean regression; ratio is not an identified latent population type share"
+      },
+      "include_both_attention_failures": {
+        "n": 4314,
+        "coefficients": {
+          "constant": 0.36163693318793977,
+          "ATR": 0.30768081843928946,
+          "MTR": 0.08794343115798485
+        },
+        "standard_errors": {
+          "constant": 0.014583035973479276,
+          "ATR": 0.02737443758733675,
+          "MTR": 0.0275581536081212
+        },
+        "r_squared": 0.04177740741023861,
+        "ATR_fraction_of_total_coefficient": 0.7777097049852053,
+        "ATR_fraction_delta_se": 0.061492221876974576,
+        "interpretation": "midpoint conditional-mean regression; ratio is not an identified latent population type share"
+      }
+    },
+    "appendix_A9_label_discrepancy": "native include_final_attention_failures matches printed col3 (N=3603); include_endpoint_failures matches col4 (N=3689); printed group labels appear reversed",
+    "interval_bounds": {
+      "author": {
+        "bias": [
+          0.04648561694275456,
+          0.14369008978620496
+        ],
+        "second_moment": [
+          0.05092252260675058,
+          0.08779153189939064
+        ],
+        "rmse": [
+          0.22566019278275595,
+          0.29629635822836337
+        ],
+        "mae": [
+          0.1570766749968544,
+          0.24407348176065724
+        ],
+        "sd_outer": [
+          0.20069161431706617,
+          0.279623550721866
+        ],
+        "interpretation": "marginal identification bounds, not confidence intervals; SD bounds are outer bounds"
+      },
+      "payoff": {
+        "bias": [
+          0.04533545719834561,
+          0.14369008978620496
+        ],
+        "second_moment": [
+          0.05092252260675058,
+          0.08868929548851992
+        ],
+        "rmse": [
+          0.22566019278275595,
+          0.29780748057851053
+        ],
+        "mae": [
+          0.1570766749968544,
+          0.2452236415050662
+        ],
+        "sd_outer": [
+          0.2005635867268354,
+          0.2816171582963441
+        ],
+        "interpretation": "marginal identification bounds, not confidence intervals; SD bounds are outer bounds"
+      }
+    },
+    "midpoint_imputation_moments": {
+      "bias": 0.09508785336447977,
+      "variance": 0.058175351274668136,
+      "sd": 0.24119567009933685,
+      "second_moment": 0.06721705113213294,
+      "rmse": 0.2592625139354568,
+      "mae": 0.195471245338932
+    },
+    "include_final_attention_interval_bounds": {
+      "bias": [
+        0.047404934269436275,
+        0.1443935548633859
+      ],
+      "second_moment": [
+        0.05285248270323969,
+        0.09003191623461444
+      ],
+      "rmse": [
+        0.22989667832145746,
+        0.30005318900923955
+      ],
+      "mae": [
+        0.15985289814404044,
+        0.24673882816488338
+      ],
+      "sd_outer": [
+        0.2050551467606667,
+        0.28333308215041086
+      ],
+      "interpretation": "marginal identification bounds, not confidence intervals; SD bounds are outer bounds"
+    },
+    "scope": "retained MTurk respondents, 2018-2019 experimental assigned schedules and 20-cent increment; equal respondent mass",
+    "measurement_limit": "one MPL per person; intervals rationalize choices under stable monetary preferences; response noise, rounding and stable latent beliefs are not separated",
+    "endpoint_failure_limit": "reintroduced endpoint failures have open intervals; source 0/1 imputations reproduce OLS only, not finite moment bounds",
+    "latent_beliefs_identified": false
+  },
+  "welfare_input_replaced": false,
+  "illustrative_welfare_rmse": 0.12,
+  "artifact_sha256": "6ae756c78470dd9df3091ce55761654aeaa2d0775a12802ad49a2d5952cdc951"
+}
