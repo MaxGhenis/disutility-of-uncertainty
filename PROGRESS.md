@@ -42,3 +42,23 @@ The 0.12 latent error RMSE remains illustrative.
 No resets, paid overflow, paid API/compute jobs, publication, merge or messages to
 people. Preserve `auto_reset.enabled=false` and the sprint no-reset marker. Stop
 launching new work at 21:00 America/New_York on September 7, 2026.
+
+## Signed-moment checkpoint
+
+- Added `analysis/signed_errors.py`: checksum-validated canonical CSV adapter,
+  signed descriptive moments, equal respondent mass, cluster bootstrap, interval
+  identification bounds and explicit classical/nonclassical noise sensitivity.
+- Added a labelled synthetic example; it is a software demonstration only.
+- 37 targeted tests pass, covering moment identities, unequal task counts,
+  respondent clustering, interval bounds, impossible noise assumptions, component
+  cancellation, unit/schema checks and byte-level integrity. Mypy passes.
+- Primary paper inspected through the web tool. Author-linked replication ZIP
+  located, but terminal download failed with `curl: (6) Could not resolve host:
+  www.dropbox.com`. Archive contents and licensing are still unverified.
+- Consulted the independent Claude memo in `research-disutility/retry-result.md`.
+  It also did not inspect the archive. Its structural-mixture suggestions require
+  additional assumptions and corrections (absolute wedge for SD; interior share
+  maximizes SD; Table 1 coefficient is design-weighted). Do not substitute them
+  for observed signed-error calibration.
+- Next: source-instrument adapters, mapping/selection audit, paper identification
+  section and one bounded independent semantic review.

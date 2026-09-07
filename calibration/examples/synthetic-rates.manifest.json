@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "data_status": "synthetic",
+  "rate_unit": "fraction",
+  "study": "Constructed software example; not Rees-Jones/Taubinsky respondents",
+  "tax_scope": "Artificial 30% flat tax",
+  "population": "Four constructed records; no target-population claim",
+  "sample_selection": "All four constructed records",
+  "transformation": "Directly specified rates for software verification",
+  "measurement_error": "Unknown; no reliability estimate supplied",
+  "weighting": "equal_respondent",
+  "input_sha256": "ff7c9683ce02a2a2dd77806ba3b1797d12f332a5d8f595ac28ac64c9747a0e37"
+}
