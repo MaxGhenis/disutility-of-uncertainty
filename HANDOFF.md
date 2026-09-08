@@ -1,3 +1,31 @@
+# Study 1 provenance repair handoff
+
+DOU-STUDY1-001 is repaired at exact `cd204c90e2ca94a2f81766cfb1e06320b76d1832`.
+[STUDY1-REPAIR-READY.md](STUDY1-REPAIR-READY.md) supplies the precise diff from
+98bc1b7, owner verification and scope for the same host reviewer's rereview.
+That rereview is pending; no new independent repair approval is claimed.
+
+Current isolated continuation: `sprint/study1-provenance-repair-20260907` in
+`/Users/maxghenis/disutility-of-uncertainty-study1-repair-20260907`.
+Current base checks: draft PR #3 head 98bc1b7, main 5d134c1. No base changes needed.
+
+The completed integration review at 09a5685 found one P2: a manifest/cache could
+rewrite its own identity while retaining reviewed-source attribution. The repair
+pins the exact manifest bytes and canonical aggregate digest in code and checks
+both rebuilt evidence and installed cache loads. Eight bypass regressions fail
+before and pass after; one positive formatting case passes. All 30 focused tests,
+lint/types, generated/citation checks and 26-file installed-wheel checks pass.
+All scientific values are unchanged; 49 source/artifact paths are byte-identical.
+The only rendered-output change is the model-source fingerprint on page 2.
+
+Repair artifacts: `/Users/maxghenis/capacity-sprint-20260907/disutility/study1-repair/`.
+The same reviewer should rereview only this repair. Keep original a5191ea and
+09a5685 scientific/integration reviews scoped to their exact targets. Draft updates
+are authorized; no publication, merge, reset, paid compute or raw-source changes.
+Safe checkpoint by 20:40 ET; stop new work 21:00 ET.
+
+## Prior integration handoff (historical)
+
 # Study 1 integration handoff
 
 ## State

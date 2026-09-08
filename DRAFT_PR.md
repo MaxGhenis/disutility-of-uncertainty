@@ -53,9 +53,13 @@ Review scope:
 - The separate Study 1 audit is independently clean at a5191ea: 28 tests, 36 files
   reproduced exactly, independent native/LP/covariance checks. Its precision-only
   report correction 935ed77 changes none of the included code or aggregates.
-- The **new paper/importer integration awaits focused independent review** at
-  09a5685. `STUDY1-REVIEW-READY.md` records the exact head/diff, inherited evidence,
-  new review scope and validation artifacts. No nested reviewer was launched.
+- The completed integration review at 09a5685 reconciles the frozen science,
+  units/math and rendered appendix, with one P2 (DOU-STUDY1-001): the importer
+  accepted rewritten manifest/cache identities. Repair cd204c9 anchors the exact
+  manifest inventory/source mappings and canonical cache content in code. Eight
+  bypass regressions fail before and pass after; 30 focused tests and installed
+  cache checks pass. `STUDY1-REPAIR-READY.md` records its exact rereview scope.
+  The same host reviewer's repair rereview is pending; no nested review was launched.
 
 Both dirty original checkouts remain preserved. The new isolated continuation
 starts at verified PR head 8e05267; a fresh fetch confirms main remains 5d134c1.

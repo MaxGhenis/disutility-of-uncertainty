@@ -2,13 +2,13 @@
 
 ## State
 
-Repairing confirmed importer provenance finding DOU-STUDY1-001 in a fresh
-isolated continuation `sprint/study1-provenance-repair-20260907`, based on live
-verified PR #3 head `98bc1b77d179d024daba8e2fba66a0f5ae571ea0`. Fresh fetch and
-PR checks confirm main remains `5d134c14630613ff32819abe99ad5109b65b07a5`.
-The prior continuations and dirty originals are untouched. The frozen scientific
-artifacts are correct and will remain byte-identical; only provenance enforcement
-and its regressions change. Safe repair target: 20:40 ET; no new work after 21:00.
+Confirmed P2 DOU-STUDY1-001 is repaired and owner-validated at exact commit
+`cd204c90e2ca94a2f81766cfb1e06320b76d1832`. The same host reviewer's focused
+rereview is pending; `STUDY1-REPAIR-READY.md` records its exact head/diff.
+The isolated branch is `sprint/study1-provenance-repair-20260907`, based on live
+verified PR #3 head 98bc1b7 and unchanged main 5d134c1. All scientific values,
+Study 2/welfare inputs and the 0.12 illustration are preserved. Prior continuations
+and dirty originals remain untouched. Safe checkpoint target: 20:40 ET.
 
 ## Done
 
@@ -344,3 +344,14 @@ These are local self-checks; no independent semantic reviewer completed.
 - All 30 focused importer/pipeline tests and lint/type checks pass. Next: regenerate
   the source fingerprint, compare every scientific value and paper artifact,
   commit the exact repair and prepare STUDY1-REPAIR-READY.md for host rereview.
+
+## Repair-ready checkpoint
+
+- Committed exact repair cd204c9; wrote its head/diff and 30-test verification
+  in STUDY1-REPAIR-READY.md for coordinator-host rereview. No nested review.
+- Fresh installed wheel matches 26 files, reproduces all results without PE or
+  Matplotlib, and rejects a self-rehashed changed cache using the code anchor.
+- All 20 pages' extracted PDF text is unchanged except the model fingerprint
+  on page 2, which was visually inspected. Science/cache/manifest remain exact.
+- Next: normal draft update from verified live head, host rereview of cd204c9,
+  preserve final validation artifacts and a safe report by 20:40 ET.
