@@ -2,7 +2,7 @@
   "schema_version": 2,
   "status": "illustrative scenarios; not a national welfare estimate",
   "provenance": {
-    "model_source_sha256": "06339cb54c0eee9fa90ee57f0660a04c8b1a818b9247f15aaaa6b2f9c061277c",
+    "model_source_sha256": "5861a1fcdd327853c63a540970cc92d43e0bc47135858730f6dca02f580b2b6f",
     "method": "deterministic Gauss-Legendre quadrature with explicit censoring atoms",
     "quadrature_order": 256,
     "seed": 42,

@@ -329,3 +329,18 @@ These are local self-checks; no independent semantic reviewer completed.
   STUDY1-REPAIR-READY.md for the same host reviewer's focused rereview.
 - Final integration review is still in progress; read its final report before
   delivery. No nested review, raw-data change, reset, paid compute or publication.
+
+## Anchored provenance repair validated
+
+- Final host integration report is COMPLETE with one P2 (DOU-STUDY1-001), no
+  other actionable finding. Its independent source/units/math/render checks pass;
+  copied the exact final report into calibration/reviews/integration-09a5685.md.
+- Eight new negative regressions fail on the previous implementation: omitted
+  consumed files, altered source mapping, rehashed changed file, empty/expanded
+  inventory, and three self-rehashed scientific/provenance cache changes.
+- Anchored manifest bytes now pin all inventory/source mappings; the canonical
+  aggregate digest is anchored in both builder and installed loader. One positive
+  regression allows harmless cache JSON formatting changes.
+- All 30 focused importer/pipeline tests and lint/type checks pass. Next: regenerate
+  the source fingerprint, compare every scientific value and paper artifact,
+  commit the exact repair and prepare STUDY1-REPAIR-READY.md for host rereview.

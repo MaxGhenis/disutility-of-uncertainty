@@ -62,3 +62,20 @@ No explicit redistribution licence was found in the original archive. Raw and
 canonical microdata, original DO files and source PDFs are excluded from this
 package. Obtain and retain source bytes separately under their applicable terms.
 The repository's MIT licence does not grant rights to those external sources.
+
+## Reviewed provenance identities
+
+The importer pins the exact manifest SHA256 in code, covering the entire
+18-file inventory, source mappings, file hashes, sizes and audit/archive identity.
+It also pins the canonical aggregate-content digest for both fresh imports and
+installed cache loads. Rewriting a file hash, dropping a consumed file, changing
+source attribution or self-rehashing changed scientific values cannot retain the
+old reviewed identity. Cache JSON whitespace/key order may vary without changing
+its canonical content. The frozen manifest itself remains byte-identical.
+
+These anchors refer to the correct frozen evidence delivered at integration
+09a5685; [its completed integration review](../reviews/integration-09a5685.md)
+identified the missing trust anchors (DOU-STUDY1-001). Changing evidence requires
+an explicit source/version review and corresponding code-anchor update, not just
+regenerating local checksums. This repair changes no aggregate or welfare input;
+the same host reviewer will assess the exact repair delta separately.

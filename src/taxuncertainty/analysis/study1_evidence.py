@@ -14,6 +14,17 @@ from pathlib import Path
 from taxuncertainty.analysis.rjt_replication import ARCHIVE_SHA256
 
 AUDIT_COMMIT = "a5191ea9f81fd414d9fbf547995dcb31341aa875"
+# Trust anchors for the frozen integration evidence at 09a5685. The manifest
+# pins the complete inventory, original source mappings, file hashes and sizes.
+# The aggregate anchor pins scientific content AND provenance in installed wheels.
+# A new evidence version requires explicit review and new anchors in code;
+# rewriting a local manifest or its self-checksum cannot extend the old review.
+REVIEWED_MANIFEST_SHA256 = (
+    "eaa4d3358abb068bccd0d5204fd4c2ef2e5c0eac86c5693f4580d2972055055d"
+)
+REVIEWED_AGGREGATE_SHA256 = (
+    "d16e23fe64d4d78da75eec90c53c8b7c185270f00fc4bb2209299ea03354b3fc"
+)
 CACHE = Path(__file__).parents[1] / "data/study1_evidence.json"
 
 
@@ -26,7 +37,10 @@ def digest(data):
 def verify_bundle(root):
     """Fail closed on altered frozen code, aggregates, or source attribution."""
     root = Path(root)
-    manifest = json.loads((root / "manifest.json").read_text())
+    raw_manifest = (root / "manifest.json").read_bytes()
+    if sha256(raw_manifest).hexdigest() != REVIEWED_MANIFEST_SHA256:
+        raise ValueError("Study 1 reviewed manifest identity mismatch")
+    manifest = json.loads(raw_manifest)
     if (
         manifest["audit_commit"] != AUDIT_COMMIT
         or manifest["archive_sha256"] != ARCHIVE_SHA256
@@ -206,6 +220,8 @@ def build_evidence(root):
     ):
         result[name] = json.loads((root / f"results/{name}.json").read_text())
     result["artifact_sha256"] = digest(result)
+    if result["artifact_sha256"] != REVIEWED_AGGREGATE_SHA256:
+        raise ValueError("Study 1 reviewed aggregate identity mismatch")
     return result
 
 
@@ -221,6 +237,8 @@ def load_evidence(path=CACHE):
         or data["welfare_input_replaced"] is not False
     ):
         raise ValueError("Study 1 evidence scope or source mismatch")
+    if claimed != REVIEWED_AGGREGATE_SHA256:
+        raise ValueError("Study 1 reviewed aggregate identity mismatch")
     data["artifact_sha256"] = claimed
     return data
 

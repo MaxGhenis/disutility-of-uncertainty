@@ -3,6 +3,7 @@
 import json
 import math
 import shutil
+from hashlib import sha256
 from pathlib import Path
 
 import pytest
@@ -60,6 +61,72 @@ def test_cache_corruption_and_relabeling_latent_evidence_rejected(tmp_path):
     path.write_text(json.dumps(data))
     with pytest.raises(ValueError, match="scope or source mismatch"):
         load_evidence(path)
+
+
+@pytest.mark.parametrize(
+    "case",
+    [
+        "omitted_consumed_file",
+        "source_mapping",
+        "rehashed_file",
+        "empty_inventory",
+        "extra_entry",
+    ],
+)
+def test_rewritten_manifest_cannot_retain_reviewed_identity(tmp_path, case):
+    bundle = tmp_path / "bundle"
+    shutil.copytree(BUNDLE, bundle)
+    manifest_path = bundle / "manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    name = "results/selection.csv"
+    if case in ("omitted_consumed_file", "rehashed_file"):
+        path = bundle / name
+        raw = path.read_bytes().replace(b"0.450752035248", b"0.123")
+        assert raw != path.read_bytes()
+        path.write_bytes(raw)
+        if case == "omitted_consumed_file":
+            del manifest["files"][name]
+        else:
+            manifest["files"][name].update(
+                sha256=sha256(raw).hexdigest(), bytes=len(raw)
+            )
+    elif case == "source_mapping":
+        manifest["files"][name]["source_path"] = "never-reviewed/selection.csv"
+    elif case == "empty_inventory":
+        manifest["files"] = {}
+    else:
+        manifest["files"]["unreviewed.csv"] = dict(manifest["files"][name])
+        shutil.copyfile(bundle / name, bundle / "unreviewed.csv")
+    manifest_path.write_text(json.dumps(manifest))
+    for check in (verify_bundle, build_evidence):
+        with pytest.raises(ValueError, match="reviewed manifest identity mismatch"):
+            check(bundle)
+
+
+@pytest.mark.parametrize("case", ["scientific_value", "source_mapping", "inventory"])
+def test_self_rehashed_cache_cannot_retain_reviewed_identity(tmp_path, case):
+    data = load_evidence()
+    if case == "scientific_value":
+        data["selection"][3]["sd_error"] = 0.123
+    elif case == "source_mapping":
+        data["provenance"]["frozen_files"]["results/selection.csv"][
+            "source_path"
+        ] = "never-reviewed/selection.csv"
+    else:
+        del data["provenance"]["frozen_files"]["results/selection.csv"]
+    data.pop("artifact_sha256")
+    data["artifact_sha256"] = digest(data)
+    path = tmp_path / "cache.json"
+    path.write_text(json.dumps(data))
+    with pytest.raises(ValueError, match="reviewed aggregate identity mismatch"):
+        load_evidence(path)
+
+
+def test_cache_identity_allows_json_formatting_without_changed_content(tmp_path):
+    data = load_evidence()
+    path = tmp_path / "cache.json"
+    path.write_text(json.dumps(data, sort_keys=True, separators=(",", ":")))
+    assert load_evidence(path) == data
 
 
 def test_source_selection_processing_and_pooled_benchmarks_match():
