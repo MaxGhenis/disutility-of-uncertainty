@@ -12,22 +12,28 @@ and dirty originals remain untouched. Safe checkpoint target: 20:40 ET.
 
 ## Done
 
-- Committed a reproducible, qualified Study 1 appendix and frozen aggregate/code
-  package. Exact integration review target: 09a5685; review-ready file committed.
-- 267 tests passed; ten native aggregates reproduce exactly; lint/type/generated
-  checks pass; 26 installed-wheel files match; affected PDF pages inspected.
-- Draft PR #3 updated normally. Remote test and paper-build jobs pass at 81bb5e5;
-  preview/Pages deployment skipped. No publication or merge.
-- Preserved both dirty originals (50 and 72 file states/status/head/branch) and
-  the clean prior continuation at 8e05267. Reset configuration hashes unchanged.
-- Durable exact diff, logs, paper, wheel and final report saved in the lane.
+- Read and preserved the completed 09a5685 integration review: one confirmed P2,
+  DOU-STUDY1-001; frozen science, units, math and rendered qualifications reconcile.
+- Fixed that provenance gate with exact code anchors for the manifest inventory/
+  source mappings and aggregate content. Eight negative regressions fail before
+  and pass after; harmless cache-format variation remains supported.
+- 30 focused tests, lint/types, aggregate/generated/citation checks pass. The
+  installed wheel matches 26 files, reproduces all results and rejects rehashed
+  changed science. All scientific values and 49 paths remain unchanged.
+- Refreshed HTML/PDF solely for the changed model-source fingerprint. Page 2 was
+  inspected; all other extracted paper text is unchanged. No scientific rerender
+  claims beyond this delta are needed.
+- Draft PR #3 updated normally to 3629030; exact repair target is cd204c9, and
+  later commits are delivery metadata. Review-ready scope is committed/exported.
+- Both dirty originals, both earlier clean continuations and reset protections
+  are preserved. Artifacts and final checkpoint report are saved in the lane.
 
 ## Next
 
-1. Focused host review of exact 09a5685, using STUDY1-REVIEW-READY.md. No new
-   integration approval is claimed; later commits contain handoff metadata only.
-2. Any later latent calibration requires independent measurement, noise/covariance
-   assumptions and population/tax-component coverage. Keep 0.12 illustrative.
+1. Same host reviewer rereviews exact cd204c9 using STUDY1-REPAIR-READY.md. The
+   repair is owner-validated; independent closure remains pending.
+2. Preserve scientific qualifications and 0.12. Additional latent calibration
+   requires independent measurement and transport evidence, outside this repair.
 
 ## Initial preservation (historical)
 
@@ -355,3 +361,12 @@ These are local self-checks; no independent semantic reviewer completed.
   on page 2, which was visually inspected. Science/cache/manifest remain exact.
 - Next: normal draft update from verified live head, host rereview of cd204c9,
   preserve final validation artifacts and a safe report by 20:40 ET.
+
+## Safe repair delivery checkpoint
+
+- Normal fast-forward draft update to 3629030 completed; PR head/body read back
+  and verified. CI status is captured in the final lane report. No publication
+  or merge. This checkpoint is documentation only; repair target stays cd204c9.
+- Both earlier continuations remain clean at their original 8e05267/98bc1b7
+  heads, and all 50/72 dirty-original states/statuses match. No reset controls
+  changed. Exact repair and delivered source bundles are retained for handoff.

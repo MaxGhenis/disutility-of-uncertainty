@@ -7,7 +7,10 @@ That rereview is pending; no new independent repair approval is claimed.
 
 Current isolated continuation: `sprint/study1-provenance-repair-20260907` in
 `/Users/maxghenis/disutility-of-uncertainty-study1-repair-20260907`.
-Current base checks: draft PR #3 head 98bc1b7, main 5d134c1. No base changes needed.
+Continuation base checks verified prior draft head 98bc1b7 and main 5d134c1.
+The normal fast-forward draft update to 3629030 is complete; PR head/body were
+read back and verified. Later delivery documentation leaves repair target cd204c9
+unchanged. Final CI status and output artifacts are recorded in the lane report.
 
 The completed integration review at 09a5685 found one P2: a manifest/cache could
 rewrite its own identity while retaining reviewed-source attribution. The repair
