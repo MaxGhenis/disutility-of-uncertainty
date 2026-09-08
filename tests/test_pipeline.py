@@ -1,215 +1,171 @@
-"""Tests for the results pipeline — TDD: written before implementation."""
+"""Reproduction, accounting, and stale-publication protections."""
 
+import builtins
 import json
+from dataclasses import asdict
+from pathlib import Path
 
-import numpy as np
 import pytest
-from unittest.mock import patch, MagicMock
 
-from taxuncertainty.pipeline import generate_results, _generate_empirical_section
+from taxuncertainty.pipeline import (
+    check_artifacts,
+    compute_results,
+    generate_figures,
+    generate_results,
+    main,
+    paper_artifacts,
+)
 from taxuncertainty.results import Results
-from taxuncertainty.analysis.calibration import Calibration
-from taxuncertainty.models.preferences import QuasilinearIsoelastic
 
 
-def _mock_empirical_section(cal, prefs):
-    """Return a fake empirical section without running PolicyEngine."""
-    return {
-        "mtr_distribution": {
-            "weighted_mean": 0.30,
-            "weighted_std": 0.04,
-            "p10": 0.15,
-            "p25": 0.22,
-            "p50": 0.30,
-            "p75": 0.36,
-            "p90": 0.42,
-            "n_observations": 3,
-            "total_weighted_workers": 3000.0,
-            "mean_earnings": 60000.0,
-        },
-        "aggregate_dwl": 500000.0,
-        "aggregate_dwl_billions": 0.0005,
-        "quintiles": [
-            {
-                "quantile": q,
-                "mean_earnings": 20000 + q * 20000,
-                "mean_mtr": 0.20 + q * 0.04,
-                "n_observations": 1,
-                "weighted_workers": 600.0,
-                "per_worker_dwl": 100.0 + q * 50,
-                "quintile_total_dwl": (100.0 + q * 50) * 600,
-                "share_of_total_dwl": 0.2,
-            }
-            for q in range(1, 6)
-        ],
-        "comparison": {
-            "empirical_dwl_billions": 0.0005,
-            "stylized_dwl_billions": 0.0006,
-            "ratio": 0.83,
-        },
-    }
+@pytest.fixture(scope="module")
+def results():
+    return compute_results()
 
 
-@pytest.fixture
-def results_path(tmp_path):
-    out = tmp_path / "results.json"
-    with patch(
-        "taxuncertainty.pipeline._generate_empirical_section",
-        _mock_empirical_section,
+def test_headline_reports_conditional_accounting_not_national_dwl(results):
+    assert results["schema_version"] == 2
+    assert "not a national" in results["status"]
+    assert results["assumptions"]["error_source"]["status"] == "assumed"
+    for old_field in (
+        "empirical",
+        "baseline",
+        "total_dwl_billions",
+        "gdp_fraction_pct",
     ):
-        generate_results(output_path=out)
-    return out
-
-
-@pytest.fixture
-def results_data(results_path):
-    return json.loads(results_path.read_text())
-
-
-class TestPipeline:
-    def test_generates_valid_json(self, results_path):
-        assert results_path.exists()
-        data = json.loads(results_path.read_text())
-        assert isinstance(data, dict)
-
-    def test_results_contain_required_keys(self, results_data):
-        for key in ["baseline", "sensitivity", "optimal_tax", "parameters", "empirical"]:
-            assert key in results_data, f"Missing key: {key}"
-
-    def test_baseline_has_required_fields(self, results_data):
-        baseline = results_data["baseline"]
-        for field in [
-            "total_dwl_billions",
-            "per_worker_dwl",
-            "gdp_fraction_pct",
-            "frisch_elasticity",
-            "misperception_std",
-        ]:
-            assert field in baseline, f"Missing baseline field: {field}"
-
-    def test_deterministic_with_seed(self, tmp_path):
-        with patch(
-            "taxuncertainty.pipeline._generate_empirical_section",
-            _mock_empirical_section,
-        ):
-            out1 = tmp_path / "r1.json"
-            out2 = tmp_path / "r2.json"
-            generate_results(output_path=out1)
-            generate_results(output_path=out2)
-        assert out1.read_text() == out2.read_text()
-
-
-class TestEmpiricalSection:
-    def test_empirical_has_required_keys(self, results_data):
-        emp = results_data["empirical"]
-        for key in ["mtr_distribution", "aggregate_dwl", "aggregate_dwl_billions",
-                     "quintiles", "comparison"]:
-            assert key in emp, f"Missing empirical key: {key}"
-
-    def test_mtr_distribution_stats(self, results_data):
-        dist = results_data["empirical"]["mtr_distribution"]
-        assert 0.0 < dist["weighted_mean"] < 1.0
-        assert dist["weighted_std"] > 0
-
-    def test_quintiles_present(self, results_data):
-        quintiles = results_data["empirical"]["quintiles"]
-        assert len(quintiles) == 5
-        for q in quintiles:
-            assert "per_worker_dwl" in q
-            assert "share_of_total_dwl" in q
-
-    def test_comparison_has_both_estimates(self, results_data):
-        comp = results_data["empirical"]["comparison"]
-        assert "empirical_dwl_billions" in comp
-        assert "stylized_dwl_billions" in comp
-        assert "ratio" in comp
-
-
-class TestGenerateEmpiricalSection:
-    """Test _generate_empirical_section with mocked PolicyEngine."""
-
-    def _make_mock_sim(self):
-        """Create a mock Microsimulation with realistic test data."""
-        n = 100
-        rng = np.random.default_rng(42)
-        ages = np.concatenate([
-            rng.integers(0, 17, size=20),
-            rng.integers(18, 64, size=60),
-            rng.integers(65, 90, size=20),
-        ]).astype(np.float32)
-        emp_inc = np.zeros(n, dtype=np.float32)
-        emp_inc[20:75] = rng.lognormal(10.5, 0.8, size=55).astype(np.float32)
-        mtr = np.zeros(n, dtype=np.float32)
-        mtr[20:75] = rng.normal(0.30, 0.10, size=55).astype(np.float32)
-        weights = rng.uniform(500, 3000, size=n).astype(np.float32)
-        sim = MagicMock()
-
-        class MockSeries:
-            def __init__(self, values):
-                self.values = np.asarray(values, dtype=np.float32)
-
-        def mock_calculate(var_name, year):
-            data = {
-                "employment_income": emp_inc,
-                "marginal_tax_rate": mtr,
-                "person_weight": weights,
-                "age": ages,
-            }
-            return MockSeries(data[var_name])
-
-        sim.calculate = mock_calculate
-        return sim
-
-    def test_generates_valid_structure(self, tmp_path):
-        cal = Calibration()
-        prefs = QuasilinearIsoelastic(
-            psi=cal.PSI, frisch_elasticity=cal.FRISCH_ELASTICITY_CENTRAL
+        assert old_field not in results
+    for scenario in results["scenarios"]:
+        worker = scenario["worker"]
+        assert worker["social_loss"] == pytest.approx(
+            worker["private_regret"] - worker["revenue_change"], abs=1e-8
         )
-        with (
-            patch("policyengine_us.Microsimulation", return_value=self._make_mock_sim()),
-            patch("taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path),
-        ):
-            result = _generate_empirical_section(cal, prefs)
 
-        assert "mtr_distribution" in result
-        assert "aggregate_dwl" in result
-        assert "aggregate_dwl_billions" in result
-        assert "quintiles" in result
-        assert "comparison" in result
-        assert result["aggregate_dwl"] > 0
-        assert len(result["quintiles"]) == 5
 
-    def test_quintile_shares_sum_to_one(self, tmp_path):
-        cal = Calibration()
-        prefs = QuasilinearIsoelastic(
-            psi=cal.PSI, frisch_elasticity=cal.FRISCH_ELASTICITY_CENTRAL
+def test_equal_rmse_does_not_force_same_optimal_tax_direction(results):
+    inverse = {
+        row["id"]: row["optimum"]["tax_rate"]
+        for row in results["planner"]["inverse_wage"]
+    }
+    assert inverse["unbiased"] < inverse["informed"] < inverse["bias_minus_3"]
+    assert results["planner"]["equal"][0]["optimum"]["tax_rate"] == 0
+    assert results["planner"]["equal"][0]["optimum"]["at_boundary"]
+
+
+def test_approximation_error_and_quadrature_are_reported(results):
+    cap = next(
+        row for row in results["approximation_accuracy"] if row["tax_rate"] == 0.99
+    )
+    assert cap["latent_ratio"] > 8
+    assert results["validation"]["baseline_social_quadrature_difference"] < 0.00001
+
+
+def test_pipeline_does_not_import_policyengine(monkeypatch):
+    original = builtins.__import__
+
+    def reject(name, *args, **kwargs):
+        if name == "policyengine" or name.startswith("policyengine_"):
+            raise AssertionError("Default pipeline must not run PolicyEngine")
+        return original(name, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "__import__", reject)
+    assert compute_results()["household_fixture"]["status"].startswith(
+        "executed household"
+    )
+
+
+def test_generate_reproducible_json_and_results_access(tmp_path, results):
+    first, second = tmp_path / "one.json", tmp_path / "two.json"
+    generate_results(first)
+    generate_results(second)
+    assert first.read_bytes() == second.read_bytes()
+    loaded = Results(first)
+    assert loaded.schema_version == 2
+    assert loaded.scenarios[1].worker.private_regret_fmt == "190.11"
+    assert json.loads(first.read_text()) == results
+
+
+def test_seed_changes_synthetic_planner_but_not_worker():
+    a, b = compute_results(42), compute_results(43)
+    assert a["scenarios"] == b["scenarios"]
+    assert a["planner"] != b["planner"]
+
+
+def test_paper_values_follow_results_and_no_longer_embed_old_percentiles(results):
+    changed = json.loads(json.dumps(results))
+    changed["scenarios"][1]["worker"]["private_regret"] = 1234.56
+    original = paper_artifacts(results)
+    altered = paper_artifacts(changed)
+    assert original["generated/scenarios.md"] != altered["generated/scenarios.md"]
+    assert json.loads(altered["_variables.yml"])["unbiased_private"] == "1234.56"
+    assert "1,234.56" in altered["generated/scenarios.md"]
+
+
+def test_cli_check_detects_results_prose_and_figure_drift(tmp_path):
+    output = tmp_path / "data/results.json"
+    paper = tmp_path / "paper"
+    args = ["--output", str(output), "--paper-dir", str(paper)]
+    assert main(args) == 0
+    assert main(args + ["--check"]) == 0
+    generated = paper / "generated/scenarios.md"
+    generated.write_text(generated.read_text().replace("190.11", "999.99"))
+    assert main(args + ["--check"]) == 1
+    assert main(args) == 0
+    figure = paper / "generated/welfare.png"
+    figure.write_bytes(figure.read_bytes() + b"corrupted")
+    assert main(args + ["--check"]) == 1
+    assert main(args) == 0
+    data = json.loads(output.read_text())
+    data["scenarios"][1]["worker"]["social_loss"] += 100
+    output.write_text(json.dumps(data))
+    assert main(args + ["--check"]) == 1
+
+
+def test_household_fixture_is_provenance_known_and_finite_grid(results):
+    fixture = results["household_fixture"]
+    assert len(fixture["artifact_sha256"]) == 64
+    assert fixture["package_versions"]["policyengine"] == "5.3.0"
+    assert fixture["discretization"]["continuous_utility_error_bound"] is None
+    assert fixture["discretization"]["maximum_grid_gap"] == 250
+    assert fixture["selected_outcomes"][2]["net_income"] == 42159
+
+
+def test_nonlinear_examples_keep_private_and_fiscal_effects_separate(results):
+    for row in results["nonlinear_examples"]:
+        outcome = row["outcome"]
+        assert outcome["private_regret"] >= 0
+        assert outcome["social_loss"] == pytest.approx(
+            outcome["private_regret"] - outcome["revenue_change"]
         )
-        with (
-            patch("policyengine_us.Microsimulation", return_value=self._make_mock_sim()),
-            patch("taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path),
-        ):
-            result = _generate_empirical_section(cal, prefs)
-
-        shares = [q["share_of_total_dwl"] for q in result["quintiles"]]
-        assert sum(shares) == pytest.approx(1.0)
+        assert row["status"].startswith("synthetic")
 
 
-class TestResultsSingleton:
-    def test_loads_from_file(self, results_path):
-        r = Results(results_path)
-        assert r.baseline.total_dwl_billions > 0
+def test_observed_calibration_drives_paper_but_never_replaces_belief_inputs(results):
+    empirical = results["observed_calibration"]
+    assert not empirical["welfare_input_replaced"]
+    assert not empirical["study2"]["latent_beliefs_identified"]
+    assert results["scenarios"][1]["beliefs"]["std_error"] == 0.12
+    changed = json.loads(json.dumps(results))
+    changed["observed_calibration"]["study2"]["interval_bounds"]["author"]["bias"][
+        0
+    ] = 0.1234
+    assert "12.34 to" in paper_artifacts(changed)["generated/empirical-intervals.md"]
+    assert (
+        paper_artifacts(changed)["generated/scenarios.md"]
+        == paper_artifacts(results)["generated/scenarios.md"]
+    )
 
-    def test_attribute_access(self, results_path):
-        r = Results(results_path)
-        assert isinstance(r.baseline.gdp_fraction_pct, float)
-        assert isinstance(r.baseline.per_worker_dwl, float)
 
-    def test_formatted_values(self, results_path):
-        r = Results(results_path)
-        assert isinstance(r.baseline.total_dwl_billions_fmt, str)
-        assert isinstance(r.baseline.gdp_fraction_pct_fmt, str)
-
-    def test_default_path(self):
-        """Results() with no argument loads from package data directory."""
-        r = Results()
-        assert r.baseline.total_dwl_billions > 0
+def test_paper_zero_cents_ignore_backend_roundoff_without_changing_accounting(results):
+    changed = json.loads(json.dumps(results))
+    for key in ("private_regret", "revenue_change", "social_loss"):
+        changed["scenarios"][0]["worker"][key] = -1e-11
+    assert (
+        paper_artifacts(changed)["generated/scenarios.md"]
+        == paper_artifacts(results)["generated/scenarios.md"]
+    )
+    assert changed["scenarios"][0]["worker"]["revenue_change"] == -1e-11
+    changed["scenarios"][0]["worker"]["revenue_change"] = -0.01
+    assert (
+        "| No error | 0.00 | -0.01 | 0.00 |"
+        in paper_artifacts(changed)["generated/scenarios.md"]
+    )

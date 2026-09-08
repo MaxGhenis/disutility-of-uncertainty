@@ -1,0 +1,51 @@
+---
+title: "Tax misperception: private losses, fiscal effects, and social welfare"
+author:
+  - name: Max Ghenis
+bibliography: references.bib
+format:
+  html:
+    toc: true
+    number-sections: true
+  pdf:
+    toc: true
+    number-sections: true
+    geometry: margin=1in
+    fontsize: 11pt
+    colorlinks: true
+---
+
+# Abstract {.unnumbered}
+
+A worker who acts on a mistaken marginal tax rate can lose privately while increasing tax revenue. The social effect depends on both changes and on how public funds are used. This note develops a reproducible accounting framework with quasilinear labor supply, signed belief errors, and an endogenous government transfer. It distinguishes private optimization regret from social welfare loss and evaluates the exact utility function rather than relying on a local approximation near tax boundaries. In an illustrative scenario, an informed worker earns \$55,000 at a 30% linear tax rate. Mean-zero latent normal errors with a standard deviation of 12 percentage points generate a private loss of \${{< var unbiased_private >}} and a social loss of \${{< var unbiased_social >}} when incremental revenue is rebated and valued equally. Introducing downward bias can reverse the social-welfare effect. An inverse-wage-weighted planner's preferred tax rate falls from {{< var optimal_informed >}}% to {{< var optimal_unbiased >}}% under unbiased errors, but rises to {{< var optimal_bias_minus_3 >}}% with a three-point downward bias at the same latent root-mean-square error. These are conditional model results: the error distribution is assumed, and no national welfare estimate is identified. A native-data calibration reproduces selected Rees-Jones/Taubinsky benchmarks and bounds errors implied by retained experimental choices, while keeping observed intervals separate from latent beliefs and welfare inputs. An extension handles explicitly specified nonlinear budgets and records actual PolicyEngine household outcomes on a finite earnings grid.
+
+**Keywords:** Tax misperception; labor supply; fiscal externalities; welfare accounting.
+
+**Replication:** [Source code](https://github.com/MaxGhenis/disutility-of-uncertainty). Tables, figures, and inline results are generated from one numerical pipeline. Model source fingerprint: `{{< var model_hash >}}`.
+
+{{< include chapters/introduction.md >}}
+
+{{< include chapters/literature_review.md >}}
+
+{{< include chapters/model.md >}}
+
+{{< include chapters/calibration.md >}}
+
+{{< include chapters/identification.md >}}
+
+{{< include chapters/results.md >}}
+
+{{< include chapters/extensions.md >}}
+
+{{< include chapters/conclusion.md >}}
+
+{{< include chapters/technical_appendix.md >}}
+
+{{< include chapters/study1_appendix.md >}}
+
+{{< pagebreak >}}
+
+# References {.unnumbered}
+
+::: {#refs}
+:::

@@ -1,98 +1,95 @@
-"""Calibration of model parameters and baseline results.
+"""Explicit illustrative inputs and their evidentiary status.
 
-Uses empirical estimates from the public finance literature to calibrate
-the model and compute deadweight loss estimates.
+These inputs do not identify national welfare costs. In particular, .12 is
+an assumed latent rate-error RMSE, not an estimate attributed to a survey.
 """
 
-import pandas as pd
+from dataclasses import asdict, dataclass
+from math import isfinite, sqrt
+
+from taxuncertainty.models.beliefs import NormalBeliefs
+from taxuncertainty.models.preferences import QuasilinearIsoelastic
 
 
-class Calibration:
-    """Calibrated parameter sets and baseline results.
+@dataclass(frozen=True)
+class Illustration:
+    """Dollar normalization and assumptions for the research note."""
 
-    Literature sources
-    ------------------
-    - Frisch elasticity: Chetty (2012) meta-analysis
-    - Misperception std: Rees-Jones & Taubinsky (2020), Gideon (2017)
-    - US macro parameters: CBO, BLS
-    """
+    elasticity: float = 0.33
+    hourly_wage: float = 27.5
+    baseline_hours: float = 2000.0
+    tax_rate: float = 0.30
+    error_rmse: float = 0.12
+    wage_log_std: float = 0.5
+    synthetic_workers: int = 500
+    seed: int = 42
 
-    # From Chetty (2012) meta-analysis of Frisch elasticity
-    FRISCH_ELASTICITY_LOW = 0.25
-    FRISCH_ELASTICITY_CENTRAL = 0.33
-    FRISCH_ELASTICITY_HIGH = 0.50
+    def __post_init__(self):
+        for name in ("elasticity", "hourly_wage", "baseline_hours"):
+            value = getattr(self, name)
+            if not isfinite(value) or value <= 0:
+                raise ValueError(f"{name} must be positive and finite")
+        if not isfinite(self.tax_rate) or self.tax_rate >= 1:
+            raise ValueError("the earnings normalization requires tax_rate < 1")
+        for name in ("error_rmse", "wage_log_std"):
+            value = getattr(self, name)
+            if not isfinite(value) or value < 0:
+                raise ValueError(f"{name} must be nonnegative and finite")
+        if not isinstance(self.synthetic_workers, int) or self.synthetic_workers < 1:
+            raise ValueError("synthetic_workers must be a positive integer")
 
-    # From Rees-Jones & Taubinsky (2020) and Gideon (2017)
-    MISPERCEPTION_STD_LOW = 0.08
-    MISPERCEPTION_STD_CENTRAL = 0.12
-    MISPERCEPTION_STD_HIGH = 0.15
+    @property
+    def earnings(self):
+        return self.hourly_wage * self.baseline_hours
 
-    # US macro parameters
-    MEAN_MARGINAL_RATE = 0.30  # From CBO
-    MEAN_HOURLY_WAGE = 27.5  # ~$55k annual at 2000 hrs
-    MEAN_ANNUAL_EARNINGS = 55_000
-    TOTAL_WORKERS = 160_000_000
-    GDP = 28_000_000_000_000  # ~$28T
+    @property
+    def preferences(self):
+        psi = (
+            self.hourly_wage
+            * (1 - self.tax_rate)
+            / self.baseline_hours ** (1 / self.elasticity)
+        )
+        return QuasilinearIsoelastic(psi, self.elasticity)
 
-    # Disutility scale psi calibrated so median worker works ~2000 hrs/year
-    PSI = 1.0  # normalized
-
-    def per_worker_dwl(self, eps, sigma, tau=None, earnings=None):
-        """Analytical per-worker DWL: 0.5 * eps * earnings * sigma^2 / (1 - tau)."""
-        tau = tau if tau is not None else self.MEAN_MARGINAL_RATE
-        earnings = earnings if earnings is not None else self.MEAN_ANNUAL_EARNINGS
-        return 0.5 * eps * earnings * sigma**2 / (1 - tau)
-
-    def _dwl_row(self, eps, sigma):
-        """Build a result dict for one (elasticity, sigma) combination."""
-        per_worker = self.per_worker_dwl(eps, sigma)
-        total = per_worker * self.TOTAL_WORKERS
+    def assumptions(self):
         return {
-            "frisch_elasticity": eps,
-            "misperception_std": sigma,
-            "per_worker_dwl": per_worker,
-            "total_dwl_billions": total / 1e9,
-            "gdp_fraction_pct": total / self.GDP * 100,
+            **asdict(self),
+            "baseline_earnings": self.earnings,
+            "psi": self.preferences.psi,
+            "status": "illustrative; no population calibration",
+            "elasticity_source": {
+                "url": "https://doi.org/10.3982/ECTA9043",
+                "location": "Chetty (2012), abstract and p. 972",
+                "concept": "Hicksian intensive-margin estimate, mapped to the common elasticity under quasilinearity",
+            },
+            "error_source": {
+                "status": "assumed",
+                "note": "No verified .12 RMSE estimate or behavioral error distribution is attributed to Rees-Jones and Taubinsky (2020).",
+            },
+            "dollar_normalization": f"{self.hourly_wage:.2f} dollars/hour and {self.baseline_hours:,.0f} hours are illustrative, not estimated population means",
+            "perception_bounds": [0.0, 1.0],
+            "fiscal_closure": "all incremental net tax revenue rebated equally; wages fixed",
         }
 
-    def baseline_results(self):
-        """Compute baseline DWL using central parameters.
 
-        Uses the analytical formula:
-            per_worker = 0.5 * epsilon * annual_earnings * sigma^2 / (1 - tau)
+def beliefs_with_rmse(mean_error, rmse=0.12):
+    """Normal latent errors with a specified signed mean and second moment."""
+    if not isfinite(mean_error) or not isfinite(rmse) or rmse < abs(mean_error):
+        raise ValueError("finite RMSE must be at least the absolute mean error")
+    return NormalBeliefs(mean_error, sqrt(max(0, rmse**2 - mean_error**2)))
 
-        Returns
-        -------
-        dict
-            Keys: total_dwl_billions, per_worker_dwl, gdp_fraction_pct,
-            frisch_elasticity, misperception_std.
-        """
-        return self._dwl_row(
-            self.FRISCH_ELASTICITY_CENTRAL,
-            self.MISPERCEPTION_STD_CENTRAL,
+
+def private_regret_approx(earnings, elasticity, tax_rate, error_second_moment):
+    """Local private regret, not social DWL; use realized moments if censored.
+
+    This expression is a diagnostic only near tax/choice boundaries. At a
+    nonpositive net wage the interior expansion does not exist.
+    """
+    values = (earnings, elasticity, tax_rate, error_second_moment)
+    if not all(isfinite(value) for value in values):
+        raise ValueError("all inputs must be finite")
+    if earnings < 0 or elasticity <= 0 or error_second_moment < 0 or tax_rate >= 1:
+        raise ValueError(
+            "requires earnings >= 0, elasticity > 0, second moment >= 0, tax_rate < 1"
         )
-
-    def sensitivity_table(self):
-        """Grid of DWL across (frisch_elasticity, misperception_std) pairs.
-
-        Computes 3 x 3 = 9 rows using low, central, high values for each.
-
-        Returns
-        -------
-        pd.DataFrame
-            Columns: frisch_elasticity, misperception_std, per_worker_dwl,
-            total_dwl_billions, gdp_fraction_pct.
-        """
-        elasticities = [
-            self.FRISCH_ELASTICITY_LOW,
-            self.FRISCH_ELASTICITY_CENTRAL,
-            self.FRISCH_ELASTICITY_HIGH,
-        ]
-        sigmas = [
-            self.MISPERCEPTION_STD_LOW,
-            self.MISPERCEPTION_STD_CENTRAL,
-            self.MISPERCEPTION_STD_HIGH,
-        ]
-
-        rows = [self._dwl_row(eps, sigma) for eps in elasticities for sigma in sigmas]
-        return pd.DataFrame(rows)
+    return 0.5 * elasticity * earnings * error_second_moment / (1 - tax_rate)

@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "calculation_source_sha256": "3a88e6f12bdd68fba19b1eae95b259a4a65b6296d9b888508b8ca74594db5403",
+  "status": "synthetic study-sample errors; no national welfare estimate",
+  "provenance": {
+    "schema_version": 1,
+    "data_status": "synthetic",
+    "rate_unit": "fraction",
+    "study": "Constructed software example; not Rees-Jones/Taubinsky respondents",
+    "tax_scope": "Artificial 30% flat tax",
+    "population": "Four constructed records; no target-population claim",
+    "sample_selection": "All four constructed records",
+    "transformation": "Directly specified rates for software verification",
+    "measurement_error": "Unknown; no reliability estimate supplied",
+    "weighting": "equal_respondent",
+    "input_sha256": "ff7c9683ce02a2a2dd77806ba3b1797d12f332a5d8f595ac28ac64c9747a0e37"
+  },
+  "sign_convention": "perceived minus true",
+  "respondents": 4,
+  "observations": 4,
+  "interval_bounds": {
+    "bias": [
+      0.020000000000000018,
+      0.020000000000000018
+    ],
+    "second_moment": [
+      0.005000000000000001,
+      0.005000000000000001
+    ],
+    "rmse": [
+      0.07071067811865477,
+      0.07071067811865477
+    ],
+    "mae": [
+      0.06,
+      0.06
+    ],
+    "sd_outer": [
+      0.06782329983125268,
+      0.06782329983125268
+    ],
+    "interpretation": "marginal identification bounds, not confidence intervals; SD bounds are outer bounds"
+  },
+  "latent_beliefs_identified": false,
+  "observed_moments": {
+    "bias": 0.020000000000000018,
+    "variance": 0.0046,
+    "sd": 0.06782329983125268,
+    "second_moment": 0.005000000000000001,
+    "rmse": 0.07071067811865477,
+    "mae": 0.06
+  },
+  "variance_decomposition": {
+    "between_respondent_variance": 0.0046,
+    "within_respondent_variance": 0.0,
+    "total_variance": 0.0046,
+    "measurement_error_identified": false
+  },
+  "bootstrap": {
+    "method": "equal-respondent cluster percentile bootstrap, conditional on supplied data processing",
+    "replications": 1000,
+    "seed": 20260907,
+    "confidence": 0.95,
+    "intervals": {
+      "bias": [
+        -0.03999999999999998,
+        0.085
+      ],
+      "sd": [
+        0.017320508075688797,
+        0.0812403840463596
+      ],
+      "rmse": [
+        0.031622776601683805,
+        0.10816653826391967
+      ],
+      "mae": [
+        0.02999999999999997,
+        0.105
+      ]
+    },
+    "population_inference": false
+  },
+  "classical_zero_mean_unknown_noise": {
+    "assumptions": "observed error = latent error + noise; zero latent-noise covariance; supplied noise mean/SD ranges",
+    "noise_mean": [
+      0.0,
+      0.0
+    ],
+    "requested_noise_sd": [
+      0.0,
+      0.06782329983125268
+    ],
+    "feasible_noise_sd": [
+      0.0,
+      0.06782329983125268
+    ],
+    "latent_bias": [
+      0.020000000000000018,
+      0.020000000000000018
+    ],
+    "latent_sd": [
+      0.0,
+      0.06782329983125268
+    ],
+    "latent_rmse": [
+      0.020000000000000018,
+      0.07071067811865477
+    ],
+    "interpretation": "sensitivity bounds conditional on observed moments and assumptions, not confidence intervals"
+  }
+}

@@ -1,36 +1,66 @@
-# Disutility of uncertainty
+# Tax misperception: private losses, fiscal effects, and social welfare
 
-Quantifying the welfare cost of tax rate misperception. Workers who misperceive their marginal tax rate choose suboptimal labor supply, generating deadweight loss.
+This research project studies when acting on a mistaken tax rate reduces private and social welfare. It retains the original project's labor-supply model and rebuilds its welfare accounting.
 
-Core result: E[DWL]/earnings ~ 1/2 * epsilon * sigma^2 / (1 - tau).
+The model evaluates three distinct quantities:
 
-What's here
-------------
+- **Private regret:** the worker's utility loss at the true budget, holding the common transfer fixed.
+- **Revenue change:** the change in net tax receipts caused by different work choices.
+- **Social loss:** private regret minus the value of the revenue change under an explicit rebate rule and social dollar weights. A negative loss is a gain.
 
-- Preference models (quasilinear-isoelastic and Cobb-Douglas): `src/taxuncertainty/models/preferences.py`
-- Labor supply and deadweight loss functions: `src/taxuncertainty/models/labor.py`
-- Social planner with optimal tax: `src/taxuncertainty/models/planner.py`
-- Empirical calibration: `src/taxuncertainty/analysis/calibration.py`
-- Population-level welfare analysis: `src/taxuncertainty/analysis/welfare.py`
-- Results generation pipeline: `src/taxuncertainty/pipeline.py`
-- Results accessor: `src/taxuncertainty/results.py`
-- Calibration parameters: `src/taxuncertainty/data/parameters.yaml`
-- Generated results: `src/taxuncertainty/data/results.json`
-- Tests: `tests/`
-- Paper (MyST): `paper/`
+For the illustrative worker, unbiased latent errors generate about $190 of private regret and $247 of social loss. Bias can reverse the social effect. These are assumed scenarios, not estimates of national losses. The former $30–37 billion headline and clipped-MTR population calculation are retired.
 
-Quick start
------------
+## Reproduce
 
-1. Create a virtual environment:
-   - `python3 -m venv .venv && source .venv/bin/activate`
-2. Install the package:
-   - `pip install -e ".[dev]"`
-3. Run tests:
-   - `python -m pytest tests/`
-4. Regenerate results:
-   - `python -c "from taxuncertainty.pipeline import generate_results; generate_results()"`
-5. Build the paper (optional):
-   - `cd paper && myst build`
+Install [uv](https://docs.astral.sh/uv/) and Quarto 1.9.36, then:
 
-Replication details are in `REPRODUCING.md`.
+```sh
+make install
+make test
+make replicate
+make check-results
+```
+
+The locked default environment excludes PolicyEngine. The pipeline reads a stored, provenance-recorded household grid; it does not run or download a population simulation. Outputs are `src/taxuncertainty/data/results.json`, `paper/generated/`, `paper/_variables.yml`, and rendered `paper/_build/index.html` and `index.pdf`.
+
+## Use the accounting model
+
+```python
+from taxuncertainty.analysis.calibration import Illustration
+from taxuncertainty.models.accounting import evaluate_worker
+from taxuncertainty.models.beliefs import NormalBeliefs
+
+inputs = Illustration()
+outcome = evaluate_worker(
+    wage=inputs.hourly_wage,
+    tax_rate=inputs.tax_rate,
+    prefs=inputs.preferences,
+    beliefs=NormalBeliefs(mean_error=-0.03, std_error=0.1161895003862225),
+)
+print(outcome.private_regret, outcome.revenue_change, outcome.social_loss)
+```
+
+The belief distribution separates signed bias, dispersion, and censoring bounds. Latent and realized error moments are both reported. The planner uses the same exact expectations with an endogenous demogrant and an explicit choice of equal or inverse-wage social weights.
+
+`models/schedules.py` optimizes globally over known piecewise-linear budgets with explicit threshold ownership, or over supplied finite grid points without interpolation. It supports earnings subsidies and benefit cliffs. `analysis/policyengine_budgets.py` samples actual household outcomes using pinned `policyengine[us]==5.3.0` and records inputs, model/bundle versions, measure scope, and hashes. To run the separately enabled live household checks:
+
+```sh
+make test-policyengine
+```
+
+This integration is household-level and does not establish a national welfare estimate or certify every cliff between sampled points. See [REPRODUCING.md](REPRODUCING.md) for numerical conventions, artifact validation, and migration details.
+
+## Signed-error calibration
+
+The [calibration protocol](calibration/IDENTIFICATION.md) distinguishes observed
+bias, dispersion, measurement error and tax/population coverage. The
+[adapter guide](calibration/README.md) provides executable canonical examples for
+local tax-liability slopes and interval-valued choices, checksum-validated CSVs,
+respondent-cluster bootstrap and conditional identification bounds.
+
+The [native archive adapter](calibration/NATIVE_MAPPING.md) now reproduces
+selected Rees-Jones/Taubinsky benchmarks and observed Study 2 error bounds.
+Real aggregate results are stored with source and calculation hashes; canonical
+examples remain synthetic fixtures. Measurement noise and population transport
+remain unresolved, so the 0.12 latent RMSE stays illustrative.
+[Source provenance](calibration/sources.json) records the verified archive.
