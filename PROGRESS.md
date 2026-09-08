@@ -2,14 +2,13 @@
 
 ## State
 
-Study 1 appendix integration is implemented and validated at
-`09a5685bef8e614ed77f8878426efd347727de12`, ready for focused host review.
-The exact inherited/new review scopes are in `STUDY1-REVIEW-READY.md`.
-The isolated continuation is `sprint/study1-evidence-integration-20260907`, based
-on verified draft PR #3 head 8e05267. Main remains 5d134c1 after a fresh fetch.
-The existing draft has received a normal fast-forward update; all Study 2 findings
-and welfare inputs remain unchanged. Latent RMSE 0.12 stays illustrative.
-The previous continuation and both dirty originals remain untouched.
+Repairing confirmed importer provenance finding DOU-STUDY1-001 in a fresh
+isolated continuation `sprint/study1-provenance-repair-20260907`, based on live
+verified PR #3 head `98bc1b77d179d024daba8e2fba66a0f5ae571ea0`. Fresh fetch and
+PR checks confirm main remains `5d134c14630613ff32819abe99ad5109b65b07a5`.
+The prior continuations and dirty originals are untouched. The frozen scientific
+artifacts are correct and will remain byte-identical; only provenance enforcement
+and its regressions change. Safe repair target: 20:40 ET; no new work after 21:00.
 
 ## Done
 
@@ -319,3 +318,14 @@ These are local self-checks; no independent semantic reviewer completed.
 - Final preservation checks match all 50 original and 72 rebuild file states,
   Git statuses, heads and branches. The prior continuation remains clean at
   8e05267. Both no-reset protection files match their original hashes.
+
+## Study 1 provenance repair started
+
+- Read the host's confirmed P2 and preserved its aggregate-only reproducer/report
+  in lane `study1-repair/`. A manifest can currently omit consumed files or change
+  source mappings; a self-rehashed changed cache retains the reviewed identity.
+- Next: anchor the exact reviewed manifest and cache identity, add bypass
+  regressions, verify unchanged science and relevant tests, and write exact
+  STUDY1-REPAIR-READY.md for the same host reviewer's focused rereview.
+- Final integration review is still in progress; read its final report before
+  delivery. No nested review, raw-data change, reset, paid compute or publication.
