@@ -1,0 +1,11 @@
+{
+  "nominal_departure_minus_stored_phaseout_tax_max_abs_dollars": 0.0050962579241513595,
+  "own_bracket_nominal_departure_forecasts": 30,
+  "own_bracket_nominal_departure_respondents": 13,
+  "own_pair_direct_difference_mean_error": -5.794893031389467,
+  "own_pair_direct_difference_sd_error": 835.794240423179,
+  "own_pair_direct_formula_matches_general_OLS": true,
+  "own_pair_variance_share_largest_10_respondents": 0.9955995033128341,
+  "own_pair_variance_share_largest_respondent": 0.8525193052051702,
+  "scope": "Exact source-field arithmetic on stored observations only. No extrapolated tax schedule or raw respondent output."
+}

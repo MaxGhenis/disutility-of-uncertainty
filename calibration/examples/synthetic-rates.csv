@@ -1,0 +1,5 @@
+respondent_id,observation_id,true_rate,perceived_rate_lower,perceived_rate_upper
+001,local-slope,0.30,0.24,0.24
+002,local-slope,0.30,0.34,0.34
+003,local-slope,0.30,0.28,0.28
+004,local-slope,0.30,0.42,0.42

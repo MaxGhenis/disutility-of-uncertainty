@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "instrument": "local_forecasts",
+  "manifest": {
+    "data_status": "synthetic",
+    "study": "Constructed instrument example, not study microdata",
+    "tax_scope": "Artificial tax schedule",
+    "population": "Constructed records only",
+    "sample_selection": "All constructed records",
+    "measurement_error": "Not identified; software fixture",
+    "currency_unit": "dollars"
+  },
+  "records": [
+    {
+      "respondent_id": "001",
+      "observation_id": "0",
+      "income": 1000,
+      "true_tax": 300.0,
+      "perceived_tax": 300.0,
+      "in_own_bracket": true,
+      "selected": true
+    },
+    {
+      "respondent_id": "001",
+      "observation_id": "1",
+      "income": 1500,
+      "true_tax": 450.0,
+      "perceived_tax": 400.0,
+      "in_own_bracket": true,
+      "selected": true
+    },
+    {
+      "respondent_id": "001",
+      "observation_id": "2",
+      "income": 2000,
+      "true_tax": 600.0,
+      "perceived_tax": 500.0,
+      "in_own_bracket": true,
+      "selected": true
+    },
+    {
+      "respondent_id": "002",
+      "observation_id": "0",
+      "income": 1000,
+      "true_tax": 300.0,
+      "perceived_tax": 440.0,
+      "in_own_bracket": true,
+      "selected": true
+    },
+    {
+      "respondent_id": "002",
+      "observation_id": "1",
+      "income": 1500,
+      "true_tax": 450.0,
+      "perceived_tax": 610.0,
+      "in_own_bracket": true,
+      "selected": true
+    },
+    {
+      "respondent_id": "002",
+      "observation_id": "2",
+      "income": 2000,
+      "true_tax": 600.0,
+      "perceived_tax": 780.0,
+      "in_own_bracket": true,
+      "selected": true
+    },
+    {
+      "respondent_id": "003",
+      "observation_id": "0",
+      "income": 1000,
+      "true_tax": 300.0,
+      "perceived_tax": 390.0,
+      "in_own_bracket": true,
+      "selected": true
+    },
+    {
+      "respondent_id": "003",
+      "observation_id": "1",
+      "income": 1500,
+      "true_tax": 450.0,
+      "perceived_tax": 535.0,
+      "in_own_bracket": true,
+      "selected": true
+    },
+    {
+      "respondent_id": "003",
+      "observation_id": "2",
+      "income": 2000,
+      "true_tax": 600.0,
+      "perceived_tax": 680.0,
+      "in_own_bracket": true,
+      "selected": true
+    }
+  ]
+}

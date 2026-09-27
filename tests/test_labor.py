@@ -1,8 +1,11 @@
 """Tests for labor supply and DWL — TDD: written before implementation."""
 
 import pytest
-from taxuncertainty.models.preferences import QuasilinearIsoelastic
+
 from taxuncertainty.models import labor
+from taxuncertainty.models.accounting import evaluate_worker
+from taxuncertainty.models.beliefs import NormalBeliefs
+from taxuncertainty.models.preferences import QuasilinearIsoelastic
 
 
 @pytest.fixture
@@ -152,24 +155,47 @@ class TestTaylorValidation:
         assert err_large > err_small
 
 
-class TestTaylorAtSensitivityExtremes:
-    """Validate the second-order approximation at the corners of the sensitivity grid."""
+class TestTaylorAcrossCalibrationRanges:
+    """Second-order approximation versus exact quadrature.
 
-    def test_approx_within_5pct_at_extreme(self):
-        """At eps=0.50, sigma=0.15, tau=0.43 the Taylor approx should be within 5% of MC."""
-        prefs = QuasilinearIsoelastic(psi=1.0, frisch_elasticity=0.50)
-        w, tau, sigma = 27.50, 0.43, 0.15
-        approx = labor.expected_dwl_approx(w, tau, sigma, prefs)
-        mc = labor.expected_dwl_monte_carlo(w, tau, sigma, prefs, n_draws=500_000, seed=42)
-        assert approx == pytest.approx(mc, rel=0.05)
+    An earlier draft called (eps .50, sigma .15, tau .43) the extreme corner,
+    with a 4.7% simulated error, and put the baseline error at 1.1%. Exact
+    quadrature over eps {.25, .33, .50} x tau {.25, .30, .43} x sigma
+    {.08, .12, .15} gives an 8.36% understatement at (.25, .43, .15) and a
+    1.80% baseline understatement (audit 2026-09-25).
+    """
 
-    def test_approx_within_3pct_at_baseline(self):
-        """At baseline (eps=0.33, sigma=0.12, tau=0.30) the error should be <3%."""
-        prefs = QuasilinearIsoelastic(psi=1.0, frisch_elasticity=0.33)
-        w, tau, sigma = 27.50, 0.30, 0.12
-        approx = labor.expected_dwl_approx(w, tau, sigma, prefs)
-        mc = labor.expected_dwl_monte_carlo(w, tau, sigma, prefs, n_draws=500_000, seed=42)
-        assert approx == pytest.approx(mc, rel=0.03)
+    @staticmethod
+    def error_pct(eps, tau, sigma):
+        prefs = QuasilinearIsoelastic(psi=1.0, frisch_elasticity=eps)
+        exact = evaluate_worker(27.5, tau, prefs, NormalBeliefs(0, sigma))
+        approx = labor.expected_dwl_approx(27.5, tau, sigma, prefs)
+        return 100 * (approx / exact.private_regret - 1)
+
+    def test_baseline_understatement(self):
+        assert self.error_pct(0.33, 0.30, 0.12) == pytest.approx(-1.803, abs=1e-3)
+
+    def test_worst_checked_corner(self):
+        worst = min(
+            (self.error_pct(e, t, s), (e, t, s))
+            for e in (0.25, 0.33, 0.50)
+            for t in (0.25, 0.30, 0.43)
+            for s in (0.08, 0.12, 0.15)
+        )
+        assert worst[1] == (0.25, 0.43, 0.15)
+        assert worst[0] == pytest.approx(-8.358, abs=1e-3)
+
+    def test_former_extreme_is_not_the_worst(self):
+        assert self.error_pct(0.50, 0.43, 0.15) == pytest.approx(-4.450, abs=1e-3)
+
+    def test_monte_carlo_agrees_at_worst_corner(self):
+        """Differential check: production Monte Carlo against quadrature."""
+        prefs = QuasilinearIsoelastic(psi=1.0, frisch_elasticity=0.25)
+        exact = evaluate_worker(27.5, 0.43, prefs, NormalBeliefs(0, 0.15))
+        mc = labor.expected_dwl_monte_carlo(
+            27.5, 0.43, 0.15, prefs, n_draws=200_000, seed=42
+        )
+        assert mc == pytest.approx(exact.private_regret, rel=0.01)
 
 
 class TestDWLMonteCarlo:
@@ -196,3 +222,27 @@ class TestDWLMonteCarlo:
             20.0, 0.3, 0.15, prefs, n_draws=10_000, seed=42
         )
         assert mc2 > mc1
+
+
+class TestDomainValidation:
+    @pytest.mark.parametrize("tax", [1, 1.1])
+    def test_approximation_rejects_noninterior_true_tax(self, prefs, tax):
+        with pytest.raises(ValueError, match="interior approximation"):
+            labor.expected_dwl_approx(20, tax, 0.12, prefs)
+        assert labor.individual_dwl(20, tax, 0.8, prefs) > 0
+
+    @pytest.mark.parametrize("wage", [0, -1, float("inf"), float("nan")])
+    def test_invalid_wage(self, prefs, wage):
+        with pytest.raises(ValueError):
+            labor.optimal_hours(wage, 0.3, prefs)
+
+    def test_invalid_moments(self, prefs):
+        with pytest.raises(ValueError):
+            labor.expected_dwl_approx(20, 0.3, -0.1, prefs)
+        with pytest.raises(ValueError):
+            labor.expected_dwl_approx(20, 0.3, 0.1, prefs, mean_error=float("nan"))
+
+    def test_approximation_includes_bias_squared(self, prefs):
+        unbiased = labor.expected_dwl_approx(20, 0.3, 0.05, prefs)
+        biased = labor.expected_dwl_approx(20, 0.3, 0.04, prefs, mean_error=-0.03)
+        assert biased == pytest.approx(unbiased)

@@ -1,0 +1,32 @@
+{
+  "source": {
+    "path": "/Users/maxghenis/disutility-of-uncertainty-calibration-20260907/src/taxuncertainty/data/rjt_replication.json",
+    "sha256": "1475ef4c31e8df0b45b437d5ea340f76c260ccd13a1085c843b74cd988540628"
+  },
+  "table1_pooled_panels": {
+    "full": {
+      "clustered_standard_error": 0.009608385519515717,
+      "coefficient": 0.6174117585350004,
+      "estimand": "within-person true-tax-variation weighted scale; not mean signed rate error",
+      "forecasts": 58758,
+      "respondents": 4197,
+      "respondents_with_positive_tax_variation": 4197
+    },
+    "local": {
+      "clustered_standard_error": 0.04297978260502916,
+      "coefficient": 0.8058436932109119,
+      "estimand": "within-person true-tax-variation weighted scale; not mean signed rate error",
+      "forecasts": 17937,
+      "respondents": 4197,
+      "respondents_with_positive_tax_variation": 3596
+    },
+    "mid_range": {
+      "clustered_standard_error": 0.013339724837056071,
+      "coefficient": 0.8192877896337636,
+      "estimand": "within-person true-tax-variation weighted scale; not mean signed rate error",
+      "forecasts": 41970,
+      "respondents": 4197,
+      "respondents_with_positive_tax_variation": 4197
+    }
+  }
+}

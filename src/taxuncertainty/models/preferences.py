@@ -1,7 +1,10 @@
 """Preference models for tax uncertainty analysis.
 
-Provides utility function specifications used in labor supply and DWL calculations.
+Provides utility function specifications used in labor supply and regret calculations.
 """
+
+from math import isfinite
+
 
 class QuasilinearIsoelastic:
     """Quasilinear utility with isoelastic labor disutility.
@@ -17,9 +20,9 @@ class QuasilinearIsoelastic:
     """
 
     def __init__(self, psi: float, frisch_elasticity: float) -> None:
-        if psi <= 0:
+        if not isfinite(psi) or psi <= 0:
             raise ValueError(f"psi must be positive, got {psi}")
-        if frisch_elasticity <= 0:
+        if not isfinite(frisch_elasticity) or frisch_elasticity <= 0:
             raise ValueError(
                 f"frisch_elasticity must be positive, got {frisch_elasticity}"
             )
@@ -41,6 +44,8 @@ class QuasilinearIsoelastic:
         float
             Utility value.
         """
+        if not isfinite(consumption) or not isfinite(hours) or hours < 0:
+            raise ValueError("consumption must be finite and hours finite/nonnegative")
         eps = self.frisch_elasticity
         exponent = 1.0 + 1.0 / eps
         return consumption - self.psi * hours**exponent / exponent
@@ -62,6 +67,8 @@ class QuasilinearIsoelastic:
         float
             Marginal disutility value.
         """
+        if not isfinite(hours) or hours < 0:
+            raise ValueError("hours must be finite and nonnegative")
         return self.psi * hours ** (1.0 / self.frisch_elasticity)
 
 
@@ -79,9 +86,9 @@ class CobbDouglas:
     """
 
     def __init__(self, alpha: float, beta: float) -> None:
-        if alpha <= 0:
+        if not isfinite(alpha) or alpha <= 0:
             raise ValueError(f"alpha must be positive, got {alpha}")
-        if beta <= 0:
+        if not isfinite(beta) or beta <= 0:
             raise ValueError(f"beta must be positive, got {beta}")
         self.alpha = alpha
         self.beta = beta
@@ -101,6 +108,8 @@ class CobbDouglas:
         float
             Utility value. Returns 0 at boundaries (leisure=0 or consumption=0).
         """
+        if not isfinite(leisure) or not isfinite(consumption):
+            raise ValueError("leisure and consumption must be finite")
         if leisure <= 0 or consumption <= 0:
             return 0.0
         return leisure**self.alpha * consumption**self.beta

@@ -1,7 +1,8 @@
 """Tests for preference models — TDD: written before implementation."""
 
 import pytest
-from taxuncertainty.models.preferences import QuasilinearIsoelastic, CobbDouglas
+
+from taxuncertainty.models.preferences import CobbDouglas, QuasilinearIsoelastic
 
 
 class TestQuasilinearIsoelastic:
@@ -78,3 +79,21 @@ class TestCobbDouglas:
         cd = CobbDouglas(alpha=0.5, beta=0.5)
         assert cd.utility(0, 10) == 0.0
         assert cd.utility(10, 0) == 0.0
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf")])
+def test_nonfinite_parameters_rejected(value):
+    with pytest.raises(ValueError):
+        QuasilinearIsoelastic(value, 0.33)
+    with pytest.raises(ValueError):
+        QuasilinearIsoelastic(1, value)
+    with pytest.raises(ValueError):
+        CobbDouglas(value, 1)
+
+
+def test_invalid_hours_rejected():
+    prefs = QuasilinearIsoelastic(1, 0.33)
+    with pytest.raises(ValueError):
+        prefs.utility(100, -1)
+    with pytest.raises(ValueError):
+        prefs.marginal_disutility_labor(float("nan"))

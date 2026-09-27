@@ -1,10 +1,12 @@
-"""Labor supply and deadweight loss under tax misperception.
+"""Labor supply and private regret under tax misperception.
 
 All functions use the quasilinear isoelastic preference model:
     U(C, h) = C - psi * h^(1+1/epsilon) / (1+1/epsilon)
 
 where the budget constraint (without transfers) gives C = w(1-tau)*h.
 """
+
+from math import isfinite
 
 import numpy as np
 
@@ -30,6 +32,10 @@ def optimal_hours(wage: float, tax_rate: float, prefs: QuasilinearIsoelastic) ->
     float
         Optimal hours h*. Returns 0 if tax_rate >= 1.
     """
+    if not isfinite(wage) or wage <= 0:
+        raise ValueError("wage must be finite and positive")
+    if not isfinite(tax_rate):
+        raise ValueError("tax_rate must be finite")
     if tax_rate >= 1.0:
         return 0.0
     net_wage = wage * (1.0 - tax_rate)
@@ -64,6 +70,8 @@ def misperceived_hours(
     float
         Hours chosen under the perceived tax rate.
     """
+    if not isfinite(true_tax):
+        raise ValueError("true_tax must be finite")
     return optimal_hours(wage, perceived_tax, prefs)
 
 
@@ -89,7 +97,7 @@ def individual_dwl(
     perceived_tax: float,
     prefs: QuasilinearIsoelastic,
 ) -> float:
-    """Exact individual deadweight loss from tax misperception.
+    """Exact private regret; retained under its historical function name.
 
     DWL = U(h*) - U(h_hat)
 
@@ -111,7 +119,8 @@ def individual_dwl(
     Returns
     -------
     float
-        Non-negative deadweight loss.
+        Non-negative private utility loss with transfers fixed. This excludes
+        changes in revenue and is not a measure of total social welfare loss.
     """
     h_star = optimal_hours(wage, true_tax, prefs)
     h_hat = misperceived_hours(wage, true_tax, perceived_tax, prefs)
@@ -119,7 +128,7 @@ def individual_dwl(
     u_star = _utility_at_hours(wage, true_tax, h_star, prefs)
     u_hat = _utility_at_hours(wage, true_tax, h_hat, prefs)
 
-    return u_star - u_hat
+    return max(0.0, u_star - u_hat)
 
 
 def expected_dwl_approx(
@@ -127,10 +136,14 @@ def expected_dwl_approx(
     tax_rate: float,
     misperception_std: float,
     prefs: QuasilinearIsoelastic,
+    mean_error: float = 0.0,
 ) -> float:
-    """Second-order approximation to expected DWL.
+    """Interior second-order approximation to expected private regret.
 
-    E[DWL] ~ 0.5 * epsilon * w * h* * sigma^2 / (1 - tau)
+    E[regret] ~ 0.5 * epsilon * w * h* * (sigma^2 + mean^2) / (1 - tau)
+
+    Errors here are latent, uncensored moments. This approximation requires
+    small errors away from perceived-rate bounds and a true tax below one.
 
     Parameters
     ----------
@@ -148,11 +161,24 @@ def expected_dwl_approx(
     float
         Approximate expected DWL. Returns 0 if sigma = 0.
     """
-    if misperception_std == 0.0:
-        return 0.0
     h_star = optimal_hours(wage, tax_rate, prefs)
+    if tax_rate >= 1.0:
+        raise ValueError("the interior approximation requires tax_rate < 1")
+    if not isfinite(misperception_std) or misperception_std < 0:
+        raise ValueError("misperception_std must be finite and nonnegative")
+    if not isfinite(mean_error):
+        raise ValueError("mean_error must be finite")
+    if misperception_std == 0.0 and mean_error == 0.0:
+        return 0.0
     eps = prefs.frisch_elasticity
-    return 0.5 * eps * wage * h_star * misperception_std**2 / (1.0 - tax_rate)
+    return (
+        0.5
+        * eps
+        * wage
+        * h_star
+        * (misperception_std**2 + mean_error**2)
+        / (1.0 - tax_rate)
+    )
 
 
 def expected_dwl_monte_carlo(
@@ -189,11 +215,26 @@ def expected_dwl_monte_carlo(
     float
         Monte Carlo estimate of E[DWL].
     """
+    h_star = optimal_hours(wage, tax_rate, prefs)
+    if not isfinite(misperception_std) or misperception_std < 0:
+        raise ValueError("misperception_std must be finite and nonnegative")
+    if not isinstance(n_draws, (int, np.integer)) or n_draws < 1:
+        raise ValueError("n_draws must be a positive integer")
     rng = np.random.default_rng(seed)
     deltas = rng.normal(0.0, misperception_std, size=n_draws)
     perceived_taxes = np.clip(tax_rate + deltas, 0.0, 1.0)
 
-    dwl_values = np.array(
-        [individual_dwl(wage, tax_rate, float(pt), prefs) for pt in perceived_taxes]
+    hours = (wage * (1.0 - perceived_taxes) / prefs.psi) ** prefs.frisch_elasticity
+    exponent = 1.0 + 1.0 / prefs.frisch_elasticity
+    actual_utility = (
+        wage * (1.0 - tax_rate) * hours - prefs.psi * hours**exponent / exponent
+    )
+    dwl_values = np.maximum(
+        0.0, _utility_at_hours(wage, tax_rate, h_star, prefs) - actual_utility
     )
     return float(np.mean(dwl_values))
+
+
+# Prefer these names in new code. Historical aliases remain for callers.
+private_regret = individual_dwl
+expected_private_regret_approx = expected_dwl_approx
