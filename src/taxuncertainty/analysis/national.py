@@ -7,8 +7,9 @@ retired clipped-MTR calculation (``analysis.empirical``) with these rules:
 - Each person's marginal tax rate, as computed by PolicyEngine, is the slope
   of a locally linear budget; observed earnings are their informed earnings.
   PolicyEngine's ``marginal_tax_rate`` is one minus the change in household
-  net income (health benefits excluded) when the person's earnings rise by
-  the ``marginal_tax_rate_delta`` parameter ($1,000), split between wages and
+  net income (health benefits excluded) per dollar of added earnings, when
+  the person's earnings rise by the ``marginal_tax_rate_delta`` parameter
+  ($1,000), split between wages and
   self-employment in proportion to their positive amounts
   (``emp_self_emp_ratio``). Earnings here are therefore employment income
   plus positive self-employment income, the measure that rate perturbs. By default it
@@ -377,8 +378,9 @@ def national_estimate(records, elasticity=None, std_error=None):
                 "valued equally"
             ),
             "budget": (
-                "locally linear at each person's PolicyEngine marginal tax rate; "
-                "observed employment income is informed earnings"
+                "locally linear with slope one minus each person's PolicyEngine "
+                "marginal tax rate; observed earnings (employment plus positive "
+                "self-employment income) are informed earnings"
             ),
             "population": (
                 f"people aged {MIN_AGE}-{MAX_AGE} with positive earnings "

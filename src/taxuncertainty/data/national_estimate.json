@@ -1,6 +1,6 @@
 {
   "assumptions": {
-    "budget": "locally linear at each person's PolicyEngine marginal tax rate; observed employment income is informed earnings",
+    "budget": "locally linear with slope one minus each person's PolicyEngine marginal tax rate; observed earnings (employment plus positive self-employment income) are informed earnings",
     "elasticity": 0.33,
     "fiscal_closure": "revenue changes rebated lump sum; private utility and revenue valued equally",
     "latent_error_mean": 0.0,
@@ -504,7 +504,7 @@
       "runtime_dataset_source": "data/populace_us_2024.h5",
       "runtime_dataset_uri": "hf://policyengine/populace-us/populace_us_2024.h5@populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z"
     },
-    "microdata_extracted_at_utc": "2026-09-27T13:01:59.781852+00:00",
+    "microdata_extracted_at_utc": "2026-09-27T13:01:59.998449+00:00",
     "package_versions": {
       "numpy": "2.5.2",
       "policyengine": "5.3.0",
@@ -709,5 +709,5 @@
     "weighted_workers": 159466185.7107607
   },
   "zero_weight_records": 0,
-  "artifact_sha256": "43d81c2b1117e9d86bacf02347e8993f291db7c50700a00f881507cede3c6e55"
+  "artifact_sha256": "81afae161fab413e18d19af1256677499023b6179c19811ca7303e4b8cdc2238"
 }

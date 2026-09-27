@@ -3,6 +3,12 @@
 import importlib.util
 
 import pytest
+from hypothesis import settings
+
+# Property tests run exact quadrature; wall-clock deadlines only measure
+# machine load and made loaded CI runners fail spuriously.
+settings.register_profile("taxuncertainty", deadline=None)
+settings.load_profile("taxuncertainty")
 
 
 def pytest_addoption(parser):
