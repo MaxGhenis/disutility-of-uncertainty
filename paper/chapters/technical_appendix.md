@@ -28,9 +28,9 @@ The model has no estimated population distribution of beliefs, no estimated inte
 
 ## National aggregation
 
-Every expected outcome is proportional to informed earnings $y^0$. A worker with wage one and $\psi=1-\tau$ has $y^0=1$, so one exact evaluation per distinct marginal rate gives private regret, revenue change and social loss per dollar of informed earnings. Each person's amounts are those per-dollar values times observed employment income, and all totals are survey-weighted sums of per-person amounts. Group totals therefore add to the national total by construction; tests check this identity, and invariance to reordering records and to splitting a record's weight, on generated populations.
+Every expected outcome is proportional to informed earnings $y^0$. A worker with wage one and $\psi=1-\tau$ has $y^0=1$, so one exact evaluation per distinct marginal rate gives private regret, revenue change and social loss per dollar of informed earnings. Each person's amounts are those per-dollar values times observed earnings (employment plus positive self-employment income), and all totals are survey-weighted sums of per-person amounts. Group totals therefore add to the national total by construction. On generated populations, tests check this identity, that quintile totals do not depend on record order, and that national totals do not change when one record's weight is split between two copies.
 
-Earnings quintiles rank records by earnings, then marginal rate, then weight, and assign a record to quintile $q$ when the cumulative weight through it lies in $((q-1)/5,q/5]$ of the total. Weighted percentiles interpolate between cumulative-weight midpoints after dropping zero-weight records, which carry no population mass.
+Earnings quintiles rank records by earnings, then marginal rate, then weight, and assign a record to quintile $q$ when the cumulative weight through it lies in $((q-1)/5,q/5]$ of the total. Weighted percentiles interpolate between cumulative-weight midpoints after dropping zero-weight records, which carry no population mass, and merging tied values, so they depend only on the weighted distribution.
 
 The representative-worker comparison uses the identity
 $$\sum_i n_iy_i^0g(\tau_i)-Ny^0_\text{mean}g(\tau_\text{mean})=Ny^0_\text{mean}\big(E[g(\tau)]-g(\tau_\text{mean})\big)+N\,\text{Cov}\big(y^0,g(\tau)\big),$$

@@ -5,10 +5,13 @@ in the managed PolicyEngine-US population microsimulation. It replaces the
 retired clipped-MTR calculation (``analysis.empirical``) with these rules:
 
 - Each person's marginal tax rate, as computed by PolicyEngine, is the slope
-  of a locally linear budget; observed employment income is their informed
-  earnings. PolicyEngine's ``marginal_tax_rate`` is one minus the change in
-  household net income (health benefits excluded) when the person's earnings
-  rise by the ``marginal_tax_rate_delta`` parameter ($1,000). By default it
+  of a locally linear budget; observed earnings are their informed earnings.
+  PolicyEngine's ``marginal_tax_rate`` is one minus the change in household
+  net income (health benefits excluded) when the person's earnings rise by
+  the ``marginal_tax_rate_delta`` parameter ($1,000), split between wages and
+  self-employment in proportion to their positive amounts
+  (``emp_self_emp_ratio``). Earnings here are therefore employment income
+  plus positive self-employment income, the measure that rate perturbs. By default it
   is computed only for the ``marginal_tax_rate_adults`` (two) highest-earning
   adults in each household and is zero by construction for everyone else, so
   the extraction raises that limit to cover every eligible earner and
@@ -22,7 +25,10 @@ retired clipped-MTR calculation (``analysis.empirical``) with these rules:
   are counted and reported separately: a rate of at least one implies zero
   informed hours on a linear budget, which contradicts positive observed
   earnings; a negative rate lies below the default perceived-rate bounds.
-  A sensitivity variant evaluates negative rates with no lower belief bound.
+  A sensitivity variant removes the lower belief bound for every worker,
+  which lets negative-rate workers enter.
+- Zero-weight records carry no population mass and are dropped before any
+  weighted statistic.
 - Every group total is a sum of per-person amounts, so quintile and band
   totals add up to the national total.
 - Only aggregates are stored. The microdata are not redistributed.
@@ -78,7 +84,7 @@ OUTCOMES = ("private_regret", "revenue_change", "social_loss")
 
 @dataclass(frozen=True)
 class PersonRecords:
-    """Person-level employment income, marginal tax rate and survey weight."""
+    """Person-level earnings, marginal tax rate and survey weight."""
 
     earnings: np.ndarray
     marginal_tax_rate: np.ndarray
@@ -116,8 +122,9 @@ class PersonRecords:
 def weighted_percentile(values, weights, percentile):
     """Weighted percentile by linear interpolation between weight midpoints.
 
-    Zero-weight observations are dropped first: they carry no population
-    mass, so they must not anchor an interpolation point.
+    Zero-weight observations are dropped and tied values merged first, so
+    the result depends only on the weighted distribution: reordering records
+    or splitting one record's weight leaves it unchanged.
     """
     values = np.asarray(values, dtype=float)
     weights = np.asarray(weights, dtype=float)
@@ -130,9 +137,8 @@ def weighted_percentile(values, weights, percentile):
     keep = weights > 0
     if not keep.any():
         raise ValueError("at least one weight must be positive")
-    values, weights = values[keep], weights[keep]
-    order = np.argsort(values, kind="stable")
-    values, weights = values[order], weights[order]
+    values, inverse = np.unique(values[keep], return_inverse=True)
+    weights = np.bincount(inverse, weights=weights[keep])
     cumulative = np.cumsum(weights)
     midpoints = 100 * (cumulative - 0.5 * weights) / cumulative[-1]
     return float(np.interp(percentile, midpoints, values))
@@ -223,7 +229,7 @@ def default_beliefs(std_error):
 
 
 def subsidy_beliefs(std_error):
-    """Sensitivity: no lower perceived-rate bound, so subsidies are coherent."""
+    """Sensitivity: no lower perceived-rate bound for anyone, so subsidies fit."""
     return lambda rate: NormalBeliefs(0.0, std_error, lower_bound=None)
 
 
@@ -231,8 +237,9 @@ def aggregate(records, elasticity, std_error):
     """Aggregate per-person exact outcomes for one set of assumptions.
 
     Records with ``0 <= rate < 1`` form the main estimate under the note's
-    default belief model. The ``subsidy_inclusive`` variant adds records
-    with negative rates, evaluating all rates below one with no lower bound.
+    default belief model. The ``subsidy_inclusive`` variant removes the lower
+    perceived-rate bound for every record with a rate below one; this admits
+    negative-rate records and also changes beliefs for the main records.
     """
     rates = records.marginal_tax_rate
     in_domain = (rates >= 0) & (rates < 1)
@@ -258,7 +265,11 @@ def national_estimate(records, elasticity=None, std_error=None):
     illustration = Illustration()
     elasticity = illustration.elasticity if elasticity is None else elasticity
     std_error = illustration.error_rmse if std_error is None else std_error
+    zero_weight_records = int(np.sum(records.weight == 0))
+    records = records.subset(records.weight > 0)
     rates = records.marginal_tax_rate
+    if not np.any((rates >= 0) & (rates < 1)):
+        raise ValueError("no positive-weight records with rates in [0, 1)")
     main, per_dollar, totals, inclusive = aggregate(records, elasticity, std_error)
 
     domain = {}
@@ -292,7 +303,7 @@ def national_estimate(records, elasticity=None, std_error=None):
                 "mean_marginal_rate": (
                     float(main.weight[mask] @ main.marginal_tax_rate[mask])
                     / row["weighted_workers"]
-                    if mask.any()
+                    if row["weighted_workers"] > 0
                     else None
                 ),
             }
@@ -370,13 +381,15 @@ def national_estimate(records, elasticity=None, std_error=None):
                 "observed employment income is informed earnings"
             ),
             "population": (
-                f"people aged {MIN_AGE}-{MAX_AGE} with positive employment income"
+                f"people aged {MIN_AGE}-{MAX_AGE} with positive earnings "
+                "(employment plus positive self-employment income)"
             ),
             "status": (
                 "conditional on assumed elasticity and error distribution; not an "
                 "identified welfare estimate"
             ),
         },
+        "zero_weight_records": zero_weight_records,
         "domain": domain,
         "totals": totals,
         "subsidy_inclusive": inclusive,
@@ -409,11 +422,27 @@ def content_sha256(artifact):
 
 RAW_VARIABLES = (
     "employment_income",
+    "self_employment_income",
+    "sstb_self_employment_income",
     "marginal_tax_rate",
     "person_weight",
     "age",
     "adult_earnings_index",
 )
+
+
+def total_earnings(raw):
+    """Employment plus positive self-employment income.
+
+    PolicyEngine splits the marginal-rate perturbation across these in
+    proportion to their positive amounts, so the rate is a slope with
+    respect to this total.
+    """
+    return (
+        raw["employment_income"]
+        + np.maximum(0.0, raw["self_employment_income"])
+        + np.maximum(0.0, raw["sstb_self_employment_income"])
+    )
 
 
 def _simulate(year):
@@ -427,7 +456,17 @@ def _simulate(year):
     default_adults = int(
         sim.tax_benefit_system.parameters(year).simulation.marginal_tax_rate_adults
     )
-    age, earnings = values("age"), values("employment_income")
+    age = values("age")
+    earnings = total_earnings(
+        {
+            name: values(name)
+            for name in (
+                "employment_income",
+                "self_employment_income",
+                "sstb_self_employment_income",
+            )
+        }
+    )
     eligible = (age >= MIN_AGE) & (age <= MAX_AGE) & (earnings > 0)
     needed = int(values("adult_earnings_index")[eligible].max())
     if needed > default_adults:
@@ -465,27 +504,31 @@ def extract_person_records(year=YEAR, cache=None):
     provenance = _installed_provenance()
     cache = None if cache is None else Path(cache)
     if cache is not None and cache.exists():
+        bundle = json.loads(Path(f"{cache}.bundle.json").read_text())
+        cached = bundle.get("cache", {})
+        if cached.get("year") != year or cached.get("variables") != list(RAW_VARIABLES):
+            raise ValueError(
+                f"{cache} holds {cached.get('year')} data for "
+                f"{cached.get('variables')}; expected {year} and {list(RAW_VARIABLES)}"
+            )
         with np.load(cache) as data:
             raw = {name: np.asarray(data[name], dtype=float) for name in RAW_VARIABLES}
-        bundle = json.loads(Path(f"{cache}.bundle.json").read_text())
         extracted_at = datetime.fromtimestamp(cache.stat().st_mtime, timezone.utc)
     else:
         raw, bundle = _simulate(year)
+        bundle["cache"] = {"year": year, "variables": list(RAW_VARIABLES)}
         extracted_at = datetime.now(timezone.utc)
         if cache is not None:
             np.savez_compressed(cache, **raw)
             Path(f"{cache}.bundle.json").write_text(json.dumps(bundle, indent=1))
-    eligible = (
-        (raw["age"] >= MIN_AGE)
-        & (raw["age"] <= MAX_AGE)
-        & (raw["employment_income"] > 0)
-    )
+    earnings = total_earnings(raw)
+    eligible = (raw["age"] >= MIN_AGE) & (raw["age"] <= MAX_AGE) & (earnings > 0)
     rate_adults = bundle["marginal_tax_rate_settings"]["adults"]
     computed = raw["adult_earnings_index"] <= rate_adults
     keep = eligible & computed
     skipped = eligible & ~computed
     records = PersonRecords(
-        raw["employment_income"][keep],
+        earnings[keep],
         raw["marginal_tax_rate"][keep],
         raw["person_weight"][keep],
     )
@@ -496,10 +539,13 @@ def extract_person_records(year=YEAR, cache=None):
             "dataset_bundle": bundle,
             "year": year,
             "variables": {
-                "earnings": "employment_income",
+                "earnings": (
+                    "employment_income + max(0, self_employment_income) + "
+                    "max(0, sstb_self_employment_income)"
+                ),
                 "marginal_tax_rate": "marginal_tax_rate (unclipped)",
                 "weight": "person_weight",
-                "filter": f"age {MIN_AGE}-{MAX_AGE} and employment_income > 0",
+                "filter": f"age {MIN_AGE}-{MAX_AGE} and earnings > 0",
                 "rate_computed": (
                     f"adult_earnings_index <= {rate_adults}; PolicyEngine sets "
                     "marginal_tax_rate to zero for other people"
@@ -512,7 +558,7 @@ def extract_person_records(year=YEAR, cache=None):
                 "records": int(skipped.sum()),
                 "weighted_workers": float(raw["person_weight"][skipped].sum()),
                 "total_earnings": float(
-                    raw["person_weight"][skipped] @ raw["employment_income"][skipped]
+                    raw["person_weight"][skipped] @ earnings[skipped]
                 ),
             },
             "records_sha256": records.digest(),

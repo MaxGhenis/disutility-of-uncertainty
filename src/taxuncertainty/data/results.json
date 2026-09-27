@@ -2,7 +2,7 @@
   "schema_version": 2,
   "status": "illustrative scenarios and a conditional national aggregation; not an identified national welfare estimate",
   "provenance": {
-    "model_source_sha256": "d9995435e7b2310caf6ed6a9fc942c99b1791467376ce80924da14ef1080de1c",
+    "model_source_sha256": "09affa39f5d01899d98d4649fcd3628094a3e292d6d5e5e9b3feda6620c2e5dc",
     "method": "deterministic Gauss-Legendre quadrature with explicit censoring atoms",
     "quadrature_order": 256,
     "seed": 42,
@@ -2102,7 +2102,7 @@
   },
   "national_estimate": {
     "status": "conditional national aggregation of the illustrative model; not an identified welfare estimate",
-    "artifact_sha256": "4bee511399350accc59f34cf5b690ca1868e7021e1fb429b55d96ee85db2a0af",
+    "artifact_sha256": "43d81c2b1117e9d86bacf02347e8993f291db7c50700a00f881507cede3c6e55",
     "package_versions": {
       "numpy": "2.5.2",
       "policyengine": "5.3.0",
@@ -2114,21 +2114,21 @@
       "uri": "hf://policyengine/populace-us/populace_us_2024.h5@populace-us-2024-buildp-sparse-rmloss100-cae8640-20260728T011454Z",
       "sha256": "48b9d479fb4fd1c3537f9383ce4697d130b6f618658409d74f6233c43b994c7e",
       "marginal_tax_rate_settings": {
-        "adults": 9,
+        "adults": 10,
         "default_adults": 2,
         "delta": 1000.0
       }
     },
     "year": 2024,
     "person_records_total": 166321,
-    "person_records_eligible": 71323,
-    "person_records_used": 71323,
+    "person_records_eligible": 77056,
+    "person_records_used": 77056,
     "rate_not_computed": {
       "records": 0,
       "total_earnings": 0.0,
       "weighted_workers": 0.0
     },
-    "records_sha256": "ac099f5080f299643fa7b721e76216c9b0b3313aa297c34b88bde7c2aad0ff4e",
+    "records_sha256": "b1ef5aa7b8ef0664f94d7b2d473940e70879310c287b0830f5c24bcf7cdc5409",
     "assumptions": {
       "budget": "locally linear at each person's PolicyEngine marginal tax rate; observed employment income is informed earnings",
       "elasticity": 0.33,
@@ -2139,339 +2139,339 @@
         0.0,
         1.0
       ],
-      "population": "people aged 18-64 with positive employment income",
+      "population": "people aged 18-64 with positive earnings (employment plus positive self-employment income)",
       "status": "conditional on assumed elasticity and error distribution; not an identified welfare estimate"
     },
     "domain": {
       "in_domain": {
-        "records": 69458,
-        "total_earnings": 9755587050023.373,
-        "weighted_workers": 145972202.66055018
+        "records": 75001,
+        "total_earnings": 10453194013385.3,
+        "weighted_workers": 159466185.7107607
       },
       "negative_rate": {
-        "records": 1453,
-        "total_earnings": 25407142880.982986,
-        "weighted_workers": 2844770.758537474
+        "records": 1627,
+        "total_earnings": 32414372700.055138,
+        "weighted_workers": 3480132.623993147
       },
       "rate_at_least_one": {
-        "records": 412,
-        "total_earnings": 19361864175.95788,
-        "weighted_workers": 671681.1911507491
+        "records": 428,
+        "total_earnings": 19878209593.665268,
+        "weighted_workers": 699442.5416932168
       }
     },
     "totals": {
-      "private_regret": 37271753686.51392,
-      "revenue_change": -17624622445.656555,
-      "second_order": 36682996693.79139,
-      "social_loss": 54896376132.17047,
-      "total_earnings": 9755587050023.373,
-      "weighted_workers": 145972202.66055018
+      "private_regret": 39938629735.34322,
+      "revenue_change": -18872503757.783875,
+      "second_order": 39309974559.03963,
+      "social_loss": 58811133493.127106,
+      "total_earnings": 10453194013385.3,
+      "weighted_workers": 159466185.7107607
     },
     "subsidy_inclusive": {
-      "private_regret": 37855289302.82535,
-      "revenue_change": -17210742353.451553,
-      "second_order": 36732580656.0938,
-      "social_loss": 55066031656.2769,
-      "total_earnings": 9780994192904.355,
-      "weighted_workers": 148816973.41908765
+      "private_regret": 40582023597.53627,
+      "revenue_change": -18425532139.202274,
+      "second_order": 39372421303.47497,
+      "social_loss": 59007555736.73854,
+      "total_earnings": 10485608386085.355,
+      "weighted_workers": 162946318.33475387
     },
     "quintiles": [
       {
-        "max_earnings": 20000.0,
-        "mean_marginal_rate": 0.2445156533856116,
-        "min_earnings": 1.0,
-        "private_regret": 1126516721.4821768,
+        "max_earnings": 19411.739868164062,
+        "mean_marginal_rate": 0.24029025358775938,
+        "min_earnings": 0.3965558111667633,
+        "private_regret": 1097137563.4077847,
         "quintile": 1,
-        "records": 12273,
-        "revenue_change": -696667812.7164168,
-        "second_order": 1325139550.2308729,
-        "social_loss": 1823184534.1985936,
-        "total_earnings": 332949163885.47107,
-        "weighted_workers": 29188403.31647236
+        "records": 12861,
+        "revenue_change": -682308898.8880733,
+        "second_order": 1295684665.7288704,
+        "social_loss": 1779446462.295858,
+        "total_earnings": 323864667815.59155,
+        "weighted_workers": 31891245.922849443
       },
       {
-        "max_earnings": 35493.671875,
-        "mean_marginal_rate": 0.29632615890628394,
-        "min_earnings": 20000.0,
-        "private_regret": 3044769933.749709,
+        "max_earnings": 34000.0,
+        "mean_marginal_rate": 0.28464876652453397,
+        "min_earnings": 19411.739868164062,
+        "private_regret": 3013957668.7963543,
         "quintile": 2,
-        "records": 14008,
-        "revenue_change": -2228113620.3656554,
-        "second_order": 2982450645.935858,
-        "social_loss": 5272883554.115364,
-        "total_earnings": 805421073548.8633,
-        "weighted_workers": 29192589.988199443
+        "records": 14488,
+        "revenue_change": -2018155157.3395019,
+        "second_order": 2985943589.1975846,
+        "social_loss": 5032112826.135857,
+        "total_earnings": 825877462587.2163,
+        "weighted_workers": 31892886.579247307
       },
       {
-        "max_earnings": 54961.76953125,
-        "mean_marginal_rate": 0.2910909753006692,
-        "min_earnings": 35493.671875,
-        "private_regret": 4624837000.978935,
+        "max_earnings": 51994.07421875,
+        "mean_marginal_rate": 0.293806375586355,
+        "min_earnings": 34000.0,
+        "private_regret": 4909979709.7125435,
         "quintile": 3,
-        "records": 13645,
-        "revenue_change": -2264420481.1657686,
-        "second_order": 4716356579.043564,
-        "social_loss": 6889257482.144705,
-        "total_earnings": 1300824516518.9468,
-        "weighted_workers": 29201033.161826715
+        "records": 15091,
+        "revenue_change": -2478008352.0637817,
+        "second_order": 4918116809.966595,
+        "social_loss": 7387988061.776325,
+        "total_earnings": 1369073097920.5635,
+        "weighted_workers": 31888871.75619083
       },
       {
-        "max_earnings": 89968.1171875,
-        "mean_marginal_rate": 0.308482435298024,
-        "min_earnings": 54961.76953125,
-        "private_regret": 7191014436.44854,
+        "max_earnings": 87036.140625,
+        "mean_marginal_rate": 0.30633004400063585,
+        "min_earnings": 51994.07421875,
+        "private_regret": 7654648692.639017,
         "quintile": 4,
-        "records": 13519,
-        "revenue_change": -2675034162.5917516,
-        "second_order": 7096892735.338294,
-        "social_loss": 9866048599.040293,
-        "total_earnings": 2020859135531.0674,
-        "weighted_workers": 29194393.99982951
+        "records": 15044,
+        "revenue_change": -2937053759.278949,
+        "second_order": 7643777900.82218,
+        "social_loss": 10591702451.917967,
+        "total_earnings": 2153881981541.228,
+        "weighted_workers": 31891332.53065547
       },
       {
-        "max_earnings": 2118376.5,
-        "mean_marginal_rate": 0.3589006888852187,
-        "min_earnings": 89968.1171875,
-        "private_regret": 21284615593.854565,
+        "max_earnings": 3262530.875,
+        "mean_marginal_rate": 0.35777963846051236,
+        "min_earnings": 87037.40625,
+        "private_regret": 23262906100.78753,
         "quintile": 5,
-        "records": 16013,
-        "revenue_change": -9760386368.816961,
-        "second_order": 20562157183.242805,
-        "social_loss": 31045001962.671524,
-        "total_earnings": 5295533160539.023,
-        "weighted_workers": 29195782.194222137
+        "records": 17517,
+        "revenue_change": -10756977590.21357,
+        "second_order": 22466451593.324398,
+        "social_loss": 34019883691.0011,
+        "total_earnings": 5780496803520.702,
+        "weighted_workers": 31901848.92181767
       }
     ],
     "mtr_bands": [
       {
         "rate_max_exclusive": 0.0,
         "rate_min": null,
-        "records": 1453,
-        "total_earnings": 25407142880.982986,
-        "weighted_workers": 2844770.758537474
+        "records": 1627,
+        "total_earnings": 32414372700.055138,
+        "weighted_workers": 3480132.623993147
       },
       {
-        "private_regret": 281287574.3194936,
+        "private_regret": 301444850.24433625,
         "rate_max_exclusive": 0.1,
         "rate_min": 0.0,
-        "records": 4371,
-        "revenue_change": -94843435.64228222,
-        "second_order": 408150816.7029638,
-        "social_loss": 376131009.9617759,
-        "total_earnings": 158704717455.40726,
-        "weighted_workers": 9631483.701980285
+        "records": 4763,
+        "revenue_change": -99460417.13319986,
+        "second_order": 441399372.47887486,
+        "social_loss": 400905267.37753606,
+        "total_earnings": 172185702291.47015,
+        "weighted_workers": 10858604.583965175
       },
       {
-        "private_regret": 1665366962.3580074,
+        "private_regret": 1733651858.30122,
         "rate_max_exclusive": 0.2,
         "rate_min": 0.1,
-        "records": 6853,
-        "revenue_change": -404678495.5271661,
-        "second_order": 1780496770.893598,
-        "social_loss": 2070045457.8851738,
-        "total_earnings": 608018599153.141,
-        "weighted_workers": 17316907.20093334
+        "records": 7635,
+        "revenue_change": -422786965.46599054,
+        "second_order": 1858605300.2977214,
+        "social_loss": 2156438823.7672105,
+        "total_earnings": 635850018286.9152,
+        "weighted_workers": 19314480.03118451
       },
       {
-        "private_regret": 8172394845.56282,
+        "private_regret": 8924070728.358074,
         "rate_max_exclusive": 0.3,
         "rate_min": 0.2,
-        "records": 25463,
-        "revenue_change": -2148828110.3339686,
-        "second_order": 8187746721.353266,
-        "social_loss": 10321222955.89679,
-        "total_earnings": 2560319384097.8223,
-        "weighted_workers": 51908921.358927265
+        "records": 27614,
+        "revenue_change": -2345062179.4116297,
+        "second_order": 8940979725.116802,
+        "social_loss": 11269132907.769703,
+        "total_earnings": 2796275150780.2305,
+        "weighted_workers": 57587989.367859855
       },
       {
-        "private_regret": 15463551417.160574,
+        "private_regret": 16369832537.076393,
         "rate_max_exclusive": 0.4,
         "rate_min": 0.3,
-        "records": 21118,
-        "revenue_change": -5858175395.486935,
-        "second_order": 15011970256.545038,
-        "social_loss": 21321726812.647507,
-        "total_earnings": 4071256686445.018,
-        "weighted_workers": 44456728.184127636
+        "records": 22690,
+        "revenue_change": -6194621285.677507,
+        "second_order": 15892636377.803053,
+        "social_loss": 22564453822.7539,
+        "total_earnings": 4311979570702.729,
+        "weighted_workers": 47942768.749448165
       },
       {
-        "private_regret": 7924437604.515815,
+        "private_regret": 8392536395.045225,
         "rate_max_exclusive": 0.5,
         "rate_min": 0.4,
-        "records": 8073,
-        "revenue_change": -4281730459.536577,
-        "second_order": 7579085665.764952,
-        "social_loss": 12206168064.052391,
-        "total_earnings": 1783044939978.0674,
-        "weighted_workers": 14556604.021524005
+        "records": 8510,
+        "revenue_change": -4545446941.314539,
+        "second_order": 8025834398.704093,
+        "social_loss": 12937983336.359764,
+        "total_earnings": 1886291835817.6826,
+        "weighted_workers": 15260993.155518126
       },
       {
-        "private_regret": 2503637476.1512027,
+        "private_regret": 2840059246.561959,
         "rate_max_exclusive": 0.6,
         "rate_min": 0.5,
-        "records": 2238,
-        "revenue_change": -1960056441.723147,
-        "second_order": 2333502856.031549,
-        "social_loss": 4463693917.87435,
-        "total_earnings": 460126820971.4507,
-        "weighted_workers": 4373623.74230618
+        "records": 2388,
+        "revenue_change": -2225677756.036448,
+        "second_order": 2646846378.8232055,
+        "social_loss": 5065737002.598407,
+        "total_earnings": 521587818920.4596,
+        "weighted_workers": 4729394.1361139435
       },
       {
-        "private_regret": 587723337.4299387,
+        "private_regret": 697142022.8038948,
         "rate_max_exclusive": 0.7,
         "rate_min": 0.6,
-        "records": 736,
-        "revenue_change": -779791784.1192485,
-        "second_order": 498111313.6898417,
-        "social_loss": 1367515121.5491872,
-        "total_earnings": 73666032474.58762,
-        "weighted_workers": 2250574.2783966865
+        "records": 782,
+        "revenue_change": -913894834.9417033,
+        "second_order": 592779026.199522,
+        "social_loss": 1611036857.7455978,
+        "total_earnings": 88303999431.92288,
+        "weighted_workers": 2294595.121573592
       },
       {
-        "private_regret": 345911308.7193267,
+        "private_regret": 345971893.94928634,
         "rate_max_exclusive": 0.8,
         "rate_min": 0.7,
-        "records": 361,
-        "revenue_change": -788324817.435935,
-        "second_order": 248441337.08373532,
-        "social_loss": 1134236126.155262,
-        "total_earnings": 25896163636.9673,
-        "weighted_workers": 911143.0946224104
+        "records": 368,
+        "revenue_change": -788434566.1681893,
+        "second_order": 248487794.48073953,
+        "social_loss": 1134406460.1174755,
+        "total_earnings": 25901762043.09267,
+        "weighted_workers": 911143.1302062524
       },
       {
-        "private_regret": 219289358.39584458,
+        "private_regret": 219703177.0799117,
         "rate_max_exclusive": 0.9,
         "rate_min": 0.8,
         "records": 147,
-        "revenue_change": -856734348.7841761,
-        "second_order": 159448655.54269725,
-        "social_loss": 1076023707.1800208,
-        "total_earnings": 10364026932.857143,
+        "revenue_change": -858618834.7672989,
+        "second_order": 159774010.42633215,
+        "social_loss": 1078322011.8472104,
+        "total_earnings": 10381827484.995998,
         "weighted_workers": 400279.2250298998
       },
       {
-        "private_regret": 108153801.90090111,
+        "private_regret": 114217025.92292759,
         "rate_max_exclusive": 1.0,
         "rate_min": 0.9,
-        "records": 98,
-        "revenue_change": -451459157.0671184,
-        "second_order": 476042300.1837524,
-        "social_loss": 559612958.9680195,
-        "total_earnings": 4189678878.0538864,
-        "weighted_workers": 165937.85270245324
+        "records": 104,
+        "revenue_change": -478499976.86736715,
+        "second_order": 502632174.7092847,
+        "social_loss": 592717002.7902948,
+        "total_earnings": 4436327625.801451,
+        "weighted_workers": 165938.20986120132
       },
       {
         "rate_max_exclusive": null,
         "rate_min": 1.0,
-        "records": 412,
-        "total_earnings": 19361864175.95788,
-        "weighted_workers": 671681.1911507491
+        "records": 428,
+        "total_earnings": 19878209593.665268,
+        "weighted_workers": 699442.5416932168
       }
     ],
     "mtr_percentiles": {
       "all_records": {
-        "p10": 0.15725121274308132,
-        "p25": 0.22356247901916504,
-        "p50": 0.2877922037854882,
-        "p75": 0.3634999990463257,
-        "p90": 0.43650001287460327
+        "p10": 0.14129429709681546,
+        "p25": 0.2221751109157733,
+        "p50": 0.279006990794358,
+        "p75": 0.36052028633389144,
+        "p90": 0.4326768111736748
       },
       "in_domain": {
-        "p10": 0.17650002241134644,
-        "p25": 0.22658962753636638,
-        "p50": 0.2952036652275158,
-        "p75": 0.3644999861717224,
-        "p90": 0.4352031350135803
+        "p10": 0.1753243932306189,
+        "p25": 0.2260694472793922,
+        "p50": 0.2851301843852001,
+        "p75": 0.3613643168302617,
+        "p90": 0.43159929012330966
       }
     },
     "representative_worker": {
-      "mean_earnings": 66831.81367557644,
-      "mean_marginal_rate": 0.2998656599897886,
+      "mean_earnings": 65551.16350713544,
+      "mean_marginal_rate": 0.2965750092282935,
       "second_order": {
-        "at_means": 33106896071.570305,
-        "covariance": -1964805084.4981296,
-        "population": 36682996693.79139,
-        "rate_dispersion": 5540905706.719213
+        "at_means": 35308368769.4345,
+        "covariance": -1513270590.3174314,
+        "population": 39309974559.03963,
+        "rate_dispersion": 5514876379.922553
       },
       "social_loss": {
-        "at_means": 43811644397.121284,
-        "covariance": 2099964504.5036378,
-        "population": 54896376132.17047,
-        "rate_dispersion": 8984767230.545553
+        "at_means": 46544527838.97849,
+        "covariance": 3218426225.0195775,
+        "population": 58811133493.127106,
+        "rate_dispersion": 9048179429.12904
       },
-      "weighted_workers": 145972202.66055018
+      "weighted_workers": 159466185.7107607
     },
     "sensitivity": [
       {
         "elasticity": 0.25,
-        "private_regret": 12466642077.031387,
-        "revenue_change": -6897939332.945198,
-        "second_order": 12351177337.9769,
-        "social_loss": 19364581409.976585,
+        "private_regret": 13356351133.801353,
+        "revenue_change": -7385949055.685458,
+        "second_order": 13235681669.710314,
+        "social_loss": 20742300189.486813,
         "std_error": 0.08
       },
       {
         "elasticity": 0.25,
-        "private_regret": 28522504392.232407,
-        "revenue_change": -15621008999.72895,
-        "second_order": 27790149010.44802,
-        "social_loss": 44143513391.961365,
+        "private_regret": 30560319926.612404,
+        "revenue_change": -16712624453.733635,
+        "second_order": 29780283756.8482,
+        "social_loss": 47272944380.34603,
         "std_error": 0.12
       },
       {
         "elasticity": 0.25,
-        "private_regret": 45427564553.32375,
-        "revenue_change": -25553782296.915283,
-        "second_order": 43422107828.825035,
-        "social_loss": 70981346850.23904,
+        "private_regret": 48694167910.07982,
+        "revenue_change": -27382738467.52484,
+        "second_order": 46531693370.07532,
+        "social_loss": 76076906377.60466,
         "std_error": 0.15
       },
       {
         "elasticity": 0.33,
-        "private_regret": 16381898933.144054,
-        "revenue_change": -7715925242.754343,
-        "second_order": 16303554086.129509,
-        "social_loss": 24097824175.8984,
+        "private_regret": 17552465679.268116,
+        "revenue_change": -8263750596.700054,
+        "second_order": 17471099804.017616,
+        "social_loss": 25816216275.96817,
         "std_error": 0.08
       },
       {
         "elasticity": 0.33,
-        "private_regret": 37271753686.51392,
-        "revenue_change": -17624622445.656555,
-        "second_order": 36682996693.79139,
-        "social_loss": 54896376132.17047,
+        "private_regret": 39938629735.34322,
+        "revenue_change": -18872503757.783875,
+        "second_order": 39309974559.03963,
+        "social_loss": 58811133493.127106,
         "std_error": 0.12
       },
       {
         "elasticity": 0.33,
-        "private_regret": 58897677060.9991,
-        "revenue_change": -28865314005.374176,
-        "second_order": 57317182334.04906,
-        "social_loss": 87762991066.37329,
+        "private_regret": 63130895458.218765,
+        "revenue_change": -30954025424.654236,
+        "second_order": 61421835248.49942,
+        "social_loss": 94084920882.87299,
         "std_error": 0.15
       },
       {
         "elasticity": 0.5,
-        "private_regret": 24652582579.95494,
-        "revenue_change": -7946142019.278301,
-        "second_order": 24702354675.9538,
-        "social_loss": 32598724599.23324,
+        "private_regret": 26416282914.0826,
+        "revenue_change": -8514870161.184953,
+        "second_order": 26471363339.420628,
+        "social_loss": 34931153075.26755,
         "std_error": 0.08
       },
       {
         "elasticity": 0.5,
-        "private_regret": 55573567850.80823,
-        "revenue_change": -18559783389.88623,
-        "second_order": 55580298020.89604,
-        "social_loss": 74133351240.69446,
+        "private_regret": 59554316570.92595,
+        "revenue_change": -19897579077.58335,
+        "second_order": 59560567513.6964,
+        "social_loss": 79451895648.5093,
         "std_error": 0.12
       },
       {
         "elasticity": 0.5,
-        "private_regret": 86743324683.22815,
-        "revenue_change": -30715885070.97216,
-        "second_order": 86844215657.65007,
-        "social_loss": 117459209754.2003,
+        "private_regret": 92970336994.05267,
+        "revenue_change": -32972141911.038857,
+        "second_order": 93063386740.15063,
+        "social_loss": 125942478905.09152,
         "std_error": 0.15
       }
     ]

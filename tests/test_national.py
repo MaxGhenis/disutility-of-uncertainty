@@ -34,7 +34,13 @@ def populations(draw, min_size=5, max_size=40, rates=RATE_GRID):
     n = draw(st.integers(min_size, max_size))
     earnings = draw(st.lists(st.floats(100, 4e5, **finite), min_size=n, max_size=n))
     tax = draw(st.lists(st.sampled_from(rates), min_size=n, max_size=n))
-    weights = draw(st.lists(st.floats(0.5, 5e3, **finite), min_size=n, max_size=n))
+    weights = draw(
+        st.lists(
+            st.one_of(st.just(0.0), st.floats(0.5, 5e3, **finite)),
+            min_size=n,
+            max_size=n,
+        )
+    )
     return PersonRecords(np.array(earnings), np.array(tax), np.array(weights))
 
 
@@ -85,7 +91,7 @@ class TestAggregation:
     @settings(max_examples=25, deadline=None)
     def test_group_totals_add_up_and_identity_holds(self, records):
         in_domain = (records.marginal_tax_rate >= 0) & (records.marginal_tax_rate < 1)
-        if not in_domain.any():
+        if not (in_domain & (records.weight > 0)).any():
             return
         est = national_estimate(records)
         totals = est["totals"]
@@ -109,10 +115,13 @@ class TestAggregation:
     @given(populations())
     @settings(max_examples=25, deadline=None)
     def test_domains_partition_records_without_clipping(self, records):
+        est_zero = int(np.sum(records.weight == 0))
+        records = records.subset(records.weight > 0)
         rates = records.marginal_tax_rate
         if not ((rates >= 0) & (rates < 1)).any():
             return
         est = national_estimate(records)
+        assert est["zero_weight_records"] == 0 <= est_zero
         domain = est["domain"]
         assert sum(d["records"] for d in domain.values()) == len(rates)
         assert sum(d["weighted_workers"] for d in domain.values()) == pytest.approx(
@@ -133,6 +142,8 @@ class TestAggregation:
     @given(in_domain_populations(), st.data())
     @settings(max_examples=20, deadline=None)
     def test_permutation_and_split_invariance(self, records, data):
+        if not (records.weight > 0).any():
+            return
         base = national_estimate(records)
         order = data.draw(st.permutations(range(len(records.weight))))
         permuted = national_estimate(
@@ -160,6 +171,21 @@ class TestAggregation:
         for name in FIELDS:
             assert _close(after["totals"][name], base["totals"][name], scale)
 
+    def test_zero_weight_records_are_ignored(self):
+        """Review counterexample: a zero-weight record crashed the quintile mean."""
+        with_zero = national_estimate(
+            PersonRecords(
+                np.array([1.0, 2.0]), np.array([0.3, 0.3]), np.array([0, 1.0])
+            )
+        )
+        without = national_estimate(
+            PersonRecords(np.array([2.0]), np.array([0.3]), np.array([1.0]))
+        )
+        assert with_zero["zero_weight_records"] == 1
+        for name in FIELDS:
+            assert with_zero["totals"][name] == without["totals"][name]
+        assert with_zero["mtr_percentiles"] == without["mtr_percentiles"]
+
     def test_quintiles_are_ordered_by_earnings(self):
         rng = np.random.default_rng(0)
         records = PersonRecords(
@@ -178,6 +204,10 @@ class TestRepresentativeWorker:
     @given(in_domain_populations())
     @settings(max_examples=25, deadline=None)
     def test_decomposition_identity(self, records):
+        if not (records.weight > 0).any():
+            with pytest.raises(ValueError, match="positive-weight"):
+                national_estimate(records)
+            return
         est = national_estimate(records)
         for name in ("second_order", "social_loss"):
             d = est["representative_worker"][name]
@@ -205,9 +235,43 @@ class TestQuantilesAndPercentiles:
     @given(populations(), st.sampled_from([5, 10]))
     @settings(max_examples=40)
     def test_every_record_gets_one_label(self, records, n_groups):
+        if records.weight.sum() <= 0:
+            with pytest.raises(ValueError):
+                quantile_labels(records, n_groups)
+            return
         labels = quantile_labels(records, n_groups)
         assert labels.shape == records.weight.shape
         assert labels.min() >= 1 and labels.max() <= n_groups
+
+    def test_review_tie_counterexample(self):
+        """Same weighted distribution, different record order: same answer."""
+        a = weighted_percentile([0, 0, 1], [1, 3, 1], 75)
+        b = weighted_percentile([0, 0, 1], [3, 1, 1], 75)
+        assert a == b == weighted_percentile([0, 1], [4, 1], 75)
+
+    @given(
+        st.lists(
+            st.sampled_from([-0.2, 0.0, 0.1, 0.3, 0.3, 0.5]), min_size=1, max_size=20
+        ),
+        st.data(),
+    )
+    def test_invariant_to_order_and_splitting(self, values, data):
+        n = len(values)
+        weights = data.draw(
+            st.lists(st.floats(0.01, 100, **finite), min_size=n, max_size=n)
+        )
+        p = data.draw(st.sampled_from([10, 25, 50, 75, 90]))
+        base = weighted_percentile(values, weights, p)
+        order = data.draw(st.permutations(range(n)))
+        assert weighted_percentile(
+            [values[i] for i in order], [weights[i] for i in order], p
+        ) == pytest.approx(base)
+        i = data.draw(st.integers(0, n - 1))
+        share = data.draw(st.floats(0.05, 0.95))
+        split_weights = weights[:i] + [weights[i] * share] + weights[i + 1 :]
+        assert weighted_percentile(
+            values + [values[i]], split_weights + [weights[i] * (1 - share)], p
+        ) == pytest.approx(base)
 
     def test_verified_zero_weight_counterexamples(self):
         assert weighted_percentile([0.0, 0.5], [0.0, 1.0], 10) == 0.5
@@ -362,11 +426,13 @@ class TestExtraction:
     def fake_simulation(self, monkeypatch):
         calls = []
         raw = {
-            "employment_income": np.array([0.0, 20e3, 50e3, 90e3, 30e3, 40e3]),
-            "marginal_tax_rate": np.array([0.0, -0.1, 0.25, 0.35, 1.2, 0.0]),
-            "person_weight": np.array([5.0, 2.0, 3.0, 1.0, 1.0, 4.0]),
-            "age": np.array([40.0, 30.0, 45.0, 50.0, 70.0, 22.0]),
-            "adult_earnings_index": np.array([1.0, 1.0, 2.0, 1.0, 1.0, 3.0]),
+            "employment_income": np.array([0.0, 20e3, 50e3, 90e3, 30e3, 40e3, 0.0]),
+            "self_employment_income": np.array([0.0, 5e3, -8e3, 0.0, 0, 0, 12e3]),
+            "sstb_self_employment_income": np.array([0.0, 0, 0, 1e3, 0, 0, 0]),
+            "marginal_tax_rate": np.array([0.0, -0.1, 0.25, 0.35, 1.2, 0.0, 0.4]),
+            "person_weight": np.array([5.0, 2.0, 3.0, 1.0, 1.0, 4.0, 2.0]),
+            "age": np.array([40.0, 30.0, 45.0, 50.0, 70.0, 22.0, 33.0]),
+            "adult_earnings_index": np.array([1.0, 1.0, 2.0, 1.0, 1.0, 3.0, 1.0]),
         }
         manifest = _fake_provenance()["bundle_manifest"]
         bundle = {
@@ -397,23 +463,33 @@ class TestExtraction:
         cache = tmp_path / "records.npz"
         records, provenance = national.extract_person_records(2024, cache)
         # Age 70 and zero earnings are dropped; index 3 has no computed rate.
-        assert provenance["person_records_eligible"] == 4
-        assert provenance["person_records_used"] == 3
+        # A self-employed-only earner is kept.
+        assert provenance["person_records_eligible"] == 5
+        assert provenance["person_records_used"] == 4
         assert provenance["rate_not_computed"]["records"] == 1
         assert provenance["rate_not_computed"]["weighted_workers"] == 4.0
-        assert list(records.marginal_tax_rate) == [-0.1, 0.25, 0.35]
+        assert list(records.marginal_tax_rate) == [-0.1, 0.25, 0.35, 0.4]
+        # Earnings add positive self-employment income; losses are ignored.
+        assert list(records.earnings) == [25e3, 50e3, 91e3, 12e3]
         assert provenance["records_sha256"] == records.digest()
         # A second call reads the cache instead of simulating again.
         again, _ = national.extract_person_records(2024, cache)
         assert fake_simulation == [2024]
         assert again.digest() == records.digest()
 
+    def test_rejects_cache_for_another_year(self, fake_simulation, tmp_path):
+        """Review finding: a 2024 cache must not be relabeled as 2025."""
+        cache = tmp_path / "records.npz"
+        national.extract_person_records(2024, cache)
+        with pytest.raises(ValueError, match="2025"):
+            national.extract_person_records(2025, cache)
+
     def test_cli_writes_a_loadable_artifact(self, fake_simulation, tmp_path):
         output = tmp_path / "national.json"
         assert national.main(["--output", str(output)]) == 0
         artifact = load_national_estimate(output)
         assert artifact["domain"]["negative_rate"]["records"] == 1
-        assert artifact["totals"]["weighted_workers"] == 4.0
+        assert artifact["totals"]["weighted_workers"] == 6.0
 
     def test_rejects_uncertified_dataset(self, fake_simulation, tmp_path):
         output = tmp_path / "national.json"

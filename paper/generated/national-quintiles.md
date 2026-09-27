@@ -2,10 +2,10 @@
 
 | Quintile | Mean earnings ($) | Mean MTR (%) | Private loss | Revenue change | Social loss | Social loss (% of earnings) | Share of social loss (%) |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 11,407 | 24.5 | 38.59 | -23.87 | 62.46 | 0.55 | 3.3 |
-| 2 | 27,590 | 29.6 | 104.30 | -76.32 | 180.62 | 0.65 | 9.6 |
-| 3 | 44,547 | 29.1 | 158.38 | -77.55 | 235.93 | 0.53 | 12.5 |
-| 4 | 69,221 | 30.8 | 246.31 | -91.63 | 337.94 | 0.49 | 18.0 |
-| 5 | 181,380 | 35.9 | 729.03 | -334.31 | 1,063.34 | 0.59 | 56.6 |
+| 1 | 10,155 | 24.0 | 34.40 | -21.39 | 55.80 | 0.55 | 3.0 |
+| 2 | 25,895 | 28.5 | 94.50 | -63.28 | 157.78 | 0.61 | 8.6 |
+| 3 | 42,933 | 29.4 | 153.97 | -77.71 | 231.68 | 0.54 | 12.6 |
+| 4 | 67,538 | 30.6 | 240.02 | -92.10 | 332.12 | 0.49 | 18.0 |
+| 5 | 181,196 | 35.8 | 729.20 | -337.19 | 1,066.39 | 0.59 | 57.8 |
 
 : Conditional national aggregation by earnings quintile of in-domain workers. Dollar columns are annual amounts per worker; quintile totals are sums of per-person amounts, so shares add to 100%. Assumes the illustrative elasticity and mean-zero 12-point latent errors censored to [0, 1]. {#tbl-national-quintiles}

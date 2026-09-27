@@ -2,8 +2,8 @@
 
 | Elasticity | SD 8 pp | SD 12 pp | SD 15 pp |
 |---|---:|---:|---:|
-| 0.25 | 19.4 | 44.1 | 71.0 |
-| 0.33 | 24.1 | 54.9 | 87.8 |
-| 0.50 | 32.6 | 74.1 | 117.5 |
+| 0.25 | 20.7 | 47.3 | 76.1 |
+| 0.33 | 25.8 | 58.8 | 94.1 |
+| 0.50 | 34.9 | 79.5 | 125.9 |
 
 : Conditional national social loss in billions of dollars per year across assumed elasticities and mean-zero latent error dispersions. These are scenario variations, not confidence bounds. {#tbl-national-sensitivity}
