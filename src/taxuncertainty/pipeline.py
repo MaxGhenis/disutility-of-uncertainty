@@ -18,6 +18,7 @@ from taxuncertainty.analysis.calibration import (
     beliefs_with_rmse,
     private_regret_approx,
 )
+from taxuncertainty.analysis.national import load_national_estimate, national_dataset
 from taxuncertainty.analysis.policyengine_budgets import load_household_budget
 from taxuncertainty.analysis.rjt_replication import load_replication
 from taxuncertainty.analysis.study1_evidence import load_evidence
@@ -31,6 +32,10 @@ from taxuncertainty.models.schedules import (
 )
 
 DATA_DIR = Path(__file__).parent / "data"
+# Cross product used to bound the interior approximation's error.
+ACCURACY_ELASTICITIES = (0.25, 0.33, 0.50)
+ACCURACY_TAX_RATES = (0.25, 0.30, 0.43)
+ACCURACY_STD_ERRORS = (0.08, 0.12, 0.15)
 RESULTS_PATH = DATA_DIR / "results.json"
 
 
@@ -123,6 +128,37 @@ def _household_fixture():
             for y in (0, 25000, 50000, 100000)
         ],
     }
+
+
+def _national_summary():
+    """Committed national aggregates, minus the bulky bundle manifest."""
+    artifact = load_national_estimate()
+    provenance = artifact["provenance"]
+    summary = {
+        "status": artifact["status"],
+        "artifact_sha256": artifact["artifact_sha256"],
+        "package_versions": provenance["package_versions"],
+        "dataset": national_dataset(provenance),
+        "year": provenance["year"],
+        "person_records_total": provenance["person_records_total"],
+        "person_records_eligible": provenance["person_records_eligible"],
+        "person_records_used": provenance["person_records_used"],
+        "rate_not_computed": provenance["rate_not_computed"],
+        "records_sha256": provenance["records_sha256"],
+    }
+    for key in (
+        "assumptions",
+        "domain",
+        "totals",
+        "subsidy_inclusive",
+        "quintiles",
+        "mtr_bands",
+        "mtr_percentiles",
+        "representative_worker",
+        "sensitivity",
+    ):
+        summary[key] = artifact[key]
+    return summary
 
 
 def compute_results(seed=42):
@@ -223,6 +259,32 @@ def compute_results(seed=42):
             }
         )
 
+    # Accuracy of the historical interior formula across the elasticity,
+    # error-dispersion and tax-rate ranges the note has used. Informed
+    # earnings are normalized to $55,000 in every cell.
+    approximation_grid = []
+    for eps in ACCURACY_ELASTICITIES:
+        for tax in ACCURACY_TAX_RATES:
+            altered = replace(inputs, elasticity=eps, tax_rate=tax)
+            for sd in ACCURACY_STD_ERRORS:
+                outcome = evaluate_worker(
+                    inputs.hourly_wage,
+                    tax,
+                    altered.preferences,
+                    NormalBeliefs(0, sd),
+                )
+                latent = private_regret_approx(inputs.earnings, eps, tax, sd**2)
+                approximation_grid.append(
+                    {
+                        "elasticity": eps,
+                        "tax_rate": tax,
+                        "std_error": sd,
+                        "exact_private_regret": outcome.private_regret,
+                        "latent_moment_approximation": latent,
+                        "error_pct": 100 * (latent / outcome.private_regret - 1),
+                    }
+                )
+
     bias_curve = []
     planner = SocialPlanner()
     for mean in np.linspace(-0.10, 0.10, 21):
@@ -247,7 +309,10 @@ def compute_results(seed=42):
     )
     results = {
         "schema_version": 2,
-        "status": "illustrative scenarios; not a national welfare estimate",
+        "status": (
+            "illustrative scenarios and a conditional national aggregation; "
+            "not an identified national welfare estimate"
+        ),
         "provenance": {
             "model_source_sha256": model_source_hash(),
             "method": "deterministic Gauss-Legendre quadrature with explicit censoring atoms",
@@ -260,9 +325,11 @@ def compute_results(seed=42):
         "planner": planner_results,
         "sensitivity": sensitivity,
         "approximation_accuracy": accuracy,
+        "approximation_grid": approximation_grid,
         "bias_curve": bias_curve,
         "nonlinear_examples": _budget_examples(inputs),
         "household_fixture": _household_fixture(),
+        "national_estimate": _national_summary(),
         "observed_calibration": load_replication(),
         "study1_evidence": load_evidence(),
         "validation": {
@@ -369,6 +436,8 @@ def paper_artifacts(results):
         "s1_full_unwinsorized_sd": f'{100*audit["full_range_processing_sd"]["taxguessds"]:.2f}',
         "s1_full_tgw5_sd": f'{100*audit["full_range_processing_sd"]["tgw5"]:.2f}',
     }
+
+    numbers.update(_national_numbers(results))
 
     def money(value):
         # Different numerical backends can leave roundoff of either sign at an
@@ -595,7 +664,219 @@ def paper_artifacts(results):
             "tbl-household",
         ),
     }
+    artifacts.update(_national_tables(results, money))
     return artifacts
+
+
+def _billions(value):
+    return f"{value / 1e9:,.1f}"
+
+
+def _effect(value):
+    """Verb and unsigned billions, so prose reads correctly for either sign."""
+    return ("adds" if value >= 0 else "subtracts"), _billions(abs(value))
+
+
+def _national_numbers(results):
+    """Inline values for the national aggregation and approximation grid."""
+    nat = results["national_estimate"]
+    totals, domain = nat["totals"], nat["domain"]
+    workers = totals["weighted_workers"]
+    all_workers = sum(d["weighted_workers"] for d in domain.values())
+    rep = nat["representative_worker"]
+    second, social = rep["second_order"], rep["social_loss"]
+    top = nat["quintiles"][-1]
+    grid = results["approximation_grid"]
+    worst = min(grid, key=lambda row: row["error_pct"])
+    baseline = next(
+        row
+        for row in grid
+        if (row["elasticity"], row["tax_rate"], row["std_error"]) == (0.33, 0.3, 0.12)
+    )
+    former = next(
+        row
+        for row in grid
+        if (row["elasticity"], row["tax_rate"], row["std_error"]) == (0.5, 0.43, 0.15)
+    )
+    pct_in = nat["mtr_percentiles"]["in_domain"]
+    social_range = [row["social_loss"] for row in nat["sensitivity"]]
+    earnings_shares = [
+        100 * row["social_loss"] / row["total_earnings"] for row in nat["quintiles"]
+    ]
+    rate_settings = nat["dataset"]["marginal_tax_rate_settings"]
+    return {
+        "national_rate_adults": str(rate_settings["adults"]),
+        "national_default_rate_adults": str(rate_settings["default_adults"]),
+        "national_not_computed": f'{nat["rate_not_computed"]["records"]:,}',
+        "national_quintile_share_min": f"{min(earnings_shares):.2f}",
+        "national_quintile_share_max": f"{max(earnings_shares):.2f}",
+        "national_year": str(nat["year"]),
+        "national_records": f'{nat["person_records_used"]:,}',
+        "national_workers_m": f"{workers / 1e6:,.1f}",
+        "national_social_bn": _billions(totals["social_loss"]),
+        "national_private_bn": _billions(totals["private_regret"]),
+        "national_revenue_loss_bn": _billions(-totals["revenue_change"]),
+        "national_second_order_bn": _billions(totals["second_order"]),
+        "national_social_per_worker": f'{totals["social_loss"] / workers:,.0f}',
+        "national_private_per_worker": f'{totals["private_regret"] / workers:,.0f}',
+        "national_social_ratio": f'{totals["social_loss"] / totals["private_regret"]:.2f}',
+        "national_inclusive_social_bn": _billions(
+            nat["subsidy_inclusive"]["social_loss"]
+        ),
+        "national_negative_share": f'{100 * domain["negative_rate"]["weighted_workers"] / all_workers:.1f}',
+        "national_cliff_share": f'{100 * domain["rate_at_least_one"]["weighted_workers"] / all_workers:.2f}',
+        "national_excluded_workers_m": f"{(all_workers - workers) / 1e6:,.1f}",
+        "national_top_quintile_share": f'{100 * top["social_loss"] / totals["social_loss"]:.1f}',
+        "national_social_min_bn": _billions(min(social_range)),
+        "national_social_max_bn": _billions(max(social_range)),
+        "rep_mean_earnings": f'{rep["mean_earnings"]:,.0f}',
+        "rep_mean_rate": f'{100 * rep["mean_marginal_rate"]:.1f}',
+        **{
+            f"rep_{name}_{key}": value
+            for name, terms in (("second_order", second), ("social", social))
+            for key, value in (
+                ("at_means_bn", _billions(terms["at_means"])),
+                (
+                    "direction",
+                    (
+                        "exceeds"
+                        if terms["population"] >= terms["at_means"]
+                        else "falls short of"
+                    ),
+                ),
+                (
+                    "gap_pct",
+                    f'{100 * abs(terms["population"] / terms["at_means"] - 1):.1f}',
+                ),
+                ("dispersion_verb", _effect(terms["rate_dispersion"])[0]),
+                ("dispersion_bn", _effect(terms["rate_dispersion"])[1]),
+                ("covariance_verb", _effect(terms["covariance"])[0]),
+                ("covariance_bn", _effect(terms["covariance"])[1]),
+            )
+        },
+        **{f"mtr_{k}": f"{v:.2f}" for k, v in pct_in.items()},
+        "approx_baseline_error": f'{-baseline["error_pct"]:.2f}',
+        "approx_worst_error": f'{-worst["error_pct"]:.2f}',
+        "approx_worst_elasticity": f'{worst["elasticity"]:.2f}',
+        "approx_worst_tax": f'{100 * worst["tax_rate"]:.0f}',
+        "approx_worst_sd": f'{100 * worst["std_error"]:.0f}',
+        "approx_former_extreme_error": f'{-former["error_pct"]:.2f}',
+        "approx_max_overstatement": f'{max(row["error_pct"] for row in grid):.2f}',
+    }
+
+
+def _national_tables(results, money):
+    nat = results["national_estimate"]
+    totals = nat["totals"]
+
+    def per_worker(row, key):
+        return money(row[key] / row["weighted_workers"])
+
+    quintiles = _table(
+        [
+            "Quintile",
+            "Mean earnings ($)",
+            "Mean MTR (%)",
+            "Private loss",
+            "Revenue change",
+            "Social loss",
+            "Social loss (% of earnings)",
+            "Share of social loss (%)",
+        ],
+        [
+            [
+                row["quintile"],
+                f'{row["total_earnings"] / row["weighted_workers"]:,.0f}',
+                f'{100 * row["mean_marginal_rate"]:.1f}',
+                per_worker(row, "private_regret"),
+                per_worker(row, "revenue_change"),
+                per_worker(row, "social_loss"),
+                f'{100 * row["social_loss"] / row["total_earnings"]:.2f}',
+                f'{100 * row["social_loss"] / totals["social_loss"]:.1f}',
+            ]
+            for row in nat["quintiles"]
+        ],
+        "Conditional national aggregation by earnings quintile of in-domain workers. Dollar columns are annual amounts per worker; quintile totals are sums of per-person amounts, so shares add to 100%. Assumes the illustrative elasticity and mean-zero 12-point latent errors censored to [0, 1].",
+        "tbl-national-quintiles",
+    )
+
+    def band_label(row):
+        lo, hi = row["rate_min"], row["rate_max_exclusive"]
+        if lo is None:
+            return "Below 0%"
+        if hi is None:
+            return f"{100 * lo:.0f}% or more"
+        return f"{100 * lo:.0f}% to {100 * hi:.0f}%"
+
+    bands = _table(
+        [
+            "Marginal rate",
+            "Workers (m)",
+            "Private loss (\\$bn)",
+            "Revenue change (\\$bn)",
+            "Social loss (\\$bn)",
+            "Taylor approx. (\\$bn)",
+        ],
+        [
+            [band_label(row), f'{row["weighted_workers"] / 1e6:,.1f}']
+            + (
+                [
+                    _billions(row[key])
+                    for key in (
+                        "private_regret",
+                        "revenue_change",
+                        "social_loss",
+                        "second_order",
+                    )
+                ]
+                if "private_regret" in row
+                else ["not evaluated"] * 4
+            )
+            for row in nat["mtr_bands"]
+        ],
+        "National totals by PolicyEngine marginal tax rate, which is never clipped. Rates below zero lie outside the default perceived-rate bounds; rates of 100% or more imply zero informed hours on a linear budget, contradicting positive observed earnings. Neither group enters the main estimate.",
+        "tbl-national-bands",
+    )
+    sensitivity = _table(
+        ["Elasticity", "SD 8 pp", "SD 12 pp", "SD 15 pp"],
+        [
+            [f"{eps:.2f}"]
+            + [
+                _billions(
+                    next(
+                        row["social_loss"]
+                        for row in nat["sensitivity"]
+                        if row["elasticity"] == eps and row["std_error"] == sd
+                    )
+                )
+                for sd in (0.08, 0.12, 0.15)
+            ]
+            for eps in (0.25, 0.33, 0.5)
+        ],
+        "Conditional national social loss in billions of dollars per year across assumed elasticities and mean-zero latent error dispersions. These are scenario variations, not confidence bounds.",
+        "tbl-national-sensitivity",
+    )
+    grid = results["approximation_grid"]
+    accuracy = _table(
+        ["Elasticity", "SD (pp)", "Rate 25%", "Rate 30%", "Rate 43%"],
+        [
+            [f"{eps:.2f}", f"{100 * sd:.0f}"]
+            + [
+                f'{next(r["error_pct"] for r in grid if (r["elasticity"], r["std_error"], r["tax_rate"]) == (eps, sd, tax)):+.2f}'
+                for tax in ACCURACY_TAX_RATES
+            ]
+            for eps in ACCURACY_ELASTICITIES
+            for sd in ACCURACY_STD_ERRORS
+        ],
+        "Error of the interior approximation, in percent of exact expected private regret; negative values understate. Perceived rates are censored to [0, 1], so the latent second moment overstates realized errors at low rates.",
+        "tbl-approximation-grid",
+    )
+    return {
+        "generated/national-quintiles.md": quintiles,
+        "generated/national-bands.md": bands,
+        "generated/national-sensitivity.md": sensitivity,
+        "generated/approximation-grid.md": accuracy,
+    }
 
 
 def generate_figures(results, paper_dir):

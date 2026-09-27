@@ -8,7 +8,7 @@ The model evaluates three distinct quantities:
 - **Revenue change:** the change in net tax receipts caused by different work choices.
 - **Social loss:** private regret minus the value of the revenue change under an explicit rebate rule and social dollar weights. A negative loss is a gain.
 
-For the illustrative worker, unbiased latent errors generate about $190 of private regret and $247 of social loss. Bias can reverse the social effect. These are assumed scenarios, not estimates of national losses. The former $30–37 billion headline and clipped-MTR population calculation are retired.
+For the illustrative worker, unbiased latent errors generate about $247 of social loss: $190 of private regret plus $57 of lost revenue. Bias can reverse the social effect. Applying the same assumptions to 146 million workers in PolicyEngine-US 2024 microdata, with unclipped marginal rates, gives a conditional national social loss of about $55 billion a year, of which $37 billion is private regret (`make national`; see the paper's national section). Because the error distribution is assumed, this is not an identified national cost. The former $30–37 billion private-regret headline and its clipped-MTR calculation are retired.
 
 ## Reproduce
 
@@ -48,7 +48,7 @@ The belief distribution separates signed bias, dispersion, and censoring bounds.
 make test-policyengine
 ```
 
-This integration is household-level and does not establish a national welfare estimate or certify every cliff between sampled points. See [REPRODUCING.md](REPRODUCING.md) for numerical conventions, artifact validation, and migration details.
+This integration is household-level and does not certify every cliff between sampled points; the separate national aggregation uses each person's local marginal rate. See [REPRODUCING.md](REPRODUCING.md) for numerical conventions, artifact validation, and migration details.
 
 ## Signed-error calibration
 

@@ -22,6 +22,18 @@ Tests cover no-error identities, the small-error limit, signed-bias fiscal effec
 
 ## Replication and scope controls
 
-The default pipeline generates only synthetic scenarios. Source fingerprints and explicit assumptions accompany the versioned results. Quarto reads generated tables and variables; a check command compares recomputed numbers and paper artifacts to their stored versions. A separately enabled PolicyEngine check runs an actual household model and verifies the finite-grid interpretation. Stored household artifacts carry their complete request and model provenance. Unknown legacy cache provenance is rejected.
+The default pipeline generates synthetic scenarios and reads the committed national aggregate; it never runs PolicyEngine. Source fingerprints and explicit assumptions accompany the versioned results. Quarto reads generated tables and variables; a check command compares recomputed numbers and paper artifacts to their stored versions. A separately enabled PolicyEngine check runs an actual household model and verifies the finite-grid interpretation. Stored household artifacts carry their complete request and model provenance. Unknown legacy cache provenance is rejected.
 
-The model has no calibrated national sample, no estimated intervention effect on beliefs, and no general-equilibrium wage response. Social welfare calculations use a stated rebate rule and social dollar weights. These limits are part of the estimand rather than adjustments that can be inferred after computing a population total.
+The model has no estimated population distribution of beliefs, no estimated intervention effect on beliefs, and no general-equilibrium wage response. The national aggregation weights the illustrative model by PolicyEngine microdata; it does not calibrate beliefs to them. Social welfare calculations use a stated rebate rule and social dollar weights. These limits are part of the estimand rather than adjustments that can be inferred after computing a population total.
+
+## National aggregation
+
+Every expected outcome is proportional to informed earnings $y^0$. A worker with wage one and $\psi=1-\tau$ has $y^0=1$, so one exact evaluation per distinct marginal rate gives private regret, revenue change and social loss per dollar of informed earnings. Each person's amounts are those per-dollar values times observed employment income, and all totals are survey-weighted sums of per-person amounts. Group totals therefore add to the national total by construction; tests check this identity, and invariance to reordering records and to splitting a record's weight, on generated populations.
+
+Earnings quintiles rank records by earnings, then marginal rate, then weight, and assign a record to quintile $q$ when the cumulative weight through it lies in $((q-1)/5,q/5]$ of the total. Weighted percentiles interpolate between cumulative-weight midpoints after dropping zero-weight records, which carry no population mass.
+
+The representative-worker comparison uses the identity
+$$\sum_i n_iy_i^0g(\tau_i)-Ny^0_\text{mean}g(\tau_\text{mean})=Ny^0_\text{mean}\big(E[g(\tau)]-g(\tau_\text{mean})\big)+N\,\text{Cov}\big(y^0,g(\tau)\big),$$
+where $g$ is a per-dollar outcome, $n_i$ are survey weights, $N=\sum_in_i$, and means and covariance are weighted. The first term is nonnegative for the convex interior formula $g(\tau)=\varepsilon r^2/[2(1-\tau)]$; the second can take either sign.
+
+The aggregate is built by `python -m taxuncertainty.analysis.national` with the PolicyEngine extra. It records package versions, the certified bundle manifest, the dataset's URI and hash, the person filter, a hash of the extracted arrays, and a hash of the aggregate itself; the pipeline rejects an aggregate whose content hash does not match. The microdata are not stored.

@@ -25,7 +25,7 @@ def results():
 
 def test_headline_reports_conditional_accounting_not_national_dwl(results):
     assert results["schema_version"] == 2
-    assert "not a national" in results["status"]
+    assert "not an identified national welfare estimate" in results["status"]
     assert results["assumptions"]["error_source"]["status"] == "assumed"
     for old_field in (
         "empirical",
@@ -169,3 +169,42 @@ def test_paper_zero_cents_ignore_backend_roundoff_without_changing_accounting(re
         "| No error | 0.00 | -0.01 | 0.00 |"
         in paper_artifacts(changed)["generated/scenarios.md"]
     )
+
+
+def test_approximation_grid_reports_worst_corner(results):
+    """Audit 2026-09-25: the worst checked corner, not eps = .5, bounds the error."""
+    grid = results["approximation_grid"]
+    assert len(grid) == 27
+    worst = min(grid, key=lambda row: row["error_pct"])
+    assert (worst["elasticity"], worst["tax_rate"], worst["std_error"]) == (
+        0.25,
+        0.43,
+        0.15,
+    )
+    assert worst["error_pct"] == pytest.approx(-8.358, abs=1e-3)
+    numbers = json.loads(paper_artifacts(results)["_variables.yml"])
+    assert numbers["approx_worst_error"] == "8.36"
+    assert numbers["approx_baseline_error"] == "1.80"
+
+
+def test_national_summary_is_additive_and_follows_into_paper(results):
+    nat = results["national_estimate"]
+    totals = nat["totals"]
+    for name in ("private_regret", "revenue_change", "social_loss", "second_order"):
+        assert sum(q[name] for q in nat["quintiles"]) == pytest.approx(
+            totals[name], rel=1e-9
+        )
+    assert totals["social_loss"] == pytest.approx(
+        totals["private_regret"] - totals["revenue_change"], rel=1e-9
+    )
+    changed = json.loads(json.dumps(results))
+    changed["national_estimate"]["totals"]["social_loss"] = 123.4e9
+    numbers = json.loads(paper_artifacts(changed)["_variables.yml"])
+    assert numbers["national_social_bn"] == "123.4"
+    table = paper_artifacts(results)["generated/national-quintiles.md"]
+    shares = [
+        float(line.rsplit("|", 2)[1])
+        for line in table.splitlines()
+        if line.startswith("| ") and line[2].isdigit()
+    ]
+    assert sum(shares) == pytest.approx(100, abs=0.3)

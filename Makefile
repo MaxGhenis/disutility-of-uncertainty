@@ -4,12 +4,13 @@ PYTHON ?= 3.13.9
 LOCKED_UV = env -u UV_FROZEN $(UV)
 RUN = $(UV) run --no-sync
 
-.PHONY: help install test test-quick test-policyengine lint format generate figures check-results paper pdf latex serve deploy clean replicate check-all myst watch venv activate dev build-all paper-stats check-citations
+.PHONY: help install test test-quick test-policyengine national lint format generate figures check-results paper pdf latex serve deploy clean replicate check-all myst watch venv activate dev build-all paper-stats check-citations
 
 help:
 	@echo "make install          Install the locked development and paper environment"
 	@echo "make test             Run fast tests (live PolicyEngine is opt-in)"
 	@echo "make test-policyengine  Run optional live PolicyEngine validation"
+	@echo "make national         Rebuild the national aggregate from PolicyEngine microdata"
 	@echo "make generate         Recompute results, paper includes, and figures"
 	@echo "make check-results    Check committed outputs against recomputed results"
 	@echo "make paper / pdf      Generate inputs and render HTML / PDF"
@@ -40,6 +41,10 @@ lint:
 format:
 	$(RUN) isort src tests
 	$(RUN) black src tests
+
+national:
+	$(LOCKED_UV) sync --python $(PYTHON) --locked --extra dev --extra paper --extra policyengine
+	$(RUN) python -m taxuncertainty.analysis.national
 
 generate:
 	$(RUN) python -m taxuncertainty.pipeline

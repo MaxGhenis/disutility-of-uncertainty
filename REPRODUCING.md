@@ -72,9 +72,15 @@ A fresh artifact has a new generation timestamp; compare model outcomes and conf
 
 ## Migration from version 1
 
-`Calibration`, `PopulationWelfare`, and the national `baseline/empirical` results schema are replaced by `Illustration`, explicit accounting, and scenario results. The year-only `EmpiricalMTR` cache path fails with a retirement explanation; it cannot silently generate a national estimate. Existing labor helper names containing `dwl` remain private-regret compatibility helpers, documented accordingly. Legacy planner `seed` and `n_mc` arguments remain accepted but do not affect deterministic expectations.
+`Calibration`, `PopulationWelfare`, and the national `baseline/empirical` results schema are replaced by `Illustration`, explicit accounting, and scenario results. The year-only `EmpiricalMTR` cache path fails with a retirement explanation; it cannot silently generate a national estimate. The provenance-recorded national aggregation above replaces it. Existing labor helper names containing `dwl` remain private-regret compatibility helpers, documented accordingly. Legacy planner `seed` and `n_mc` arguments remain accepted but do not affect deterministic expectations.
 
 The original working tree and review artifacts were preserved when the rebuild branch was created. Prior results remain accessible in Git history; they are not retained as current findings in the revised publication.
+
+## National aggregation
+
+`make national` installs the PolicyEngine extra and runs `python -m taxuncertainty.analysis.national`. It builds the managed PolicyEngine-US microsimulation for 2024 from the certified bundle dataset, keeps people aged 18 to 64 with positive employment income, and writes `src/taxuncertainty/data/national_estimate.json`. Pass `--records-cache PATH` (outside the repository) to reuse or create a local `.npz` of the raw person variables, so aggregates can be rebuilt without rerunning the simulation; that cache is microdata and must not be committed.
+
+The artifact stores aggregates only: totals, quintiles, marginal-rate bands, weighted percentiles, the representative-worker decomposition and an elasticity-by-dispersion sensitivity grid. It records package versions, the certified bundle manifest, the dataset URI and hash, the person filter, a hash of the extracted arrays and a content hash. The default pipeline loads and validates it without importing PolicyEngine; tests check its accounting identities. Marginal rates are never clipped: records with negative rates or rates of at least one are counted and reported separately rather than forced into the model's domain.
 
 ## Observed signed-error adapters
 

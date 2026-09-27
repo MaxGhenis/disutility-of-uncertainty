@@ -20,7 +20,7 @@ The outcome measure is PolicyEngine's household net income with health benefits 
 
 {{< include generated/household.md >}}
 
-This fixture validates a real model connection and a transparent path to household-level budget analysis. It is not used to estimate national misperception losses. Such an estimate would additionally require credible household-specific beliefs, labor preferences, feasible work choices, treatment of other household members, fiscal valuations, and a provenance-known population dataset. The former population calculation that clipped MTRs and loaded year-only caches is retired explicitly.
+This fixture validates a real model connection and a transparent path to household-level budget analysis. It does not enter the national aggregation (@sec-national), which uses each person's local marginal rate instead of a full budget. That aggregation supplies a provenance-known population dataset and unclipped marginal rates. An identified national estimate would additionally require credible household-specific beliefs, labor preferences, feasible work choices, treatment of other household members, and fiscal valuations. The former population calculation that clipped MTRs and loaded year-only caches remains retired.
 
 ## Preferences, learning, and information provision
 
