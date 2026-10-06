@@ -9,7 +9,7 @@ Environment
 - Python: 3.10+ (as declared in `pyproject.toml`)
 - Install dependencies: `pip install -e ".[dev]"`
 - Install PolicyEngine-US for empirical microsimulation results: `pip install -e ".[dev,policyengine]"`
-- Optional: `mystmd` for building the paper (or use `make install`).
+- Optional: install the Quarto CLI to build the paper.
 
 Quick start
 -----------
@@ -24,7 +24,7 @@ Quick start
 4. Regenerate results (includes PolicyEngine microsimulation):
    - `python -c "from taxuncertainty.pipeline import generate_results; generate_results()"`
 5. Build the paper:
-   - `cd paper && myst build`
+   - `cd paper && quarto render index.qmd --to html`
 
 What is generated
 -----------------
@@ -35,14 +35,15 @@ What is generated
   - Optimal tax rates under uncertainty
   - Sensitivity analysis across elasticity and misperception parameters
   - Empirical MTR distribution from PolicyEngine-US microsimulation
-  - DWL by income quintile from household-level microsimulation data
+  - DWL by income quintile from person-level microsimulation data
 - `src/taxuncertainty/data/cache/` — Cached PolicyEngine microsimulation results (gitignored)
 
 Determinism and seeds
 ---------------------
 
 - All results are deterministic (seed=42).
-- No external data are fetched; all parameters are in `src/taxuncertainty/data/parameters.yaml`.
+- The calibration constants used at runtime live in `src/taxuncertainty/analysis/calibration.py`.
+- `src/taxuncertainty/data/parameters.yaml` is a documentation snapshot of those inputs, not a runtime config file.
 
 Key model
 ---------

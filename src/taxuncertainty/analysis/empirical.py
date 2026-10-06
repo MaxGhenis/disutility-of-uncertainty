@@ -42,8 +42,20 @@ def _weighted_percentile(data, weights, percentile):
 CACHE_DIR = Path(__file__).parent.parent / "data" / "cache"
 
 
+def _load_policyengine_microsimulation():
+    """Import PolicyEngine lazily and raise a reproducible setup error if missing."""
+    try:
+        from policyengine_us import Microsimulation
+    except ModuleNotFoundError as exc:
+        raise ModuleNotFoundError(
+            "policyengine_us is required for empirical microsimulation. "
+            'Install it with `pip install -e ".[policyengine]"`.'
+        ) from exc
+    return Microsimulation
+
+
 class EmpiricalMTR:
-    """Household-level comprehensive MTRs from PolicyEngine-US.
+    """Person-level comprehensive MTRs from PolicyEngine-US.
 
     Parameters
     ----------
@@ -86,8 +98,7 @@ class EmpiricalMTR:
             )
 
     def _run_simulation(self):
-        from policyengine_us import Microsimulation
-
+        Microsimulation = _load_policyengine_microsimulation()
         sim = Microsimulation()
 
         emp_inc = sim.calculate("employment_income", self.year).values
@@ -152,6 +163,10 @@ class EmpiricalMTR:
             in_q = (cum_w > lo) & (cum_w <= hi)
             labels[sorted_idx[in_q]] = q + 1
         return labels
+
+    def quantile_labels(self, n_groups):
+        """Public wrapper for weighted income-quantile labels."""
+        return self._assign_quantile_labels(n_groups)
 
     def _quantile_results(self, n_groups):
         """Earnings and MTR statistics by income quantile.

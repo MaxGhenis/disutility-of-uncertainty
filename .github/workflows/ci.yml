@@ -53,11 +53,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '22'
-    
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -67,32 +62,31 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -e ".[dev,research]"
-        npm install -g mystmd
+
+    - name: Setup Quarto
+      uses: quarto-dev/quarto-actions/setup@v2
     
     - name: Install LaTeX
       run: |
         sudo apt-get update
         sudo apt-get install -y texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra texlive-xetex latexmk
 
-    - name: Build MyST Book
+    - name: Build Quarto HTML paper
       run: |
         cd paper
-        # Build with base URL for GitHub Pages subpath
-        export BASE_URL="/disutility-of-uncertainty"
-        myst build --html
-        touch _build/html/.nojekyll
+        quarto render index.qmd --to html
+        touch _build/.nojekyll
 
     - name: Build PDF
       run: |
         cd paper
-        myst build --pdf
-        cp exports/*.pdf _build/html/ 2>/dev/null || true
+        quarto render index.qmd --to pdf
     
     - name: Upload book artifact
       uses: actions/upload-artifact@v4
       with:
-        name: myst-book
-        path: paper/_build/html/
+        name: paper
+        path: paper/_build/
     
     - name: Setup Pages
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -102,7 +96,7 @@ jobs:
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       uses: actions/upload-pages-artifact@v3
       with:
-        path: paper/_build/html
+        path: paper/_build
 
   # Deployment job
   deploy:

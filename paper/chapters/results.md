@@ -12,11 +12,11 @@ Under the central calibration ($\varepsilon = 0.33$, $\sigma = 0.12$, $\bar{\tau
 
 It is worth emphasizing what this quantity represents and what it does not. The \$187 figure is the expected utility loss, expressed in dollar terms, from a worker who optimizes labor supply against a perceived marginal rate that differs from the true rate by a random draw with standard deviation 0.12. When the perceived rate is too high, the worker supplies too little labor; when it is too low, too much. In both cases the worker ends up on a lower indifference curve than under perfect information. This is a pure behavioral distortion cost -- distinct from compliance costs, which represent resources spent on filing and record-keeping rather than misallocated time.
 
-For context, {cite:t}`kopczuk2013taxation` reviews estimates suggesting the deadweight loss of the federal estate tax is on the order of \$20--30 billion per year. The misperception estimate is similar in aggregate magnitude, though it differs in incidence: misperception-induced DWL is spread across all workers, whereas the estate tax DWL is concentrated among a small number of decedents.
+For context, @kopczuk2013taxation reviews estimates suggesting the deadweight loss of the federal estate tax is on the order of \$20--30 billion per year. The misperception estimate is similar in aggregate magnitude, though it differs in incidence: misperception-induced DWL is spread across all workers, whereas the estate tax DWL is concentrated among a small number of decedents.
 
 ## Sensitivity analysis
 
-The baseline estimate rests on point values for $\varepsilon$ and $\sigma$ that are themselves uncertain. The full sensitivity grid (Table {ref}`tab-sensitivity`) spans per-worker DWL from \$63 to \$442, or 0.04% to 0.25% of GDP. DWL is far more sensitive to $\sigma$ than to $\varepsilon$: moving across a row (doubling $\sigma$ from 0.08 to 0.15) roughly quadruples the cost, whereas moving down a column (doubling $\varepsilon$ from 0.25 to 0.50) only doubles it. This follows directly from the formula, in which $\sigma$ enters quadratically and $\varepsilon$ enters linearly. The most conservative cell (low elasticity and low misperception) implies a \$10 billion annual cost; the most aggressive implies \$71 billion.
+The baseline estimate rests on point values for $\varepsilon$ and $\sigma$ that are themselves uncertain. The full sensitivity grid in @tbl-sensitivity spans per-worker DWL from \$63 to \$442, or 0.04% to 0.25% of GDP. DWL is far more sensitive to $\sigma$ than to $\varepsilon$: moving across a row (doubling $\sigma$ from 0.08 to 0.15) roughly quadruples the cost, whereas moving down a column (doubling $\varepsilon$ from 0.25 to 0.50) only doubles it. This follows directly from the formula, in which $\sigma$ enters quadratically and $\varepsilon$ enters linearly. The most conservative cell (low elasticity and low misperception) implies a \$10 billion annual cost; the most aggressive implies \$71 billion.
 
 ## Distributional pattern
 
@@ -30,7 +30,7 @@ If $\sigma$ varies across the income distribution---with middle-income workers f
 
 ## Optimal tax rate under misperception
 
-A utilitarian planner choosing a linear tax rate to maximize social welfare faces a modified tradeoff when workers misperceive their marginal rate. Higher tax rates finance larger transfers and reduce inequality, but they also amplify the welfare cost of misperception because the DWL formula has $(1 - \tau)$ in the denominator: as $\tau$ rises, each unit of misperception becomes more costly.
+A weighted-utilitarian planner with inverse-wage social weights faces a modified tradeoff when choosing a linear tax rate under misperception. Higher tax rates finance larger transfers and reduce inequality, but they also amplify the welfare cost of misperception because the DWL formula has $(1 - \tau)$ in the denominator: as $\tau$ rises, each unit of misperception becomes more costly.
 
 Under the baseline calibration, the optimal tax rate in the absence of misperception is 44.5%. When the planner accounts for $\sigma = 0.12$ misperception, the optimum falls to 42.9%, a decline of 1.6 percentage points. The planner accepts somewhat less redistribution because the marginal cost of public funds is higher when workers cannot perceive their tax rate accurately.
 
@@ -40,11 +40,11 @@ Within the model, this 1.6 percentage-point reduction corresponds to approximate
 
 Because DWL is quadratic in $\sigma$, partial reductions in misperception yield welfare gains that are proportionally larger than the reduction in $\sigma$ itself. Reducing $\sigma$ from 0.12 to 0.07 lowers total DWL from \$29.9 billion to \$10.2 billion, a reduction of approximately two-thirds (\$19.7 billion per year). A reduction to $\sigma = 0.08$ would lower DWL by \$16.6 billion annually. The model is agnostic about *how* such reductions are achieved---better withholding tables, clearer pay-stub reporting, interactive tax tools, or legislative simplification could all contribute.
 
-For comparison, the National Taxpayers Union Foundation estimates that U.S. taxpayers spend approximately \$260 billion annually on tax compliance costs, including both time costs and out-of-pocket expenses {cite:p}`ntu2023complexity`. The misperception-induced DWL documented here is an *additional* cost, distinct from compliance costs: it arises not from time spent filing but from the residual errors that persist even after filing.
+For comparison, the National Taxpayers Union Foundation estimates that U.S. taxpayers spend approximately \$260 billion annually on tax compliance costs, including both time costs and out-of-pocket expenses [@ntu2023complexity]. The misperception-induced DWL documented here is an *additional* cost, distinct from compliance costs: it arises not from time spent filing but from the residual errors that persist even after filing.
 
 ## Microsimulation results
 
-The stylized calculations above use a single representative marginal tax rate ($\bar{\tau} = 0.30$) and a lognormal wage distribution. To assess the distributional incidence of misperception-induced DWL across the actual income distribution, I apply the per-worker DWL formula to household-level data from PolicyEngine-US {cite:p}`policyengine2024`, a microsimulation model that computes comprehensive marginal tax rates for approximately 149 million working-age adults with positive employment income.
+The stylized calculations above use a single representative marginal tax rate ($\bar{\tau} = 0.30$) and a lognormal wage distribution. To assess the distributional incidence of misperception-induced DWL across the actual income distribution, I apply the per-worker DWL formula to person-level data from PolicyEngine-US [@policyengine2024], a microsimulation model that computes comprehensive marginal tax rates for approximately 149 million working-age adults with positive employment income.
 
 ### Marginal tax rate distribution
 
@@ -52,31 +52,24 @@ The weighted mean comprehensive marginal tax rate (MTR) is 0.25, with a standard
 
 ### DWL by income quintile
 
-Applying the per-worker DWL formula $\frac{1}{2}\varepsilon \cdot \text{earnings}_i \cdot \sigma^2 / (1 - \tau_i)$ with $\varepsilon = 0.33$ and $\sigma = 0.12$ to each worker in the microsimulation yields the distributional breakdown in {numref}`tab-quintile-dwl`.
-
-:::{table} Deadweight loss from tax misperception by income quintile
-:label: tab-quintile-dwl
-:align: center
+Applying the per-worker DWL formula $\frac{1}{2}\varepsilon \cdot \text{earnings}_i \cdot \sigma^2 / (1 - \tau_i)$ with $\varepsilon = 0.33$ and $\sigma = 0.12$ to each worker in the microsimulation yields the distributional breakdown in @tbl-quintile-dwl.
 
 | Quintile | Mean earnings | Mean MTR | Per-worker DWL | Share of total |
 |:---:|---:|:---:|---:|---:|
-| 1 (lowest) | \$7,355 | 0.11 | \$20 | 1.8% |
-| 2 | \$23,550 | 0.23 | \$73 | 6.8% |
-| 3 | \$40,742 | 0.27 | \$132 | 12.3% |
-| 4 | \$64,301 | 0.31 | \$220 | 20.1% |
-| 5 (highest) | \$171,542 | 0.34 | \$614 | 58.9% |
+| 1 (lowest) | \$7,355 | 0.11 | \$29 | 2.4% |
+| 2 | \$23,550 | 0.23 | \$92 | 7.5% |
+| 3 | \$40,742 | 0.27 | \$198 | 16.1% |
+| 4 | \$64,301 | 0.31 | \$239 | 19.0% |
+| 5 (highest) | \$171,542 | 0.34 | \$663 | 55.1% |
 
-:::
+: Deadweight loss from tax misperception by income quintile {#tbl-quintile-dwl}
 
 These results assume homogeneous $\sigma = 0.12$ across all quintiles. If misperception varies with income---as is likely, given that lower-income workers navigate denser phase-out regions while higher-income workers more frequently use professional tax preparers---the distributional pattern could shift. I explore heterogeneous $\sigma_i$ as a direction for future work in the conclusion.
 
-Three findings stand out. First, the top quintile bears 59% of total DWL despite constituting only 20% of workers. This reflects the multiplicative interaction of higher earnings and higher marginal rates in the DWL formula: workers earning \$172k at a 34% MTR lose \$614/year to misperception, compared to \$20/year for workers earning \$7k at an 11% MTR.
+Three findings stand out. First, the top quintile bears 55% of total DWL despite constituting only 20% of workers. This reflects the multiplicative interaction of higher earnings and higher marginal rates in the DWL formula: workers in the top quintile lose about \$663/year to misperception on average, compared to \$29/year in the bottom quintile.
 
-Second, as a *fraction of earnings*, the distributional pattern is more uniform. The DWL-to-earnings ratio is $\frac{1}{2}\varepsilon\sigma^2/(1-\tau_i)$, which depends only on $\varepsilon$, $\sigma$, and the individual's MTR. Workers in the top quintile lose 0.36% of earnings, versus 0.27% for bottom-quintile workers---a narrower gap than the absolute dollar figures suggest. The $(1-\tau)$ denominator drives this mild progressivity: higher-MTR workers face a larger amplification of the same misperception variance.
+Second, as a *fraction of earnings*, the distributional pattern is much flatter than the absolute dollar figures. Averaging individual DWL-to-earnings ratios within quintiles yields losses between roughly 0.36% and 0.49% of earnings, with the middle quintile highest because it combines moderate earnings with relatively high effective marginal-rate exposure. Most of the concentration in total DWL therefore comes from earnings differences, not from extreme differences in the loss rate itself.
 
-Third, the aggregate DWL from the microsimulation (\$36.6 billion) exceeds the comparable stylized estimate (\$27.8 billion) by 32%. The stylized comparison applies the DWL formula at the microsimulation population's weighted-mean earnings and MTR (rather than the macro-calibrated \$55,000 and $\tau = 0.30$ used in the sensitivity grid, which yield \$29.9 billion over 160 million workers). This divergence arises because the DWL formula is convex in both earnings and $1/(1-\tau)$: the actual distribution of incomes and tax rates has heavier tails than the representative-agent approximation, and Jensen's inequality ensures that the population-level DWL exceeds the DWL evaluated at population means.
+Third, the aggregate DWL from the microsimulation (\$36.6 billion) exceeds the comparable stylized estimate (\$29.3 billion) by about 25%. The stylized comparison applies the DWL formula at the microsimulation population's weighted-mean earnings and MTR, rather than at each worker's own earnings and tax rate. This divergence arises because the DWL formula is convex in both earnings and $1/(1-\tau)$: the actual distribution of incomes and tax rates has heavier tails than the representative-agent approximation, and Jensen's inequality ensures that the population-level DWL exceeds the DWL evaluated at population means.
 
-In sum, the welfare costs of tax rate misperception range from 0.04% to 0.25% of GDP under every calibration considered, and the microsimulation analysis yields an aggregate estimate of \$37 billion---32% above the stylized baseline. The costs are concentrated in absolute terms among higher earners but are moderately progressive as a share of earnings. Within the optimal tax framework, accounting for misperception reduces the optimal linear tax rate by 1.6 percentage points.
-
-```{bibliography}
-```
+In sum, the welfare costs of tax rate misperception range from 0.04% to 0.25% of GDP under every calibration considered, and the microsimulation analysis yields an aggregate estimate of \$37 billion---about 25% above the stylized baseline evaluated at sample means. The costs are concentrated in absolute terms among higher earners, while the loss as a share of earnings is much flatter across quintiles. Within the optimal tax framework, accounting for misperception reduces the optimal linear tax rate by 1.6 percentage points.

@@ -17,20 +17,23 @@ What's here
 - Calibration parameters: `src/taxuncertainty/data/parameters.yaml`
 - Generated results: `src/taxuncertainty/data/results.json`
 - Tests: `tests/`
-- Paper (MyST): `paper/`
+- Paper (Quarto): `paper/`
 
 Quick start
 -----------
 
 1. Create a virtual environment:
    - `python3 -m venv .venv && source .venv/bin/activate`
-2. Install the package:
+2. Install the package for code and fast tests:
    - `pip install -e ".[dev]"`
-3. Run tests:
-   - `python -m pytest tests/`
-4. Regenerate results:
+3. Add empirical microsimulation support when you want to regenerate results:
+   - `pip install -e ".[policyengine]"`
+4. Run fast tests:
+   - `python -m pytest tests/ -m "not slow"`
+5. Regenerate results:
    - `python -c "from taxuncertainty.pipeline import generate_results; generate_results()"`
-5. Build the paper (optional):
-   - `cd paper && myst build`
+6. Build the paper (optional):
+   - Install the Quarto CLI
+   - `cd paper && quarto render index.qmd --to html`
 
 Replication details are in `REPRODUCING.md`.

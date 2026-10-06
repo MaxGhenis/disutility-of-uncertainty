@@ -83,7 +83,7 @@ The formula $E[\text{DWL}]/\text{earnings} = \frac{1}{2}\varepsilon\sigma^2/(1-\
 
 ## Optimal tax under misperception
 
-Consider a utilitarian planner choosing $\tau$ to maximize average welfare with a balanced-budget demogrant $v = \tau \bar{w} \bar{h} / N$. The planner's problem under perfect information yields the standard equity-efficiency tradeoff. Under misperception, the effective elasticity of the DWL with respect to $\tau$ increases, since:
+Consider an inverse-wage-weighted planner choosing $\tau$ to maximize weighted average welfare with a balanced-budget demogrant $v = \tau \bar{w} \bar{h} / N$. The planner's problem under perfect information yields the standard equity-efficiency tradeoff. Under misperception, the effective elasticity of the DWL with respect to $\tau$ increases, since:
 
 $$\frac{\partial \, E[\text{DWL}]}{\partial \tau} > 0$$
 
@@ -101,5 +101,3 @@ $$L^* = \frac{\alpha T}{\alpha + \beta}$$
 
 This is independent of the tax rate. The income and substitution effects of a tax change exactly cancel, so misperceiving $\tau$ has no effect on labor supply and hence zero DWL. This knife-edge property motivates the use of quasilinear preferences, which isolate the substitution effect — the empirically relevant channel for tax rate misperception.
 
-```{bibliography}
-```

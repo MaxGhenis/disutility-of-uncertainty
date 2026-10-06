@@ -11,7 +11,6 @@ from pathlib import Path
 import numpy as np
 
 from taxuncertainty.analysis.calibration import Calibration
-from taxuncertainty.analysis.welfare import PopulationWelfare
 from taxuncertainty.models.planner import SocialPlanner
 from taxuncertainty.models.preferences import QuasilinearIsoelastic
 
@@ -35,38 +34,38 @@ def _generate_empirical_section(cal, prefs):
 
     emp = EmpiricalMTR(year=2024, cache=True)
     stats = emp.summary_stats()
-    quintiles_raw = emp.quintile_results()
-
-    welfare = PopulationWelfare()
     sigma = cal.MISPERCEPTION_STD_CENTRAL
+    eps = prefs.frisch_elasticity
+    per_worker_dwl = 0.5 * eps * emp.earnings * sigma**2 / (1.0 - emp.mtr)
+    aggregate_dwl = float(np.sum(emp.weights * per_worker_dwl))
+    quintile_labels = emp.quantile_labels(5)
 
     quintiles_with_dwl = []
-    for q in quintiles_raw:
-        per_worker_dwl = cal.per_worker_dwl(
-            prefs.frisch_elasticity, sigma,
-            tau=q["mean_mtr"], earnings=q["mean_earnings"],
-        )
-        quintile_total_dwl = per_worker_dwl * q["weighted_workers"]
+    for quantile in range(1, 6):
+        mask = quintile_labels == quantile
+        if not np.any(mask):
+            continue
+        weights = emp.weights[mask]
+        quintile_total_dwl = float(np.sum(weights * per_worker_dwl[mask]))
         quintiles_with_dwl.append({
-            **q,
-            "per_worker_dwl": per_worker_dwl,
+            "quantile": quantile,
+            "mean_earnings": float(np.average(emp.earnings[mask], weights=weights)),
+            "mean_mtr": float(np.average(emp.mtr[mask], weights=weights)),
+            "n_observations": int(mask.sum()),
+            "weighted_workers": float(np.sum(weights)),
+            "per_worker_dwl": float(np.average(per_worker_dwl[mask], weights=weights)),
             "quintile_total_dwl": quintile_total_dwl,
+            "share_of_total_dwl": (
+                quintile_total_dwl / aggregate_dwl if aggregate_dwl > 0 else 0.0
+            ),
         })
-
-    quintile_dwl_sum = sum(q["quintile_total_dwl"] for q in quintiles_with_dwl)
-    for q in quintiles_with_dwl:
-        q["share_of_total_dwl"] = (
-            q["quintile_total_dwl"] / quintile_dwl_sum if quintile_dwl_sum > 0 else 0.0
-        )
-
-    # Aggregate DWL from microsimulation
-    aggregate_dwl = welfare.weighted_total_dwl(
-        emp.earnings, emp.mtr, emp.weights, sigma, prefs
-    )
 
     # Stylized baseline comparison
     stylized_dwl = cal.per_worker_dwl(
-        prefs.frisch_elasticity, sigma
+        eps,
+        sigma,
+        tau=stats["weighted_mean"],
+        earnings=stats["mean_earnings"],
     ) * stats["total_weighted_workers"]
 
     return {

@@ -1,8 +1,9 @@
 """Social planner model for optimal taxation under misperception.
 
-Implements a social planner who chooses a linear tax rate and lump-sum
-demogrant to maximize utilitarian social welfare, accounting for the
-possibility that workers misperceive the tax rate.
+Implements an inverse-wage-weighted social planner who chooses a linear
+tax rate and lump-sum demogrant to maximize weighted-utilitarian social
+welfare, accounting for the possibility that workers misperceive the tax
+rate.
 """
 
 import numpy as np
@@ -11,7 +12,7 @@ from taxuncertainty.models.preferences import QuasilinearIsoelastic
 
 
 class SocialPlanner:
-    """Utilitarian social planner with linear tax and lump-sum transfer."""
+    """Weighted-utilitarian social planner with linear tax and lump-sum transfer."""
 
     def _compute_hours_and_revenue(
         self, tax_rate, wages, prefs, misperception_std=0, seed=42

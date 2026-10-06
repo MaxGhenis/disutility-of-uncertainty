@@ -193,6 +193,42 @@ class TestGenerateEmpiricalSection:
         shares = [q["share_of_total_dwl"] for q in result["quintiles"]]
         assert sum(shares) == pytest.approx(1.0)
 
+    def test_quintile_totals_match_aggregate(self, tmp_path):
+        cal = Calibration()
+        prefs = QuasilinearIsoelastic(
+            psi=cal.PSI, frisch_elasticity=cal.FRISCH_ELASTICITY_CENTRAL
+        )
+        with (
+            patch("policyengine_us.Microsimulation", return_value=self._make_mock_sim()),
+            patch("taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path),
+        ):
+            result = _generate_empirical_section(cal, prefs)
+
+        quintile_total = sum(q["quintile_total_dwl"] for q in result["quintiles"])
+        assert quintile_total == pytest.approx(result["aggregate_dwl"])
+
+    def test_stylized_comparison_uses_empirical_means(self, tmp_path):
+        cal = Calibration()
+        prefs = QuasilinearIsoelastic(
+            psi=cal.PSI, frisch_elasticity=cal.FRISCH_ELASTICITY_CENTRAL
+        )
+        with (
+            patch("policyengine_us.Microsimulation", return_value=self._make_mock_sim()),
+            patch("taxuncertainty.analysis.empirical.CACHE_DIR", tmp_path),
+        ):
+            result = _generate_empirical_section(cal, prefs)
+
+        dist = result["mtr_distribution"]
+        expected = cal.per_worker_dwl(
+            prefs.frisch_elasticity,
+            cal.MISPERCEPTION_STD_CENTRAL,
+            tau=dist["weighted_mean"],
+            earnings=dist["mean_earnings"],
+        ) * dist["total_weighted_workers"]
+        assert result["comparison"]["stylized_dwl_billions"] == pytest.approx(
+            expected / 1e9
+        )
+
 
 class TestResultsSingleton:
     def test_loads_from_file(self, results_path):

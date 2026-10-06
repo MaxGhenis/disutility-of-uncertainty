@@ -105,6 +105,16 @@ class TestEmpiricalMTRMocked:
         deciles = empirical.decile_results()
         assert len(deciles) == 10
 
+    def test_empty_quantile_skipped(self, empirical):
+        """When n_groups exceeds observations, empty quantiles are skipped."""
+        n_obs = len(empirical.earnings)
+        # Request more groups than observations to force empty bins
+        results = empirical._quantile_results(n_groups=n_obs + 10)
+        assert len(results) <= n_obs
+        # Each returned quantile should have at least 1 observation
+        for q in results:
+            assert q["n_observations"] >= 1
+
     def test_cache_roundtrip(self, tmp_path):
         """Cached results should match original."""
         with (
