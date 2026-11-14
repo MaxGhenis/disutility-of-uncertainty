@@ -6,7 +6,7 @@ This guide explains how to reproduce the analysis results and build the paper.
 Environment
 -----------
 
-- Python: 3.10+ (as declared in `pyproject.toml`)
+- Python: 3.11+ (as declared in `pyproject.toml`)
 - Install dependencies: `pip install -e ".[dev]"`
 - Install PolicyEngine-US for empirical microsimulation results: `pip install -e ".[dev,policyengine]"`
 - Optional: `mystmd` for building the paper (or use `make install`).
